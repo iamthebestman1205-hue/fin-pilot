@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "FinPilot",
+    "slug": "finpilot",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#050509",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#050509"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
