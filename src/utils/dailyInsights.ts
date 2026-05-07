@@ -1,223 +1,137 @@
-import type { StockCardData, StockCategory, Tone } from "../types";
+import type { StockCardData, StockCategory, PriceMove, Tone } from "../types";
 import type { QuoteSnapshot } from "../services/marketData";
 
-const categoryCatalysts: Record<StockCategory, string[]> = {
-  tech: [
-    "AI 伺服器訂單能見度",
-    "半導體庫存調整",
-    "法人對毛利率的預期",
-    "大型科技股財報氣氛",
-    "先進製程與高階晶片需求"
-  ],
-  etf: [
-    "成分股集中度變化",
-    "配息預期與淨值表現",
-    "台股權值股資金流向",
-    "美元與台幣匯率波動",
-    "市場風格在成長與高息間切換"
-  ],
-  finance: [
-    "利率預期變化",
-    "壽險投資收益",
-    "銀行放款動能",
-    "股利政策想像",
-    "金融股防禦買盤"
-  ],
-  defensive: [
-    "穩定現金流需求",
-    "股利與防禦配置買盤",
-    "景氣放緩時的避險需求",
-    "民生消費韌性",
-    "低波動資金輪動"
-  ],
-  cyclical: [
-    "景氣循環復甦訊號",
-    "原物料價格波動",
-    "運價與庫存變化",
-    "出口需求能見度",
-    "市場對傳產輪動的期待"
-  ]
+type RiskProfile = {
+  status: string;
+  statusTone: Tone;
+  temperature: string;
+  temperatureTone: Tone;
+  riskWord: string;
 };
 
-const eventVerbs = [
-  "市場今天重新評估",
-  "法人早盤聚焦",
-  "短線資金留意",
-  "投資人開始觀察",
-  "盤前討論集中在"
-];
-
-const riskNotes = [
-  "若追價過急，短線震盪會比基本面更先被感受到。",
-  "目前不適合只看單一利多，還要對照估值與資金流向。",
-  "如果後續需求、買盤或獲利沒有延續，市場期待可能會降溫。",
-  "這類標的適合用分批觀察取代一次押注。",
-  "今天的重點是確認故事是否延續，而不是猜一天漲跌。"
-];
-
-const reminders = [
-  "先看風險溫度是否連續升高，再決定是否調整追蹤重點。",
-  "留意利多是否只影響短線情緒，還是真的改善營收、獲利或配息條件。",
-  "如果已經持有，重點是部位大小是否符合自己的承受度。",
-  "今天更適合觀察原因，不適合只被漲跌牽著走。",
-  "把它和投資組合集中度一起看，會比單看一檔更準。"
-];
-
-const upReasons: Record<StockCategory, string[]> = {
-  tech: [
-    "大家覺得 AI 和高階晶片需求還在，所以願意給它比較高的期待",
-    "市場看到大公司持續投資科技設備，帶動相關股票想像空間",
-    "買盤偏向成長題材，科技股今天比較受青睞"
-  ],
-  etf: [
-    "主要成分股表現穩，讓整包 ETF 跟著加分",
-    "大盤氣氛偏好，ETF 裡的權值股撐住表現",
-    "市場今天比較願意買分散型標的，ETF 受到支撐"
-  ],
-  finance: [
-    "市場覺得金融股配息和穩定性仍有吸引力",
-    "利率環境沒有明顯惡化，金融股買盤回來一些",
-    "投資人今天偏好比較穩的金融族群"
-  ],
-  defensive: [
-    "市場想找比較穩的標的，防禦型股票受到支撐",
-    "現金流穩定的股票今天比較有人買",
-    "大盤不確定時，資金偏向生活必需和穩定型標的"
-  ],
-  cyclical: [
-    "市場期待景氣慢慢回溫，循環股買氣變好",
-    "報價或運價想像改善，帶動買盤進來",
-    "投資人今天在找落後補漲的景氣股"
-  ]
+type InsightProfile = {
+  focus: string;
+  up: string;
+  down: string;
+  flat: string;
+  watch: string;
+  baseRisk: number;
 };
 
-const downReasons: Record<StockCategory, string[]> = {
-  tech: [
-    "前面漲太快，今天有人先獲利了結",
-    "市場擔心 AI 題材已經太熱，短線先降溫",
-    "投資人對高價科技股變謹慎，所以賣壓比較明顯"
-  ],
-  etf: [
-    "主要成分股走弱，整包 ETF 也被拖下來",
-    "大盤氣氛轉弱，ETF 很難自己逆勢表現",
-    "市場今天偏保守，分散型標的也跟著整理"
-  ],
-  finance: [
-    "市場擔心景氣轉弱會影響金融業表現",
-    "金融股今天缺少明顯買盤，價格比較容易回落",
-    "投資人轉向其他題材，金融股短線被冷落"
-  ],
-  defensive: [
-    "市場風險胃口變高，資金暫時離開穩定型股票",
-    "防禦型股票今天缺少新買盤，表現比較平淡",
-    "投資人追逐更有題材的標的，穩定型股票被放慢"
-  ],
-  cyclical: [
-    "市場擔心景氣復甦不夠快，循環股先承壓",
-    "報價或運價想像沒有繼續改善，買盤轉弱",
-    "前面反彈後有人先賣出，短線壓力變大"
-  ]
+const categoryProfiles: Record<StockCategory, InsightProfile> = {
+  tech: {
+    focus: "市場是否還願意買科技成長故事",
+    up: "買盤偏向成長股，投資人願意先相信後面的需求還在。",
+    down: "前面期待拉得比較高，今天有人先把獲利收回來。",
+    flat: "大家還在等更明確的訂單、營收或財報線索。",
+    watch: "接下來看訂單、毛利率、客戶需求有沒有跟上股價期待。",
+    baseRisk: 58
+  },
+  etf: {
+    focus: "成分股今天是一起撐住，還是互相抵消",
+    up: "主要成分股表現較穩，所以整包 ETF 跟著受到支撐。",
+    down: "成分股走弱或市場氣氛轉保守，ETF 也被一起拖累。",
+    flat: "成分股有漲有跌，整體互相抵消，方向不明顯。",
+    watch: "接下來看它主要持有哪些股票，別只看 ETF 名稱以為一定分散。",
+    baseRisk: 42
+  },
+  finance: {
+    focus: "市場對利率、股利和金融業獲利的看法",
+    up: "投資人今天比較願意買穩定現金流和股利題材。",
+    down: "市場擔心景氣或利率變化會壓到金融業表現。",
+    flat: "金融股今天沒有明確新方向，買盤和賣壓都不強。",
+    watch: "接下來看股利政策、放款動能、壽險投資收益是否穩住。",
+    baseRisk: 35
+  },
+  defensive: {
+    focus: "資金是否回到穩定型股票",
+    up: "市場想找波動較低的標的，穩定現金流受到支撐。",
+    down: "資金暫時去追更有題材的股票，穩定型標的被放慢。",
+    flat: "市場沒有特別恐慌，也沒有特別追逐防禦股。",
+    watch: "接下來看現金流、股利和本業是否維持穩定。",
+    baseRisk: 28
+  },
+  cyclical: {
+    focus: "市場是否相信景氣正在變好",
+    up: "投資人期待景氣慢慢回溫，所以循環股買氣變好。",
+    down: "市場擔心景氣復甦不夠快，短線先保守看待。",
+    flat: "景氣方向還不明確，今天比較像等待下一個訊號。",
+    watch: "接下來看報價、庫存、運價或外銷需求是否改善。",
+    baseRisk: 48
+  }
 };
 
-const flatReasons: Record<StockCategory, string[]> = {
-  tech: [
-    "市場還在等更明確的訂單或財報線索",
-    "AI 題材仍在，但今天買賣雙方力道差不多",
-    "投資人暫時觀望科技股是不是還能續強"
-  ],
-  etf: [
-    "成分股有漲有跌，整體互相抵消",
-    "大盤方向不明，ETF 今天比較像整理",
-    "市場還在等下一個明確方向"
-  ],
-  finance: [
-    "金融股今天沒有新的明確方向，表現偏整理",
-    "投資人還在觀察利率和股利期待",
-    "買盤和賣壓都不強，價格暫時震盪"
-  ],
-  defensive: [
-    "穩定型標的今天沒有明顯風向，表現偏平",
-    "市場沒有特別恐慌，也沒有特別追逐防禦股",
-    "買盤穩定但不積極，價格變化不大"
-  ],
-  cyclical: [
-    "景氣方向還不明確，循環股暫時整理",
-    "投資人還在等報價、運價或需求更明確",
-    "今天買賣力道接近，短線沒有明顯方向"
-  ]
+const stockProfiles: Record<string, Partial<InsightProfile>> = {
+  "2330": {
+    focus: "AI 晶片需求、先進製程和海外設廠成本",
+    up: "市場願意相信 AI 晶片需求仍強，台積電的故事還有支撐。",
+    down: "投資人擔心期待已經太高，先看毛利率和海外成本會不會壓力變大。",
+    flat: "買賣雙方都在等更明確的法說、營收或 AI 需求訊號。",
+    watch: "接下來看 AI 需求、毛利率、資本支出和海外設廠成本。",
+    baseRisk: 64
+  },
+  "0050": {
+    focus: "台股大型權值股今天是否撐住大盤",
+    up: "台股大型股表現較穩，所以 0050 跟著受支撐。",
+    down: "大型權值股走弱，0050 很難自己逆勢表現。",
+    flat: "權值股有漲有跌，0050 今天比較像整理。",
+    watch: "接下來看台積電、金融股和大型電子股是否同時轉強。",
+    baseRisk: 38
+  },
+  "00646": {
+    focus: "美股大型企業和美元資產氣氛",
+    up: "美股大型企業氣氛較好，讓這檔美股 ETF 受到支撐。",
+    down: "美股或匯率氣氛轉弱，ETF 今天被壓住。",
+    flat: "美股方向不明，ETF 今天比較像等待下一個線索。",
+    watch: "接下來看美股大型企業財報、美元走勢和市場風險胃口。",
+    baseRisk: 44
+  },
+  "009810": {
+    focus: "主題型 ETF 的成分股是否真的跟上題材",
+    up: "主題成分股今天比較有買盤，ETF 因此受到支撐。",
+    down: "主題股降溫時，這類 ETF 容易一起被拖下來。",
+    flat: "題材還在，但市場今天沒有明顯追價。",
+    watch: "接下來先看成分股，不要只看 ETF 名稱判斷風險。",
+    baseRisk: 62
+  },
+  "3017": {
+    focus: "AI 伺服器散熱需求是否延續",
+    up: "市場仍在買 AI 伺服器散熱故事，奇鋐容易受到資金關注。",
+    down: "散熱題材前面漲多時，只要期待降溫，股價就容易震盪。",
+    flat: "市場還在等訂單、營收或法人對散熱需求的下一步看法。",
+    watch: "接下來看 AI 伺服器出貨、散熱模組需求和毛利率。",
+    baseRisk: 78
+  },
+  "2881": {
+    focus: "壽險投資收益和股利期待",
+    up: "市場對金融股股利與投資收益比較有信心。",
+    down: "投資人擔心利率或市場波動影響壽險投資表現。",
+    flat: "今天金融股方向不明，主要仍在等利率和股利線索。",
+    watch: "接下來看股利政策、利率走勢和壽險投資收益。",
+    baseRisk: 36
+  },
+  "2603": {
+    focus: "貨櫃航運報價和運量變化",
+    up: "市場期待運價或需求改善，航運股買盤回來。",
+    down: "投資人擔心運價支撐不夠，航運股先承壓。",
+    flat: "運價和需求方向還不夠明確，今天偏整理。",
+    watch: "接下來看運價、船班供給和全球貿易需求。",
+    baseRisk: 68
+  }
 };
 
 function hashText(value: string) {
   return value.split("").reduce((total, char) => total + char.charCodeAt(0), 0);
 }
 
-function pick<T>(items: T[], seed: number) {
-  return items[Math.abs(seed) % items.length];
-}
-
-function getRiskProfile(score: number): {
-  status: string;
-  statusTone: Tone;
-  temperature: string;
-  temperatureTone: Tone;
-  riskWord: string;
-} {
-  if (score >= 86) {
-    return {
-      status: "🔴 風險升高",
-      statusTone: "red",
-      temperature: "🔴 高溫",
-      temperatureTone: "red",
-      riskWord: "明顯升溫"
-    };
-  }
-
-  if (score >= 62) {
-    return {
-      status: "🟡 觀察中",
-      statusTone: "yellow",
-      temperature: "🟠 偏熱",
-      temperatureTone: "orange",
-      riskWord: "偏熱"
-    };
-  }
-
-  if (score >= 34) {
-    return {
-      status: "🟢 穩定偏強",
-      statusTone: "green",
-      temperature: "🟡 中溫",
-      temperatureTone: "yellow",
-      riskWord: "中性偏穩"
-    };
-  }
-
+function getProfile(stock: StockCardData): InsightProfile {
   return {
-    status: "🟡 觀察中",
-    statusTone: "yellow",
-    temperature: "🟡 中溫",
-    temperatureTone: "yellow",
-    riskWord: "降溫觀察"
+    ...categoryProfiles[stock.category],
+    ...stockProfiles[stock.symbol]
   };
 }
 
-function getMoveProfile(score: number): {
-  move: string;
-  priceMove: "up" | "down" | "flat";
-  reasonSet: "up" | "down" | "flat";
-} {
-  if (score >= 67) {
-    return { move: "上漲", priceMove: "up", reasonSet: "up" };
-  }
-
-  if (score <= 32) {
-    return { move: "下跌", priceMove: "down", reasonSet: "down" };
-  }
-
-  return { move: "小幅震盪", priceMove: "flat", reasonSet: "flat" };
-}
-
-function getMoveLabel(priceMove: "up" | "down" | "flat") {
+function getMoveLabel(priceMove: PriceMove) {
   if (priceMove === "up") {
     return "上漲";
   }
@@ -229,43 +143,100 @@ function getMoveLabel(priceMove: "up" | "down" | "flat") {
   return "震盪";
 }
 
+function getMoveReason(profile: InsightProfile, priceMove: PriceMove) {
+  if (priceMove === "up") {
+    return profile.up;
+  }
+
+  if (priceMove === "down") {
+    return profile.down;
+  }
+
+  return profile.flat;
+}
+
+function getRiskProfile(stock: StockCardData, profile: InsightProfile, priceMove: PriceMove): RiskProfile {
+  const moveHeat = priceMove === "up" ? 10 : priceMove === "down" ? 16 : 4;
+  const stockHeat = stock.temperatureTone === "red" ? 12 : stock.temperatureTone === "orange" ? 8 : 0;
+  const score = profile.baseRisk + moveHeat + stockHeat + (hashText(stock.symbol) % 7);
+
+  if (score >= 86) {
+    return {
+      status: "🔴 風險升高",
+      statusTone: "red",
+      temperature: "🔴 高溫",
+      temperatureTone: "red",
+      riskWord: "明顯升溫"
+    };
+  }
+
+  if (score >= 64) {
+    return {
+      status: "🟡 觀察中",
+      statusTone: "yellow",
+      temperature: "🟠 偏熱",
+      temperatureTone: "orange",
+      riskWord: "偏熱"
+    };
+  }
+
+  return {
+    status: "🟢 穩定偏強",
+    statusTone: "green",
+    temperature: "🟡 中溫",
+    temperatureTone: "yellow",
+    riskWord: "中溫"
+  };
+}
+
+function getFallbackMove(stock: StockCardData, date: Date): PriceMove {
+  const score = hashText(`${stock.symbol}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`) % 100;
+
+  if (score >= 68) {
+    return "up";
+  }
+
+  if (score <= 30) {
+    return "down";
+  }
+
+  return "flat";
+}
+
 export function applyDailyInsight(
   stock: StockCardData,
   date = new Date(),
   quote?: QuoteSnapshot
 ): StockCardData {
-  const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  const seed = hashText(`${stock.symbol}-${dateKey}`);
-  const catalyst = pick(categoryCatalysts[stock.category], seed);
-  const verb = pick(eventVerbs, seed + 3);
-  const riskNote = pick(riskNotes, seed + 7);
-  const reminder = pick(reminders, seed + 11);
-  const score = (seed + stock.symbol.length * 13 + date.getDate() * 5) % 100;
-  const risk = getRiskProfile(score);
-  const fallbackMove = getMoveProfile(score);
-  const priceMove = quote?.priceMove ?? fallbackMove.priceMove;
+  const profile = getProfile(stock);
+  const priceMove = quote?.priceMove ?? getFallbackMove(stock, date);
   const moveLabel = getMoveLabel(priceMove);
-  const moveReason =
-    priceMove === "up"
-      ? pick(upReasons[stock.category], seed + 13)
-      : priceMove === "down"
-        ? pick(downReasons[stock.category], seed + 13)
-        : pick(flatReasons[stock.category], seed + 13);
-  const minute = String(10 + (seed % 45)).padStart(2, "0");
+  const moveReason = getMoveReason(profile, priceMove);
+  const risk = getRiskProfile(stock, profile, priceMove);
+  const minute = String(10 + (hashText(stock.symbol) % 45)).padStart(2, "0");
   const dateLabel = `${date.getMonth() + 1}/${date.getDate()}`;
+  const hasVerifiedQuote = Boolean(quote);
+  const sourceNote = hasVerifiedQuote
+    ? "已用 TWSE 今日報價確認漲跌方向；原因文字是依個股觀察主軸做白話解讀，不冒充新聞。"
+    : "目前沒有交易所報價，僅顯示 Demo 觀察主軸，不當作今日行情或新聞。";
+  const informationBasis = hasVerifiedQuote
+    ? `查證基礎：TWSE 報價 ${quote?.quoteTime ?? ""}。新聞事件需正式版再接公開資訊觀測站、交易所公告與多家媒體交叉確認。`
+    : "查證基礎：尚未取得 TWSE 報價；不產生未查證新聞。";
 
   return {
     ...stock,
     ...risk,
     priceMove,
     priceChangePercent: 0,
-    dataSource: quote ? "twse" : "demo",
+    dataSource: hasVerifiedQuote ? "twse" : "demo",
     quoteTime: quote?.quoteTime,
-    reason: `${stock.name}今天${moveLabel}，主因是${moveReason}。目前風險溫度${risk.riskWord}。`,
-    reminder,
-    aiNews: quote
-      ? `股市重點：今天${moveLabel}。白話來說，${moveReason}。`
-      : `股市重點：目前未接到真實報價，這是 Demo 推估，不能當作今日行情。`,
+    reason: `${stock.name}今天${moveLabel}。目前可確認的是報價方向；可能要看的主軸是：${profile.focus}。`,
+    reminder: profile.watch,
+    aiNews: hasVerifiedQuote
+      ? `股市重點：今天${moveLabel}。白話來說，${moveReason}`
+      : "股市重點：目前未接到真實報價，所以不寫成今日新聞。等交易所資料回來後，再判斷今天是漲、跌或震盪。",
+    informationBasis,
+    sourceNote,
     updatedAt: quote?.quoteTime ?? `${dateLabel} 08:${minute}`
   };
 }

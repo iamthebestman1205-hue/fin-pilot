@@ -31,6 +31,20 @@ const seeds: StockSeed[] = [
   { symbol: "2317", name: "鴻海", theme: "AI 伺服器與電子代工", category: "tech" },
   { symbol: "2454", name: "聯發科", theme: "手機晶片與邊緣 AI", category: "tech" },
   { symbol: "2308", name: "台達電", theme: "電源、資料中心與 AI 供應鏈", category: "tech", risk: "hot" },
+  { symbol: "3017", name: "奇鋐", theme: "散熱與 AI 伺服器零組件", category: "tech", risk: "high" },
+  { symbol: "1590", name: "亞德客-KY", theme: "自動化設備與景氣循環", category: "cyclical" },
+  { symbol: "4938", name: "和碩", theme: "電子代工與消費性電子", category: "tech" },
+  { symbol: "8046", name: "南電", theme: "ABF 載板與半導體材料", category: "tech", risk: "hot" },
+  { symbol: "6239", name: "力成", theme: "記憶體封測", category: "tech" },
+  { symbol: "6409", name: "旭隼", theme: "不斷電系統與電源設備", category: "tech" },
+  { symbol: "9914", name: "美利達", theme: "自行車與消費景氣", category: "cyclical" },
+  { symbol: "1101", name: "台泥", theme: "水泥、能源與景氣循環", category: "cyclical" },
+  { symbol: "1102", name: "亞泥", theme: "水泥與景氣循環", category: "cyclical" },
+  { symbol: "5876", name: "上海商銀", theme: "銀行與股利穩定度", category: "finance" },
+  { symbol: "5880", name: "合庫金", theme: "金融與防禦型股利", category: "finance" },
+  { symbol: "2105", name: "正新", theme: "輪胎與外銷需求", category: "cyclical" },
+  { symbol: "9904", name: "寶成", theme: "鞋業代工與消費景氣", category: "cyclical" },
+  { symbol: "2357", name: "華碩", theme: "PC、電競與消費性電子", category: "tech" },
   { symbol: "2412", name: "中華電", theme: "電信與穩定現金流", category: "defensive" },
   { symbol: "2881", name: "富邦金", theme: "金融與壽險", category: "finance" },
   { symbol: "2882", name: "國泰金", theme: "金融與壽險", category: "finance" },
@@ -87,8 +101,10 @@ function makeStock(seed: StockSeed, index: number): StockCardData {
       ? "題材熱度較高，追蹤消息比盲目追高更重要。"
       : "狀態相對穩定，但仍要留意大盤與產業消息變化。",
     aiNews: isEtf
-      ? `AI 摘要：${seed.name} 今日重點在 ${seed.theme}，建議同步觀察成分股集中度、匯率與配息穩定度。`
-      : `AI 摘要：${seed.name} 今日重點在 ${seed.theme}，建議追蹤營收動能、法人看法與短線風險溫度。`,
+      ? `股市重點：尚未取得今日交易所資料。這檔先看 ${seed.theme}，但不把推測當成新聞。`
+      : `股市重點：尚未取得今日交易所資料。這檔先看 ${seed.theme}，但不把推測當成新聞。`,
+    informationBasis: "尚未接到交易所報價，僅顯示 Demo 觀察主軸。",
+    sourceNote: "未查證新聞，不產生事件敘述。",
     updatedAt: `今日 08:${updatedMinute}`
   };
 }

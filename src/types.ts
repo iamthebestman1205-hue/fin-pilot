@@ -18,5 +18,7 @@ export type StockCardData = {
   dataSource: "twse" | "demo" | "unavailable";
   quoteTime?: string;
   aiNews: string;
+  informationBasis: string;
+  sourceNote: string;
   updatedAt: string;
 };

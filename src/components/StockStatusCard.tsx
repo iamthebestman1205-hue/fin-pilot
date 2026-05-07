@@ -61,6 +61,7 @@ export function StockStatusCard({ stock, onPress }: StockStatusCardProps) {
         <View style={styles.newsBox}>
           <Text style={styles.newsLabel}>今日股市重點</Text>
           <Text style={styles.newsText}>{stock.aiNews}</Text>
+          <Text style={styles.sourceNote}>{stock.sourceNote}</Text>
           <Text style={styles.updatedAt}>{getSourceLabel(stock)}</Text>
         </View>
         <Text style={styles.reminder}>{stock.reminder}</Text>
@@ -161,6 +162,13 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 12,
     fontWeight: "700"
+  },
+  sourceNote: {
+    marginTop: spacing.xs,
+    color: colors.muted,
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "600"
   },
   reminder: {
     marginTop: spacing.sm,
