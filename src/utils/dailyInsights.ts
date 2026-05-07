@@ -95,12 +95,44 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     baseRisk: 62
   },
   "3017": {
-    focus: "AI 伺服器散熱需求是否延續",
-    up: "市場仍在買 AI 伺服器散熱故事，奇鋐容易受到資金關注。",
-    down: "散熱題材前面漲多時，只要期待降溫，股價就容易震盪。",
-    flat: "市場還在等訂單、營收或法人對散熱需求的下一步看法。",
-    watch: "接下來看 AI 伺服器出貨、散熱模組需求和毛利率。",
+    focus: "NVIDIA 新平台散熱規格疑慮、法人籌碼和 AI 伺服器散熱需求",
+    up: "市場重新相信 AI 伺服器水冷散熱需求還在，覺得前面的疑慮可能被放大，所以買盤回來。",
+    down: "市場把 NVIDIA 新平台散熱規格疑慮，解讀成奇鋐接單想像可能降溫；如果法人或短線資金跟著賣，股價壓力就會被放大。",
+    flat: "大家還在等 NVIDIA 新平台規格、奇鋐接單狀況和法人籌碼變化，暫時不敢把方向看太死。",
+    watch: "接下來看 NVIDIA 新平台散熱設計是否確定、奇鋐水冷散熱出貨、法人買賣超和營收是否跟上。",
     baseRisk: 78
+  },
+  "2382": {
+    focus: "AI 伺服器訂單是否延續，以及客戶拉貨節奏",
+    up: "市場覺得 AI 伺服器出貨仍有支撐，廣達作為代工廠容易被資金重新關注。",
+    down: "如果市場擔心 AI 伺服器拉貨放慢，代工股會先被賣壓測試。",
+    flat: "大家在等 AI 伺服器出貨和客戶訂單是否更明確。",
+    watch: "接下來看 AI 伺服器營收占比、毛利率和主要客戶拉貨節奏。",
+    baseRisk: 66
+  },
+  "3231": {
+    focus: "AI 伺服器代工題材和短線籌碼是否過熱",
+    up: "市場仍把緯創看成 AI 伺服器受惠股，買盤願意回到題材股。",
+    down: "AI 伺服器股漲多後，只要資金轉保守，緯創容易先被獲利了結。",
+    flat: "市場在等 AI 伺服器出貨能不能繼續支撐營收。",
+    watch: "接下來看伺服器出貨、營收成長和法人籌碼是否穩定。",
+    baseRisk: 70
+  },
+  "2308": {
+    focus: "資料中心電源、散熱和電動車需求",
+    up: "市場看好資料中心電源與 AI 基礎建設需求，台達電因此受到支撐。",
+    down: "如果市場擔心股價已反映太多 AI 電源題材，短線賣壓會變明顯。",
+    flat: "大家在等電源、散熱和電動車業務哪一塊能接棒成長。",
+    watch: "接下來看資料中心電源訂單、毛利率和電動車需求。",
+    baseRisk: 62
+  },
+  "2454": {
+    focus: "手機晶片需求、AI 手機題材和毛利率",
+    up: "市場期待手機晶片需求回穩，加上 AI 手機題材帶來想像空間。",
+    down: "如果手機需求或毛利率疑慮升高，聯發科會被市場先降一點期待。",
+    flat: "投資人還在等新品銷售、客戶拉貨和毛利率訊號。",
+    watch: "接下來看手機晶片出貨、AI 手機滲透率和毛利率。",
+    baseRisk: 52
   },
   "2881": {
     focus: "壽險投資收益和股利期待",
@@ -230,11 +262,11 @@ export function applyDailyInsight(
     priceChangePercent: 0,
     dataSource: hasVerifiedQuote ? "twse" : "demo",
     quoteTime: quote?.quoteTime,
-    reason: `${stock.name}今天${moveLabel}。目前可確認的是報價方向；可能要看的主軸是：${profile.focus}。`,
+    reason: `${stock.name}今天${moveLabel}。市場今天主要在看：${profile.focus}。`,
     reminder: profile.watch,
     aiNews: hasVerifiedQuote
-      ? `股市重點：今天${moveLabel}。白話來說，${moveReason}`
-      : "股市重點：目前未接到真實報價，所以不寫成今日新聞。等交易所資料回來後，再判斷今天是漲、跌或震盪。",
+      ? `股市重點：今天${moveLabel}。${moveReason}`
+      : `股市重點：今天還沒接到報價。這檔目前先看 ${profile.focus}，等報價回來後再判斷是漲、跌或震盪。`,
     informationBasis,
     sourceNote,
     updatedAt: quote?.quoteTime ?? `${dateLabel} 08:${minute}`

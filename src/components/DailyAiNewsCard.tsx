@@ -32,7 +32,7 @@ export function DailyAiNewsCard({ stocks }: DailyAiNewsCardProps) {
   return (
     <Card soft>
       <Text style={styles.title}>股市重點</Text>
-      <Text style={styles.caption}>只把可查證的報價當事實；沒有來源的內容不寫成新聞。</Text>
+      <Text style={styles.caption}>用今日報價搭配個股事件脈絡，整理成白話重點。</Text>
       <View style={styles.list}>
         {stocks.map((stock, index) => (
           <View
@@ -55,7 +55,6 @@ export function DailyAiNewsCard({ stocks }: DailyAiNewsCardProps) {
             </View>
             <Text style={styles.time}>{getSourceLabel(stock)}</Text>
             <Text style={styles.news}>{stock.aiNews}</Text>
-            <Text style={styles.sourceNote}>{stock.sourceNote}</Text>
           </View>
         ))}
       </View>
@@ -120,13 +119,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 14,
     lineHeight: 22,
-    fontWeight: "600"
-  },
-  sourceNote: {
-    marginTop: spacing.xs,
-    color: colors.muted,
-    fontSize: 12,
-    lineHeight: 18,
     fontWeight: "600"
   }
 });

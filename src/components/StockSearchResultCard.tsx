@@ -37,7 +37,6 @@ export function StockSearchResultCard({
         <Badge label={stock.temperature} tone={stock.temperatureTone} />
       </View>
       <Text style={styles.news}>{stock.aiNews}</Text>
-      <Text style={styles.sourceNote}>{stock.sourceNote}</Text>
     </Card>
   );
 }
@@ -98,13 +97,6 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 14,
     lineHeight: 22,
-    fontWeight: "600"
-  },
-  sourceNote: {
-    marginTop: spacing.xs,
-    color: colors.muted,
-    fontSize: 12,
-    lineHeight: 18,
     fontWeight: "600"
   }
 });

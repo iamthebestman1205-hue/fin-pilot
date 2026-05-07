@@ -237,13 +237,7 @@ function StockInsightDetail({
       <SectionTitle title="今日股市重點" />
       <Card soft>
         <Text style={styles.detailNews}>{stock.aiNews}</Text>
-        <Text style={styles.sourceNote}>{stock.sourceNote}</Text>
         <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
-      </Card>
-
-      <SectionTitle title="查證狀態" />
-      <Card>
-        <Text style={styles.conclusion}>{stock.informationBasis}</Text>
       </Card>
 
       <SectionTitle title="風險溫度" />
@@ -437,13 +431,6 @@ const styles = StyleSheet.create({
     color: colors.muted,
     fontSize: 13,
     fontWeight: "800"
-  },
-  sourceNote: {
-    marginTop: spacing.sm,
-    color: colors.muted,
-    fontSize: 13,
-    lineHeight: 20,
-    fontWeight: "600"
   },
   conclusion: {
     color: colors.text,
