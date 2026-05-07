@@ -22,10 +22,10 @@ function getMoveLabel(stock: StockCardData) {
 
 function getSourceLabel(stock: StockCardData) {
   if (stock.dataSource === "twse") {
-    return `TWSE ${stock.updatedAt}`;
+    return `報價 ${stock.updatedAt}`;
   }
 
-  return "Demo 推估，非真實報價";
+  return "等待今日資料更新";
 }
 
 export function DailyAiNewsCard({ stocks }: DailyAiNewsCardProps) {

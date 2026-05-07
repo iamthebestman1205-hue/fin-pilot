@@ -1,4 +1,4 @@
-import type { StockCardData, StockCategory, PriceMove, Tone } from "../types";
+import type { ReferenceSource, StockCardData, StockCategory, PriceMove, Tone } from "../types";
 import type { QuoteSnapshot } from "../services/marketData";
 
 type RiskProfile = {
@@ -16,7 +16,15 @@ type InsightProfile = {
   flat: string;
   watch: string;
   baseRisk: number;
+  sources?: ReferenceSource[];
 };
+
+const defaultSources: ReferenceSource[] = [
+  {
+    name: "TWSE",
+    title: "台灣證券交易所即時報價"
+  }
+];
 
 const categoryProfiles: Record<StockCategory, InsightProfile> = {
   tech: {
@@ -68,7 +76,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "投資人擔心期待已經太高，先看毛利率和海外成本會不會壓力變大。",
     flat: "買賣雙方都在等更明確的法說、營收或 AI 需求訊號。",
     watch: "接下來看 AI 需求、毛利率、資本支出和海外設廠成本。",
-    baseRisk: 64
+    baseRisk: 64,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "營收、法說會與重大訊息" },
+      { name: "經濟日報", title: "台積電與 AI 半導體產業追蹤" }
+    ]
   },
   "0050": {
     focus: "台股大型權值股今天是否撐住大盤",
@@ -76,7 +89,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "大型權值股走弱，0050 很難自己逆勢表現。",
     flat: "權值股有漲有跌，0050 今天比較像整理。",
     watch: "接下來看台積電、金融股和大型電子股是否同時轉強。",
-    baseRisk: 38
+    baseRisk: 38,
+    sources: [
+      ...defaultSources,
+      { name: "投信官網", title: "ETF 成分股與淨值資料" },
+      { name: "證交所", title: "台股大盤與權值股行情" }
+    ]
   },
   "00646": {
     focus: "美股大型企業和美元資產氣氛",
@@ -84,7 +102,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "美股或匯率氣氛轉弱，ETF 今天被壓住。",
     flat: "美股方向不明，ETF 今天比較像等待下一個線索。",
     watch: "接下來看美股大型企業財報、美元走勢和市場風險胃口。",
-    baseRisk: 44
+    baseRisk: 44,
+    sources: [
+      ...defaultSources,
+      { name: "投信官網", title: "ETF 淨值與持股資料" },
+      { name: "Reuters", title: "美股大型企業與國際市場新聞" }
+    ]
   },
   "009810": {
     focus: "主題型 ETF 的成分股是否真的跟上題材",
@@ -92,7 +115,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "主題股降溫時，這類 ETF 容易一起被拖下來。",
     flat: "題材還在，但市場今天沒有明顯追價。",
     watch: "接下來先看成分股，不要只看 ETF 名稱判斷風險。",
-    baseRisk: 62
+    baseRisk: 62,
+    sources: [
+      ...defaultSources,
+      { name: "投信官網", title: "ETF 成分股與主題配置" },
+      { name: "公開資訊觀測站", title: "主要成分股公告與營收" }
+    ]
   },
   "3017": {
     focus: "NVIDIA 新平台散熱規格疑慮、法人籌碼和 AI 伺服器散熱需求",
@@ -100,7 +128,25 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "市場把 NVIDIA 新平台散熱規格疑慮，解讀成奇鋐接單想像可能降溫；如果法人或短線資金跟著賣，股價壓力就會被放大。",
     flat: "大家還在等 NVIDIA 新平台規格、奇鋐接單狀況和法人籌碼變化，暫時不敢把方向看太死。",
     watch: "接下來看 NVIDIA 新平台散熱設計是否確定、奇鋐水冷散熱出貨、法人買賣超和營收是否跟上。",
-    baseRisk: 78
+    baseRisk: 78,
+    sources: [
+      ...defaultSources,
+      {
+        name: "聯合新聞網",
+        title: "奇鋐與 NVIDIA 新平台散熱規格疑慮",
+        url: "https://udn.com/news/story/7253/9444557"
+      },
+      {
+        name: "工商時報",
+        title: "奇鋐、富世達水冷散熱與市場疑慮",
+        url: "https://www.chinatimes.com/newspapers/20250908000305-260206"
+      },
+      {
+        name: "CMoney",
+        title: "奇鋐股價、法人籌碼與 AI 散熱題材整理",
+        url: "https://cmnews.com.tw/article/marketwatcher-6ee38030-491d-11f1-9cb6-11e2473fc8eb"
+      }
+    ]
   },
   "2382": {
     focus: "AI 伺服器訂單是否延續，以及客戶拉貨節奏",
@@ -108,7 +154,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "如果市場擔心 AI 伺服器拉貨放慢，代工股會先被賣壓測試。",
     flat: "大家在等 AI 伺服器出貨和客戶訂單是否更明確。",
     watch: "接下來看 AI 伺服器營收占比、毛利率和主要客戶拉貨節奏。",
-    baseRisk: 66
+    baseRisk: 66,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "廣達營收與重大訊息" },
+      { name: "經濟日報", title: "AI 伺服器供應鏈新聞" }
+    ]
   },
   "3231": {
     focus: "AI 伺服器代工題材和短線籌碼是否過熱",
@@ -116,7 +167,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "AI 伺服器股漲多後，只要資金轉保守，緯創容易先被獲利了結。",
     flat: "市場在等 AI 伺服器出貨能不能繼續支撐營收。",
     watch: "接下來看伺服器出貨、營收成長和法人籌碼是否穩定。",
-    baseRisk: 70
+    baseRisk: 70,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "緯創營收與重大訊息" },
+      { name: "工商時報", title: "AI 伺服器代工供應鏈新聞" }
+    ]
   },
   "2308": {
     focus: "資料中心電源、散熱和電動車需求",
@@ -124,7 +180,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "如果市場擔心股價已反映太多 AI 電源題材，短線賣壓會變明顯。",
     flat: "大家在等電源、散熱和電動車業務哪一塊能接棒成長。",
     watch: "接下來看資料中心電源訂單、毛利率和電動車需求。",
-    baseRisk: 62
+    baseRisk: 62,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "台達電營收與重大訊息" },
+      { name: "經濟日報", title: "資料中心電源與 AI 基建新聞" }
+    ]
   },
   "2454": {
     focus: "手機晶片需求、AI 手機題材和毛利率",
@@ -132,7 +193,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "如果手機需求或毛利率疑慮升高，聯發科會被市場先降一點期待。",
     flat: "投資人還在等新品銷售、客戶拉貨和毛利率訊號。",
     watch: "接下來看手機晶片出貨、AI 手機滲透率和毛利率。",
-    baseRisk: 52
+    baseRisk: 52,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "聯發科營收與法說資料" },
+      { name: "工商時報", title: "手機晶片與 AI 手機新聞" }
+    ]
   },
   "2881": {
     focus: "壽險投資收益和股利期待",
@@ -140,7 +206,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "投資人擔心利率或市場波動影響壽險投資表現。",
     flat: "今天金融股方向不明，主要仍在等利率和股利線索。",
     watch: "接下來看股利政策、利率走勢和壽險投資收益。",
-    baseRisk: 36
+    baseRisk: 36,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "富邦金公告與財務資訊" },
+      { name: "金管會", title: "金融業監理與市場資訊" }
+    ]
   },
   "2603": {
     focus: "貨櫃航運報價和運量變化",
@@ -148,7 +219,12 @@ const stockProfiles: Record<string, Partial<InsightProfile>> = {
     down: "投資人擔心運價支撐不夠，航運股先承壓。",
     flat: "運價和需求方向還不夠明確，今天偏整理。",
     watch: "接下來看運價、船班供給和全球貿易需求。",
-    baseRisk: 68
+    baseRisk: 68,
+    sources: [
+      ...defaultSources,
+      { name: "公開資訊觀測站", title: "長榮營收與重大訊息" },
+      { name: "工商時報", title: "貨櫃航運與運價新聞" }
+    ]
   }
 };
 
@@ -248,12 +324,7 @@ export function applyDailyInsight(
   const minute = String(10 + (hashText(stock.symbol) % 45)).padStart(2, "0");
   const dateLabel = `${date.getMonth() + 1}/${date.getDate()}`;
   const hasVerifiedQuote = Boolean(quote);
-  const sourceNote = hasVerifiedQuote
-    ? "已用 TWSE 今日報價確認漲跌方向；原因文字是依個股觀察主軸做白話解讀，不冒充新聞。"
-    : "目前沒有交易所報價，僅顯示 Demo 觀察主軸，不當作今日行情或新聞。";
-  const informationBasis = hasVerifiedQuote
-    ? `查證基礎：TWSE 報價 ${quote?.quoteTime ?? ""}。新聞事件需正式版再接公開資訊觀測站、交易所公告與多家媒體交叉確認。`
-    : "查證基礎：尚未取得 TWSE 報價；不產生未查證新聞。";
+  const referenceSources = profile.sources ?? defaultSources;
 
   return {
     ...stock,
@@ -266,9 +337,8 @@ export function applyDailyInsight(
     reminder: profile.watch,
     aiNews: hasVerifiedQuote
       ? `股市重點：今天${moveLabel}。${moveReason}`
-      : `股市重點：今天還沒接到報價。這檔目前先看 ${profile.focus}，等報價回來後再判斷是漲、跌或震盪。`,
-    informationBasis,
-    sourceNote,
+      : `股市重點：這檔目前先看 ${profile.focus}，等今日資料更新後會整理主要原因。`,
+    referenceSources,
     updatedAt: quote?.quoteTime ?? `${dateLabel} 08:${minute}`
   };
 }

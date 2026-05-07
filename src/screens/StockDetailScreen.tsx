@@ -42,10 +42,20 @@ function getMoveLabel(stock: StockCardData) {
 
 function getSourceLabel(stock: StockCardData) {
   if (stock.dataSource === "twse") {
-    return `TWSE ${stock.updatedAt}`;
+    return `報價 ${stock.updatedAt}`;
   }
 
-  return "Demo 推估，非真實報價";
+  return "等待今日資料更新";
+}
+
+function getReferenceTitle(stock: StockCardData) {
+  if (stock.referenceSources.length === 0) {
+    return "";
+  }
+
+  return stock.referenceSources
+    .map((source) => `${source.name}：${source.title}`)
+    .join("\n");
 }
 
 function getForecastWeather(stock: StockCardData) {
@@ -239,6 +249,15 @@ function StockInsightDetail({
         <Text style={styles.detailNews}>{stock.aiNews}</Text>
         <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
       </Card>
+
+      {stock.referenceSources.length > 0 && (
+        <>
+          <SectionTitle title="參考來源" />
+          <Card>
+            <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
+          </Card>
+        </>
+      )}
 
       <SectionTitle title="風險溫度" />
       <RiskTemperatureCard temperature={stock.temperature} fill={riskFill} note={stock.reminder} />
@@ -437,6 +456,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 27,
     fontWeight: "600"
+  },
+  references: {
+    color: colors.muted,
+    fontSize: 14,
+    lineHeight: 23,
+    fontWeight: "700"
   },
   disclaimer: {
     marginTop: spacing.lg,

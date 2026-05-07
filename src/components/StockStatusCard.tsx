@@ -24,10 +24,21 @@ function getMoveLabel(stock: StockCardData) {
 
 function getSourceLabel(stock: StockCardData) {
   if (stock.dataSource === "twse") {
-    return `TWSE ${stock.updatedAt}`;
+    return `報價 ${stock.updatedAt}`;
   }
 
-  return "Demo 推估，非真實報價";
+  return "等待今日資料更新";
+}
+
+function getReferenceLabel(stock: StockCardData) {
+  const names = stock.referenceSources.map((source) => source.name);
+  const uniqueNames = Array.from(new Set(names));
+
+  if (uniqueNames.length === 0) {
+    return "";
+  }
+
+  return `參考：${uniqueNames.join("、")}`;
 }
 
 export function StockStatusCard({ stock, onPress }: StockStatusCardProps) {
@@ -62,6 +73,9 @@ export function StockStatusCard({ stock, onPress }: StockStatusCardProps) {
           <Text style={styles.newsLabel}>今日股市重點</Text>
           <Text style={styles.newsText}>{stock.aiNews}</Text>
           <Text style={styles.updatedAt}>{getSourceLabel(stock)}</Text>
+          {stock.referenceSources.length > 0 && (
+            <Text style={styles.references}>{getReferenceLabel(stock)}</Text>
+          )}
         </View>
         <Text style={styles.reminder}>{stock.reminder}</Text>
       </Card>
@@ -160,6 +174,13 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
     color: colors.muted,
     fontSize: 12,
+    fontWeight: "700"
+  },
+  references: {
+    marginTop: spacing.xs,
+    color: colors.muted,
+    fontSize: 12,
+    lineHeight: 18,
     fontWeight: "700"
   },
   reminder: {

@@ -2,6 +2,12 @@ export type Tone = "green" | "yellow" | "orange" | "red";
 export type StockCategory = "tech" | "etf" | "finance" | "defensive" | "cyclical";
 export type PriceMove = "up" | "down" | "flat";
 
+export type ReferenceSource = {
+  name: string;
+  title: string;
+  url?: string;
+};
+
 export type StockCardData = {
   symbol: string;
   name: string;
@@ -18,7 +24,6 @@ export type StockCardData = {
   dataSource: "twse" | "demo" | "unavailable";
   quoteTime?: string;
   aiNews: string;
-  informationBasis: string;
-  sourceNote: string;
+  referenceSources: ReferenceSource[];
   updatedAt: string;
 };

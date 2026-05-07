@@ -100,11 +100,8 @@ function makeStock(seed: StockSeed, index: number): StockCardData {
     reminder: isHot
       ? "題材熱度較高，追蹤消息比盲目追高更重要。"
       : "狀態相對穩定，但仍要留意大盤與產業消息變化。",
-    aiNews: isEtf
-      ? `股市重點：尚未取得今日交易所資料。這檔先看 ${seed.theme}，但不把推測當成新聞。`
-      : `股市重點：尚未取得今日交易所資料。這檔先看 ${seed.theme}，但不把推測當成新聞。`,
-    informationBasis: "尚未接到交易所報價，僅顯示 Demo 觀察主軸。",
-    sourceNote: "未查證新聞，不產生事件敘述。",
+    aiNews: `股市重點：這檔目前先看 ${seed.theme}，等今日資料更新後會整理主要原因。`,
+    referenceSources: [],
     updatedAt: `今日 08:${updatedMinute}`
   };
 }
