@@ -3,6 +3,7 @@ export type StockCategory = "tech" | "etf" | "finance" | "defensive" | "cyclical
 export type PriceMove = "up" | "down" | "flat";
 export type ExplanationLevel = "simple" | "standard" | "detailed";
 export type InvestorMode = "holding" | "watching";
+export type HoldingWeights = Record<string, number>;
 
 export type ReferenceSource = {
   name: string;

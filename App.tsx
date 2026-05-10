@@ -11,7 +11,7 @@ import { StockDetailScreen } from "./src/screens/StockDetailScreen";
 import { WatchlistScreen } from "./src/screens/WatchlistScreen";
 import { fetchTaiwanQuotes, type QuoteSnapshot } from "./src/services/marketData";
 import { colors, radius, spacing } from "./src/theme";
-import type { UserPreferences } from "./src/types";
+import type { HoldingWeights, UserPreferences } from "./src/types";
 import { applyDailyInsight } from "./src/utils/dailyInsights";
 
 type TabKey = "market" | "watchlist" | "stock" | "portfolio" | "settings";
@@ -55,12 +55,30 @@ function loadPreferences() {
   }
 }
 
+function loadHoldingWeights(): HoldingWeights {
+  if (typeof window === "undefined") {
+    return {};
+  }
+
+  const saved = window.localStorage.getItem("finpilot.holdings");
+  if (!saved) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(saved) as HoldingWeights;
+  } catch {
+    return {};
+  }
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabKey>("market");
   const [trackedSymbols, setTrackedSymbols] = useState(defaultTrackedSymbols);
   const [selectedStockSymbol, setSelectedStockSymbol] = useState<string | null>(null);
   const [quotesBySymbol, setQuotesBySymbol] = useState<Record<string, QuoteSnapshot>>({});
   const [preferences, setPreferences] = useState<UserPreferences>(loadPreferences);
+  const [holdingWeights, setHoldingWeights] = useState<HoldingWeights>(loadHoldingWeights);
   const now = new Date();
   const todayKey = new Date().toDateString();
   const weekendMode = isWeekend(now);
@@ -70,6 +88,12 @@ export default function App() {
       window.localStorage.setItem("finpilot.preferences", JSON.stringify(preferences));
     }
   }, [preferences]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("finpilot.holdings", JSON.stringify(holdingWeights));
+    }
+  }, [holdingWeights]);
 
   useEffect(() => {
     let active = true;
@@ -117,6 +141,16 @@ export default function App() {
 
       return [...current, symbol];
     });
+
+    setHoldingWeights((current) => {
+      if (trackedSymbols.includes(symbol)) {
+        const next = { ...current };
+        delete next[symbol];
+        return next;
+      }
+
+      return { ...current, [symbol]: current[symbol] ?? 10 };
+    });
   };
 
   const openStock = (symbol: string) => {
@@ -148,7 +182,14 @@ export default function App() {
           />
         );
       case "portfolio":
-        return <PortfolioScreen stocks={trackedStocks} preferences={preferences} />;
+        return (
+          <PortfolioScreen
+            stocks={trackedStocks}
+            preferences={preferences}
+            holdingWeights={holdingWeights}
+            onChangeHoldingWeights={setHoldingWeights}
+          />
+        );
       case "settings":
         return (
           <SettingsScreen

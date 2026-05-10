@@ -1,18 +1,22 @@
 import { StyleSheet, Text } from "react-native";
 
 import { Card } from "../components/Card";
+import { PositionSizingCard } from "../components/PositionSizingCard";
 import { PortfolioHealthCard, type AllocationItem } from "../components/PortfolioHealthCard";
 import { PortfolioProCard } from "../components/PortfolioProCard";
 import { PortfolioRiskCard } from "../components/PortfolioRiskCard";
+import { RiskRadarCard } from "../components/RiskRadarCard";
 import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
 import { TimelineCard } from "../components/TimelineCard";
 import { colors, spacing } from "../theme";
-import type { StockCardData, StockCategory, UserPreferences } from "../types";
+import type { HoldingWeights, StockCardData, StockCategory, UserPreferences } from "../types";
 
 type PortfolioScreenProps = {
   stocks: StockCardData[];
   preferences: UserPreferences;
+  holdingWeights: HoldingWeights;
+  onChangeHoldingWeights: (weights: HoldingWeights) => void;
 };
 
 const categoryLabels: Record<StockCategory | "cash", string> = {
@@ -33,7 +37,7 @@ const categoryColors: Record<StockCategory | "cash", string> = {
   cash: colors.muted
 };
 
-function getPortfolioModel(stocks: StockCardData[]) {
+function getPortfolioModel(stocks: StockCardData[], holdingWeights: HoldingWeights, useWeights: boolean) {
   const cash = stocks.length === 0 ? 100 : 8;
   const invested = 100 - cash;
   const counts: Record<StockCategory, number> = {
@@ -45,10 +49,15 @@ function getPortfolioModel(stocks: StockCardData[]) {
   };
 
   stocks.forEach((stock) => {
-    counts[stock.category] += 1;
+    counts[stock.category] += useWeights ? holdingWeights[stock.symbol] ?? 10 : 1;
   });
 
-  const total = Math.max(stocks.length, 1);
+  const total = Math.max(
+    useWeights
+      ? stocks.reduce((sum, stock) => sum + (holdingWeights[stock.symbol] ?? 10), 0)
+      : stocks.length,
+    1
+  );
   const categories: StockCategory[] = ["tech", "etf", "finance", "defensive", "cyclical"];
   const allocations: AllocationItem[] = categories
     .map((category) => ({
@@ -110,8 +119,14 @@ function getSimplePortfolioText(stocks: StockCardData[], model: ReturnType<typeo
   return "你的組合目前相對平衡，重點是持續追蹤偏熱股票。";
 }
 
-export function PortfolioScreen({ stocks, preferences }: PortfolioScreenProps) {
-  const model = getPortfolioModel(stocks);
+export function PortfolioScreen({
+  stocks,
+  preferences,
+  holdingWeights,
+  onChangeHoldingWeights
+}: PortfolioScreenProps) {
+  const useWeights = preferences.investorMode === "holding";
+  const model = getPortfolioModel(stocks, holdingWeights, useWeights);
   const simpleMode = preferences.explanationLevel === "simple";
   const detailedMode = preferences.explanationLevel === "detailed";
   const portfolioTimelineItems = [
@@ -148,6 +163,21 @@ export function PortfolioScreen({ stocks, preferences }: PortfolioScreenProps) {
       <PortfolioHealthCard health={model.health} allocations={model.allocations} />
 
       <SectionTitle title={preferences.investorMode === "holding" ? "持有風險" : "觀察風險"} />
+      {preferences.investorMode === "holding" && (
+        <>
+          <PositionSizingCard
+            stocks={stocks}
+            holdingWeights={holdingWeights}
+            onChangeHoldingWeights={onChangeHoldingWeights}
+          />
+          <SectionTitle title="每日風險雷達" />
+          <RiskRadarCard
+            stocks={stocks}
+            holdingWeights={holdingWeights}
+            investorMode={preferences.investorMode}
+          />
+        </>
+      )}
       {simpleMode ? (
         <Card soft>
           <Text style={styles.aiText}>{getSimplePortfolioText(stocks, model)}</Text>
@@ -159,7 +189,11 @@ export function PortfolioScreen({ stocks, preferences }: PortfolioScreenProps) {
       {detailedMode && (
         <>
           <SectionTitle title="Pro 組合健檢" caption="詳細模式預覽，正式版可作為付費功能。" />
-          <PortfolioProCard stocks={stocks} investorMode={preferences.investorMode} />
+          <PortfolioProCard
+            stocks={stocks}
+            holdingWeights={holdingWeights}
+            investorMode={preferences.investorMode}
+          />
         </>
       )}
 

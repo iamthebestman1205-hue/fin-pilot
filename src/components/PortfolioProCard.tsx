@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import { colors, spacing } from "../theme";
-import type { InvestorMode, StockCardData, StockCategory } from "../types";
+import type { HoldingWeights, InvestorMode, StockCardData, StockCategory } from "../types";
 import { Card } from "./Card";
 
 type PortfolioProCardProps = {
   stocks: StockCardData[];
+  holdingWeights: HoldingWeights;
   investorMode: InvestorMode;
 };
 
@@ -33,12 +34,19 @@ function getDominantCategory(stocks: StockCardData[]) {
   return (Object.keys(counts) as StockCategory[]).sort((a, b) => counts[b] - counts[a])[0];
 }
 
-function getDrawdownStress(stocks: StockCardData[]) {
+function getWeightedExposure(stock: StockCardData, holdingWeights: HoldingWeights, investorMode: InvestorMode) {
+  return investorMode === "holding" ? holdingWeights[stock.symbol] ?? 10 : 10;
+}
+
+function getDrawdownStress(stocks: StockCardData[], holdingWeights: HoldingWeights, investorMode: InvestorMode) {
   const hotCount = stocks.filter(
     (stock) => stock.temperatureTone === "orange" || stock.temperatureTone === "red"
   ).length;
   const downCount = stocks.filter((stock) => stock.priceMove === "down").length;
-  const score = Math.min(99, Math.round((hotCount * 18 + downCount * 14) / Math.max(stocks.length, 1)));
+  const hotWeight = stocks
+    .filter((stock) => stock.temperatureTone === "orange" || stock.temperatureTone === "red")
+    .reduce((total, stock) => total + getWeightedExposure(stock, holdingWeights, investorMode), 0);
+  const score = Math.min(99, Math.round((hotCount * 18 + downCount * 14 + hotWeight) / Math.max(stocks.length, 1)));
 
   if (score >= 45) {
     return "偏高";
@@ -51,10 +59,13 @@ function getDrawdownStress(stocks: StockCardData[]) {
   return "可控";
 }
 
-function getRebalanceText(stocks: StockCardData[], investorMode: InvestorMode) {
+function getRebalanceText(stocks: StockCardData[], holdingWeights: HoldingWeights, investorMode: InvestorMode) {
   const dominant = getDominantCategory(stocks);
-  const categoryCount = stocks.filter((stock) => stock.category === dominant).length;
-  const ratio = categoryCount / Math.max(stocks.length, 1);
+  const categoryExposure = stocks
+    .filter((stock) => stock.category === dominant)
+    .reduce((total, stock) => total + getWeightedExposure(stock, holdingWeights, investorMode), 0);
+  const totalExposure = stocks.reduce((total, stock) => total + getWeightedExposure(stock, holdingWeights, investorMode), 0);
+  const ratio = categoryExposure / Math.max(totalExposure, 1);
 
   if (ratio >= 0.6) {
     return investorMode === "holding"
@@ -65,19 +76,19 @@ function getRebalanceText(stocks: StockCardData[], investorMode: InvestorMode) {
   return "目前族群分散度尚可，重點是追蹤高溫標的是否連續升溫。";
 }
 
-function getPortfolioSummary(stocks: StockCardData[], investorMode: InvestorMode) {
+function getPortfolioSummary(stocks: StockCardData[], holdingWeights: HoldingWeights, investorMode: InvestorMode) {
   const dominant = getDominantCategory(stocks);
-  const stress = getDrawdownStress(stocks);
+  const stress = getDrawdownStress(stocks, holdingWeights, investorMode);
   const modeText = investorMode === "holding" ? "持有部位" : "觀察名單";
 
-  return `Pro 組合健檢：你的${modeText}主要曝險在${categoryNames[dominant]}，回檔壓力目前「${stress}」。${getRebalanceText(stocks, investorMode)}`;
+  return `Pro 組合健檢：你的${modeText}主要曝險在${categoryNames[dominant]}，回檔壓力目前「${stress}」。${getRebalanceText(stocks, holdingWeights, investorMode)}`;
 }
 
-export function PortfolioProCard({ stocks, investorMode }: PortfolioProCardProps) {
+export function PortfolioProCard({ stocks, holdingWeights, investorMode }: PortfolioProCardProps) {
   const dominant = getDominantCategory(stocks);
   const metrics = [
     { label: "主要曝險", value: categoryNames[dominant], note: "集中度" },
-    { label: "回檔壓力", value: getDrawdownStress(stocks), note: "風險模型" },
+    { label: "回檔壓力", value: getDrawdownStress(stocks, holdingWeights, investorMode), note: "風險模型" },
     { label: "題材重疊", value: stocks.filter((stock) => stock.category === dominant).length >= 3 ? "偏高" : "可控", note: "同族群" },
     { label: "再平衡", value: stocks.length >= 4 ? "可評估" : "資料不足", note: "Pro 建議" }
   ];
@@ -88,7 +99,7 @@ export function PortfolioProCard({ stocks, investorMode }: PortfolioProCardProps
         <Text style={styles.title}>Pro 組合健檢</Text>
         <Text style={styles.badge}>付費預覽</Text>
       </View>
-      <Text style={styles.summary}>{getPortfolioSummary(stocks, investorMode)}</Text>
+      <Text style={styles.summary}>{getPortfolioSummary(stocks, holdingWeights, investorMode)}</Text>
 
       <View style={styles.grid}>
         {metrics.map((metric) => (
