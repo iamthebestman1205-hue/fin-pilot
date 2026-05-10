@@ -5,7 +5,6 @@ import { PositionSizingCard } from "../components/PositionSizingCard";
 import { PortfolioHealthCard, type AllocationItem } from "../components/PortfolioHealthCard";
 import { PortfolioProCard } from "../components/PortfolioProCard";
 import { PortfolioRiskCard } from "../components/PortfolioRiskCard";
-import { RiskRadarCard } from "../components/RiskRadarCard";
 import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
 import { TimelineCard } from "../components/TimelineCard";
@@ -162,28 +161,28 @@ export function PortfolioScreen({
       <SectionTitle title="健康度" />
       <PortfolioHealthCard health={model.health} allocations={model.allocations} />
 
-      <SectionTitle title={preferences.investorMode === "holding" ? "持有風險" : "觀察風險"} />
       {preferences.investorMode === "holding" && (
         <>
+          <SectionTitle title="持股比例" />
           <PositionSizingCard
             stocks={stocks}
             holdingWeights={holdingWeights}
             onChangeHoldingWeights={onChangeHoldingWeights}
           />
-          <SectionTitle title="每日風險雷達" />
-          <RiskRadarCard
-            stocks={stocks}
-            holdingWeights={holdingWeights}
-            investorMode={preferences.investorMode}
-          />
         </>
       )}
+
+      <SectionTitle title={preferences.investorMode === "holding" ? "個人持有風險雷達" : "觀察名單風險雷達"} />
       {simpleMode ? (
         <Card soft>
           <Text style={styles.aiText}>{getSimplePortfolioText(stocks, model)}</Text>
         </Card>
       ) : (
-        <PortfolioRiskCard stocks={stocks} investorMode={preferences.investorMode} />
+        <PortfolioRiskCard
+          stocks={stocks}
+          holdingWeights={holdingWeights}
+          investorMode={preferences.investorMode}
+        />
       )}
 
       {detailedMode && (
