@@ -69,11 +69,11 @@ function getRebalanceText(stocks: StockCardData[], holdingWeights: HoldingWeight
 
   if (ratio >= 0.6) {
     return investorMode === "holding"
-      ? `部位集中在${categoryNames[dominant]}，可考慮降低單一題材曝險。`
-      : `觀察清單太集中在${categoryNames[dominant]}，建議加入不同族群比較。`;
+      ? `問題很明確：部位集中在${categoryNames[dominant]}，單一題材正在主導你的組合風險。`
+      : `問題很明確：觀察清單太集中在${categoryNames[dominant]}，你看到的不是分散機會，而是同一種風險。`;
   }
 
-  return "目前族群分散度尚可，重點是追蹤高溫標的是否連續升溫。";
+  return "好處是族群分散度尚可，問題只集中在少數高溫標的。";
 }
 
 function getPortfolioSummary(stocks: StockCardData[], holdingWeights: HoldingWeights, investorMode: InvestorMode) {

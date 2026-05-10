@@ -22,14 +22,14 @@ function getMoveText(stock: StockCardData) {
 
 function getInvestorMeaning(stock: StockCardData) {
   if (stock.temperatureTone === "red") {
-    return "風險已經偏高，先確認原因是否影響長期故事，再決定要不要動作。";
+    return "風險已經偏高。問題是市場期待太滿，壞消息會被放大。";
   }
 
   if (stock.temperatureTone === "orange") {
-    return "短線溫度偏熱，重點是避免只因一天漲跌做決定。";
+    return "短線溫度偏熱。問題是追價空間變小，波動會變大。";
   }
 
-  return "目前不用過度緊張，先觀察事件是否連續發酵。";
+  return "目前不用過度緊張。好處是風險溫度還沒有失控。";
 }
 
 export function CauseChainCard({ stock }: CauseChainCardProps) {

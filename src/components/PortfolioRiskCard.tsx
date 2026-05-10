@@ -65,9 +65,9 @@ function getCategoryPhrase(stock: StockCardData) {
     case "defensive":
       return "防禦股通常比較穩，但上漲爆發力也較有限";
     case "cyclical":
-      return "循環股要看報價和景氣是否真的改善";
+      return "循環股的問題在景氣敏感，報價和需求一轉弱，股價反應會很快";
     default:
-      return "重點是看事件是否會延續";
+      return "核心問題在事件延續性";
   }
 }
 
@@ -81,33 +81,33 @@ function getPersonalizedLine(
 
   if (investorMode === "watching") {
     if (stock.temperatureTone === "red" || stock.temperatureTone === "orange") {
-      return `你還在觀察，這檔先不要急著追。${categoryPhrase}，等溫度降一點再看比較舒服。`;
+      return `結論：這檔現在不適合追。問題是${categoryPhrase}，而且目前溫度已經偏高，進場位置不漂亮。`;
     }
 
     if (stock.priceMove === "down") {
-      return `你還在觀察，今天轉弱反而可以拿來研究原因。先看它是個股問題，還是整個族群都弱。`;
+      return `結論：這檔今天轉弱，問題出在賣壓已經反映到價格。若同族群也弱，這不是單一股票問題，而是整個題材在降溫。`;
     }
 
-    return `你還在觀察，這檔目前不是主要警訊，可以等下一個明確事件再決定。`;
+    return `結論：這檔目前不是主要風險。好處是溫度不高，壞處是方向還不明確。`;
   }
 
   if (weight >= 30 && (stock.temperatureTone === "red" || stock.temperatureTone === "orange")) {
-    return `你給它 ${weight}% 的比重，而且現在是${stock.temperature}。這不是小波動，應該先檢查是否太集中在同一個題材。`;
+    return `結論：這是組合裡最大的風險。你給它 ${weight}% 的比重，又遇到${stock.temperature}，問題是單一題材對你的組合影響太大。`;
   }
 
   if (weight >= 25 && stock.priceMove === "down") {
-    return `你給它 ${weight}% 的比重，最近又轉弱。先看賣壓是否連續，如果同族群也弱，組合壓力會被放大。`;
+    return `結論：這檔正在拖累組合。你給它 ${weight}% 的比重，價格又轉弱，問題是賣壓已經從新聞面進到你的部位損益。`;
   }
 
   if (weight <= 10 && stock.priceMove === "down") {
-    return `這檔比重只有 ${weight}%，就算轉弱，對整體傷害相對有限。重點是觀察它會不會拖累同族群。`;
+    return `結論：這檔不是你的主要傷害。比重只有 ${weight}%，下跌對整體影響有限；真正要注意的是它會不會拖累同族群。`;
   }
 
   if (weight >= 20 && stock.priceMove === "up" && stock.temperatureTone === "orange") {
-    return `這檔比重 ${weight}% 且偏熱，上漲時很有感，但也要避免讓獲利集中在單一題材。`;
+    return `結論：這檔是目前的主要貢獻，但也偏熱。好處是 ${weight}% 的比重讓上漲很有感，問題是獲利太集中在單一題材。`;
   }
 
-  return `這檔比重約 ${weight}%，目前影響可控。${categoryPhrase}，先持續追蹤事件是否延續。`;
+  return `結論：這檔目前影響可控。比重約 ${weight}%，好處是沒有拖累組合；問題是${categoryPhrase}。`;
 }
 
 export function PortfolioRiskCard({

@@ -65,14 +65,14 @@ function getReferenceTitle(stock: StockCardData) {
 
 function getSimpleConclusion(stock: StockCardData) {
   if (stock.priceMove === "up") {
-    return `${stock.name}最近偏強，但先不要只因為漲就追。重點是看這個原因能不能延續。`;
+    return `${stock.name}最近偏強。好處是買盤有撐住，問題是如果已經偏熱，追高位置不好。`;
   }
 
   if (stock.priceMove === "down") {
-    return `${stock.name}最近轉弱，先確認下跌是短線情緒，還是故事真的變差。`;
+    return `${stock.name}最近轉弱。問題是賣壓已經反映在價格上，短線不是漂亮進場點。`;
   }
 
-  return `${stock.name}目前還沒有明確方向。先放觀察，不需要急著做決定。`;
+  return `${stock.name}目前沒有明確方向。好處是風險沒有失控，問題是還缺少新的推動力。`;
 }
 
 function getProFocusText(stock: StockCardData) {
@@ -81,12 +81,12 @@ function getProFocusText(stock: StockCardData) {
     : "成交量需 Pro 資料補齊";
   const volumePrice =
     stock.priceMove === "down"
-      ? "重點看是否放量轉弱，以及法人賣壓是否延續"
+      ? "問題是價格轉弱，若同時放量，代表賣壓正在擴大"
       : stock.priceMove === "up"
-        ? "重點看上漲是否有量能支撐，避免只是短線追價"
-        : "重點看量縮整理後，資金往哪邊選方向";
+        ? "好處是價格走強，若量能跟上，代表買盤不是只有短線情緒"
+        : "結論是方向未定，問題在資金還沒有明確表態";
 
-  return `Pro 重點：${volumeText}，${volumePrice}。接下來看籌碼、量價、同族群強弱和事件影響期是否同方向。`;
+  return `Pro 判斷：${volumeText}，${volumePrice}。籌碼、量價、同族群強弱和事件影響期會決定這個判斷是短線雜音還是趨勢改變。`;
 }
 
 function getForecastWeather(stock: StockCardData) {
@@ -128,7 +128,7 @@ function buildForecastItems(stock: StockCardData): ForecastItem[] {
   const weekNotes =
     stock.category === "tech" || stock.category === "etf"
       ? [
-          "未來一週留意 AI、半導體、ETF 內容是否太集中，以及大盤買氣是否同步支持。",
+          "未來一週的主要問題是 AI、半導體或 ETF 內容太集中，大盤買氣不足時會放大波動。",
           "如果市場不再偏愛科技股，這檔的天氣也可能跟著變差。",
           "觀察題材是否從單日題材變成連續買盤，這比一天漲跌更重要。"
         ]

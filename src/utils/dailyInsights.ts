@@ -28,15 +28,15 @@ const defaultSources: ReferenceSource[] = [
 
 const categoryProfiles: Record<StockCategory, InsightProfile> = {
   tech: {
-    focus: "市場是否還願意買科技成長故事",
+    focus: "科技成長故事的買盤強度",
     up: "買盤偏向成長股，投資人願意先相信後面的需求還在。",
     down: "前面期待拉得比較高，今天有人先把獲利收回來。",
-    flat: "大家還在等更明確的訂單、營收或財報線索。",
+    flat: "買賣雙方力道接近，訂單、營收或財報還沒有給出新方向。",
     watch: "接下來看訂單、毛利率、客戶需求有沒有跟上股價期待。",
     baseRisk: 58
   },
   etf: {
-    focus: "成分股今天是一起撐住，還是互相抵消",
+    focus: "成分股對 ETF 的支撐力",
     up: "主要成分股表現較穩，所以整包 ETF 跟著受到支撐。",
     down: "成分股走弱或市場氣氛轉保守，ETF 也被一起拖累。",
     flat: "成分股有漲有跌，整體互相抵消，方向不明顯。",
@@ -44,7 +44,7 @@ const categoryProfiles: Record<StockCategory, InsightProfile> = {
     baseRisk: 42
   },
   finance: {
-    focus: "市場對利率、股利和金融業獲利的看法",
+    focus: "利率、股利和金融業獲利的支撐力",
     up: "投資人今天比較願意買穩定現金流和股利題材。",
     down: "市場擔心景氣或利率變化會壓到金融業表現。",
     flat: "金融股今天沒有明確新方向，買盤和賣壓都不強。",
@@ -52,7 +52,7 @@ const categoryProfiles: Record<StockCategory, InsightProfile> = {
     baseRisk: 35
   },
   defensive: {
-    focus: "資金是否回到穩定型股票",
+    focus: "資金對穩定型股票的需求",
     up: "市場想找波動較低的標的，穩定現金流受到支撐。",
     down: "資金暫時去追更有題材的股票，穩定型標的被放慢。",
     flat: "市場沒有特別恐慌，也沒有特別追逐防禦股。",
@@ -60,7 +60,7 @@ const categoryProfiles: Record<StockCategory, InsightProfile> = {
     baseRisk: 28
   },
   cyclical: {
-    focus: "市場是否相信景氣正在變好",
+    focus: "景氣循環復甦力道",
     up: "投資人期待景氣慢慢回溫，所以循環股買氣變好。",
     down: "市場擔心景氣復甦不夠快，短線先保守看待。",
     flat: "景氣方向還不明確，今天比較像等待下一個訊號。",
@@ -334,11 +334,11 @@ export function applyDailyInsight(
     dataSource: hasVerifiedQuote ? "twse" : "demo",
     quoteTime: quote?.quoteTime,
     quoteVolume: quote?.volume,
-    reason: `${stock.name}今天${moveLabel}。市場今天主要在看：${profile.focus}。`,
+    reason: `${stock.name}今天${moveLabel}。核心原因是：${profile.focus}。`,
     reminder: profile.watch,
     aiNews: hasVerifiedQuote
       ? `股市重點：今天${moveLabel}。${moveReason}`
-      : `股市重點：這檔目前先看 ${profile.focus}，等今日資料更新後會整理主要原因。`,
+      : `股市重點：目前缺少今日報價，既有判斷是 ${profile.focus} 主導這檔股票。`,
     referenceSources,
     updatedAt: quote?.quoteTime ?? `${dateLabel} 08:${minute}`
   };

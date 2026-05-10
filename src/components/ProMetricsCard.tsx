@@ -137,21 +137,21 @@ function getPeers(stock: StockCardData) {
 function getInvestorAction(stock: StockCardData, investorMode: InvestorMode) {
   if (investorMode === "holding") {
     if (stock.temperatureTone === "red") {
-      return "已持有者先檢查部位大小，避免單一題材過度集中。";
+      return "結論是部位風險偏高，問題在單一題材過熱。";
     }
 
     if (stock.priceMove === "down") {
-      return "已持有者先看賣壓是否連續，不急著因一天波動出場。";
+      return "結論是賣壓已經形成，問題在價格轉弱會直接壓到持有部位。";
     }
 
-    return "已持有者可續抱觀察，但要追蹤量價是否失衡。";
+    return "結論是持有狀態尚可，好處是風險沒有失控，問題是量價若失衡會轉弱。";
   }
 
   if (stock.temperatureTone === "red" || stock.temperatureTone === "orange") {
-    return "觀察者先等溫度降一點，避免在市場最興奮時追進去。";
+    return "結論是不適合追高，問題是目前市場期待已經偏滿。";
   }
 
-  return "觀察者可以放入清單，等事件和量能更明確。";
+  return "結論是可以列入觀察，好處是目前風險沒有明顯失控。";
 }
 
 function getProSummary(stock: StockCardData, investorMode: InvestorMode) {
