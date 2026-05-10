@@ -148,7 +148,7 @@ export default function App() {
           />
         );
       case "portfolio":
-        return <PortfolioScreen stocks={trackedStocks} />;
+        return <PortfolioScreen stocks={trackedStocks} preferences={preferences} />;
       case "settings":
         return (
           <SettingsScreen

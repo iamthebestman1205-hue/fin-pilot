@@ -2,14 +2,17 @@ import { StyleSheet, Text } from "react-native";
 
 import { Card } from "../components/Card";
 import { PortfolioHealthCard, type AllocationItem } from "../components/PortfolioHealthCard";
+import { PortfolioProCard } from "../components/PortfolioProCard";
+import { PortfolioRiskCard } from "../components/PortfolioRiskCard";
 import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
 import { TimelineCard } from "../components/TimelineCard";
 import { colors, spacing } from "../theme";
-import type { StockCardData, StockCategory } from "../types";
+import type { StockCardData, StockCategory, UserPreferences } from "../types";
 
 type PortfolioScreenProps = {
   stocks: StockCardData[];
+  preferences: UserPreferences;
 };
 
 const categoryLabels: Record<StockCategory | "cash", string> = {
@@ -91,8 +94,26 @@ function getPortfolioModel(stocks: StockCardData[]) {
   return { allocations, health, concentration, aiReminder, top };
 }
 
-export function PortfolioScreen({ stocks }: PortfolioScreenProps) {
+function getSimplePortfolioText(stocks: StockCardData[], model: ReturnType<typeof getPortfolioModel>) {
+  if (stocks.length === 0) {
+    return "先加入追蹤股票，FinPilot 才能幫你看持有風險。";
+  }
+
+  if (model.health === "集中偏高") {
+    return "你的持有風險偏集中。先不要只看哪一檔會漲，應該先看風險是不是都壓在同一類股票。";
+  }
+
+  if (model.health === "中等偏積極") {
+    return "你的組合偏積極，行情好時會很有感，但修正時也會比較晃。";
+  }
+
+  return "你的組合目前相對平衡，重點是持續追蹤偏熱股票。";
+}
+
+export function PortfolioScreen({ stocks, preferences }: PortfolioScreenProps) {
   const model = getPortfolioModel(stocks);
+  const simpleMode = preferences.explanationLevel === "simple";
+  const detailedMode = preferences.explanationLevel === "detailed";
   const portfolioTimelineItems = [
     {
       time: "今天",
@@ -117,22 +138,52 @@ export function PortfolioScreen({ stocks }: PortfolioScreenProps) {
   return (
     <Screen>
       <Text style={styles.title}>投資組合狀態</Text>
-      <Text style={styles.subtitle}>依照你追蹤的股票，動態估算配置集中度與風險來源。</Text>
+      <Text style={styles.subtitle}>
+        {preferences.investorMode === "holding"
+          ? "把追蹤清單當作已持有部位，估算集中度與風險。"
+          : "把追蹤清單當作觀察名單，找出值得注意的風險。"}
+      </Text>
 
       <SectionTitle title="健康度" />
       <PortfolioHealthCard health={model.health} allocations={model.allocations} />
 
-      <SectionTitle title="時間追蹤" caption="追蹤清單改變時，組合狀態會跟著更新。" />
-      <TimelineCard items={portfolioTimelineItems} />
+      <SectionTitle title={preferences.investorMode === "holding" ? "持有風險" : "觀察風險"} />
+      {simpleMode ? (
+        <Card soft>
+          <Text style={styles.aiText}>{getSimplePortfolioText(stocks, model)}</Text>
+        </Card>
+      ) : (
+        <PortfolioRiskCard stocks={stocks} investorMode={preferences.investorMode} />
+      )}
 
-      <SectionTitle title="集中度提醒" />
-      <Card>
-        <Text style={styles.cardTitle}>{model.concentration}</Text>
-      </Card>
+      {detailedMode && (
+        <>
+          <SectionTitle title="Pro 組合健檢" caption="詳細模式預覽，正式版可作為付費功能。" />
+          <PortfolioProCard stocks={stocks} investorMode={preferences.investorMode} />
+        </>
+      )}
+
+      {!simpleMode && (
+        <>
+          <SectionTitle title="集中度提醒" />
+          <Card>
+            <Text style={styles.cardTitle}>{model.concentration}</Text>
+          </Card>
+        </>
+      )}
+
+      {preferences.explanationLevel === "standard" && (
+        <>
+          <SectionTitle title="時間追蹤" caption="追蹤清單改變時，組合狀態會跟著更新。" />
+          <TimelineCard items={portfolioTimelineItems} />
+        </>
+      )}
 
       <SectionTitle title="AI 白話提醒" />
       <Card soft>
-        <Text style={styles.aiText}>{model.aiReminder}</Text>
+        <Text style={styles.aiText}>
+          {simpleMode ? getSimplePortfolioText(stocks, model) : model.aiReminder}
+        </Text>
       </Card>
     </Screen>
   );

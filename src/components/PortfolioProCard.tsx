@@ -1,0 +1,165 @@
+import { StyleSheet, Text, View } from "react-native";
+
+import { colors, spacing } from "../theme";
+import type { InvestorMode, StockCardData, StockCategory } from "../types";
+import { Card } from "./Card";
+
+type PortfolioProCardProps = {
+  stocks: StockCardData[];
+  investorMode: InvestorMode;
+};
+
+const categoryNames: Record<StockCategory, string> = {
+  tech: "科技 / AI",
+  etf: "ETF",
+  finance: "金融",
+  defensive: "防禦",
+  cyclical: "景氣循環"
+};
+
+function getDominantCategory(stocks: StockCardData[]) {
+  const counts: Record<StockCategory, number> = {
+    tech: 0,
+    etf: 0,
+    finance: 0,
+    defensive: 0,
+    cyclical: 0
+  };
+
+  stocks.forEach((stock) => {
+    counts[stock.category] += 1;
+  });
+
+  return (Object.keys(counts) as StockCategory[]).sort((a, b) => counts[b] - counts[a])[0];
+}
+
+function getDrawdownStress(stocks: StockCardData[]) {
+  const hotCount = stocks.filter(
+    (stock) => stock.temperatureTone === "orange" || stock.temperatureTone === "red"
+  ).length;
+  const downCount = stocks.filter((stock) => stock.priceMove === "down").length;
+  const score = Math.min(99, Math.round((hotCount * 18 + downCount * 14) / Math.max(stocks.length, 1)));
+
+  if (score >= 45) {
+    return "偏高";
+  }
+
+  if (score >= 25) {
+    return "中等";
+  }
+
+  return "可控";
+}
+
+function getRebalanceText(stocks: StockCardData[], investorMode: InvestorMode) {
+  const dominant = getDominantCategory(stocks);
+  const categoryCount = stocks.filter((stock) => stock.category === dominant).length;
+  const ratio = categoryCount / Math.max(stocks.length, 1);
+
+  if (ratio >= 0.6) {
+    return investorMode === "holding"
+      ? `部位集中在${categoryNames[dominant]}，可考慮降低單一題材曝險。`
+      : `觀察清單太集中在${categoryNames[dominant]}，建議加入不同族群比較。`;
+  }
+
+  return "目前族群分散度尚可，重點是追蹤高溫標的是否連續升溫。";
+}
+
+function getPortfolioSummary(stocks: StockCardData[], investorMode: InvestorMode) {
+  const dominant = getDominantCategory(stocks);
+  const stress = getDrawdownStress(stocks);
+  const modeText = investorMode === "holding" ? "持有部位" : "觀察名單";
+
+  return `Pro 組合健檢：你的${modeText}主要曝險在${categoryNames[dominant]}，回檔壓力目前「${stress}」。${getRebalanceText(stocks, investorMode)}`;
+}
+
+export function PortfolioProCard({ stocks, investorMode }: PortfolioProCardProps) {
+  const dominant = getDominantCategory(stocks);
+  const metrics = [
+    { label: "主要曝險", value: categoryNames[dominant], note: "集中度" },
+    { label: "回檔壓力", value: getDrawdownStress(stocks), note: "風險模型" },
+    { label: "題材重疊", value: stocks.filter((stock) => stock.category === dominant).length >= 3 ? "偏高" : "可控", note: "同族群" },
+    { label: "再平衡", value: stocks.length >= 4 ? "可評估" : "資料不足", note: "Pro 建議" }
+  ];
+
+  return (
+    <Card>
+      <View style={styles.header}>
+        <Text style={styles.title}>Pro 組合健檢</Text>
+        <Text style={styles.badge}>付費預覽</Text>
+      </View>
+      <Text style={styles.summary}>{getPortfolioSummary(stocks, investorMode)}</Text>
+
+      <View style={styles.grid}>
+        {metrics.map((metric) => (
+          <View key={metric.label} style={styles.metric}>
+            <Text style={styles.label}>{metric.label}</Text>
+            <Text style={styles.value}>{metric.value}</Text>
+            <Text style={styles.note}>{metric.note}</Text>
+          </View>
+        ))}
+      </View>
+    </Card>
+  );
+}
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.md
+  },
+  title: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: "900"
+  },
+  badge: {
+    color: colors.background,
+    fontSize: 12,
+    fontWeight: "900",
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: 999,
+    backgroundColor: colors.gold
+  },
+  summary: {
+    marginTop: spacing.md,
+    color: colors.text,
+    fontSize: 15,
+    lineHeight: 24,
+    fontWeight: "700"
+  },
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+    marginTop: spacing.md
+  },
+  metric: {
+    width: "48%",
+    padding: spacing.md,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.softCard
+  },
+  label: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: "800"
+  },
+  value: {
+    marginTop: spacing.xs,
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: "900"
+  },
+  note: {
+    marginTop: 4,
+    color: colors.gold,
+    fontSize: 11,
+    fontWeight: "800"
+  }
+});
