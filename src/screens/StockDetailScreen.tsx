@@ -86,7 +86,7 @@ function getProFocusText(stock: StockCardData) {
         ? "重點看上漲是否有量能支撐，避免只是短線追價"
         : "重點看量縮整理後，資金往哪邊選方向";
 
-  return `Pro 重點：${volumeText}，${volumePrice}。接下來看籌碼、量價和題材溫度是否同方向。`;
+  return `Pro 重點：${volumeText}，${volumePrice}。接下來看籌碼、量價、同族群強弱和事件影響期是否同方向。`;
 }
 
 function getForecastWeather(stock: StockCardData) {
@@ -309,7 +309,7 @@ function StockInsightDetail({
       {detailedMode && (
         <>
           <SectionTitle title="Pro 指標" caption="詳細模式預覽，正式版可作為付費解鎖內容。" />
-          <ProMetricsCard stock={stock} />
+          <ProMetricsCard stock={stock} investorMode={preferences.investorMode} />
         </>
       )}
 

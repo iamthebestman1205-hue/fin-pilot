@@ -26,6 +26,7 @@ const tabs: Array<{ key: TabKey; label: string; icon: string }> = [
 
 const defaultPreferences: UserPreferences = {
   explanationLevel: "standard",
+  investorMode: "watching",
   showCauseChain: true,
   showForecast: true,
   showImpactBreakdown: true,

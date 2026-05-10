@@ -4,7 +4,7 @@ import { Card } from "../components/Card";
 import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
 import { colors, radius, spacing } from "../theme";
-import type { ExplanationLevel, UserPreferences } from "../types";
+import type { ExplanationLevel, InvestorMode, UserPreferences } from "../types";
 
 type SettingsScreenProps = {
   preferences: UserPreferences;
@@ -20,6 +20,7 @@ const levels: Array<{ key: ExplanationLevel; label: string; description: string 
 const levelPresets: Record<ExplanationLevel, UserPreferences> = {
   simple: {
     explanationLevel: "simple",
+    investorMode: "watching",
     showCauseChain: false,
     showForecast: false,
     showImpactBreakdown: false,
@@ -27,6 +28,7 @@ const levelPresets: Record<ExplanationLevel, UserPreferences> = {
   },
   standard: {
     explanationLevel: "standard",
+    investorMode: "watching",
     showCauseChain: true,
     showForecast: true,
     showImpactBreakdown: true,
@@ -34,12 +36,18 @@ const levelPresets: Record<ExplanationLevel, UserPreferences> = {
   },
   detailed: {
     explanationLevel: "detailed",
+    investorMode: "holding",
     showCauseChain: true,
     showForecast: true,
     showImpactBreakdown: true,
     showSources: true
   }
 };
+
+const investorModes: Array<{ key: InvestorMode; label: string; description: string }> = [
+  { key: "watching", label: "觀察中", description: "提醒會偏向是否值得加入清單或等更好時機。" },
+  { key: "holding", label: "已持有", description: "提醒會偏向部位風險、是否需要降溫或續抱觀察。" }
+];
 
 function ToggleRow({
   label,
@@ -119,6 +127,29 @@ export function SettingsScreen({ preferences, onChangePreferences }: SettingsScr
           value={preferences.showSources}
           onPress={() => update({ showSources: !preferences.showSources })}
         />
+      </Card>
+
+      <SectionTitle title="我的狀態" />
+      <Card>
+        <View style={styles.levelRow}>
+          {investorModes.map((mode) => {
+            const selected = preferences.investorMode === mode.key;
+            return (
+              <Pressable
+                key={mode.key}
+                onPress={() => update({ investorMode: mode.key })}
+                style={[styles.levelButton, selected && styles.levelButtonActive]}
+              >
+                <Text style={[styles.levelLabel, selected && styles.levelLabelActive]}>
+                  {mode.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <Text style={styles.levelDescription}>
+          {investorModes.find((mode) => mode.key === preferences.investorMode)?.description}
+        </Text>
       </Card>
     </Screen>
   );

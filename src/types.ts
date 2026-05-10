@@ -2,6 +2,7 @@ export type Tone = "green" | "yellow" | "orange" | "red";
 export type StockCategory = "tech" | "etf" | "finance" | "defensive" | "cyclical";
 export type PriceMove = "up" | "down" | "flat";
 export type ExplanationLevel = "simple" | "standard" | "detailed";
+export type InvestorMode = "holding" | "watching";
 
 export type ReferenceSource = {
   name: string;
@@ -32,6 +33,7 @@ export type StockCardData = {
 
 export type UserPreferences = {
   explanationLevel: ExplanationLevel;
+  investorMode: InvestorMode;
   showCauseChain: boolean;
   showForecast: boolean;
   showImpactBreakdown: boolean;

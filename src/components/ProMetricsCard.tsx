@@ -1,11 +1,23 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import { colors, spacing } from "../theme";
-import type { StockCardData } from "../types";
+import type { InvestorMode, StockCardData } from "../types";
 import { Card } from "./Card";
 
 type ProMetricsCardProps = {
   stock: StockCardData;
+  investorMode: InvestorMode;
+};
+
+const peerGroups: Record<string, string[]> = {
+  "3017": ["雙鴻", "富世達", "台達電"],
+  "2330": ["聯發科", "日月光投控", "世芯-KY"],
+  "2382": ["緯創", "英業達", "鴻海"],
+  "3231": ["廣達", "英業達", "鴻海"],
+  "2308": ["奇鋐", "雙鴻", "光寶科"],
+  "2454": ["瑞昱", "聯詠", "祥碩"],
+  "2603": ["陽明", "萬海", "慧洋-KY"],
+  "0050": ["006208", "台積電", "大型權值股"]
 };
 
 function formatVolume(volume?: number) {
@@ -68,6 +80,22 @@ function getVolumePriceText(stock: StockCardData) {
   return "量能普通";
 }
 
+function getTurnoverText(stock: StockCardData) {
+  if (!stock.quoteVolume) {
+    return "Pro 解鎖";
+  }
+
+  if (stock.quoteVolume >= 80000) {
+    return "短線活躍";
+  }
+
+  if (stock.quoteVolume >= 20000) {
+    return "資金關注";
+  }
+
+  return "正常";
+}
+
 function getThemeHeatText(stock: StockCardData) {
   if (stock.temperatureTone === "red") {
     return "過熱";
@@ -80,30 +108,70 @@ function getThemeHeatText(stock: StockCardData) {
   return "可控";
 }
 
-function getProSummary(stock: StockCardData) {
+function getEventHorizon(stock: StockCardData) {
+  if (stock.symbol === "3017") {
+    return "一週到一個月";
+  }
+
+  if (stock.category === "tech") {
+    return "數週";
+  }
+
+  if (stock.category === "etf") {
+    return "一到兩週";
+  }
+
+  return "短線觀察";
+}
+
+function getPeers(stock: StockCardData) {
+  return peerGroups[stock.symbol] ?? (
+    stock.category === "finance"
+      ? ["國泰金", "中信金", "兆豐金"]
+      : stock.category === "cyclical"
+        ? ["同族群報價", "同業營收", "景氣指標"]
+        : ["同族群個股", "大盤", "ETF 成分股"]
+  );
+}
+
+function getInvestorAction(stock: StockCardData, investorMode: InvestorMode) {
+  if (investorMode === "holding") {
+    if (stock.temperatureTone === "red") {
+      return "已持有者先檢查部位大小，避免單一題材過度集中。";
+    }
+
+    if (stock.priceMove === "down") {
+      return "已持有者先看賣壓是否連續，不急著因一天波動出場。";
+    }
+
+    return "已持有者可續抱觀察，但要追蹤量價是否失衡。";
+  }
+
+  if (stock.temperatureTone === "red" || stock.temperatureTone === "orange") {
+    return "觀察者先等溫度降一點，避免在市場最興奮時追進去。";
+  }
+
+  return "觀察者可以放入清單，等事件和量能更明確。";
+}
+
+function getProSummary(stock: StockCardData, investorMode: InvestorMode) {
   const volumePrice = getVolumePriceText(stock);
   const chip = getChipText(stock);
   const heat = getThemeHeatText(stock);
+  const horizon = getEventHorizon(stock);
+  const action = getInvestorAction(stock, investorMode);
 
-  if (stock.priceMove === "down") {
-    return `專業角度先看賣壓是否只是短線，還是量能與籌碼一起轉弱。目前量價訊號是「${volumePrice}」，籌碼壓力為「${chip}」，題材溫度「${heat}」。`;
-  }
-
-  if (stock.priceMove === "up") {
-    return `專業角度不是只看上漲，而是看量能有沒有跟上、籌碼是否過熱。目前量價訊號是「${volumePrice}」，籌碼壓力為「${chip}」，題材溫度「${heat}」。`;
-  }
-
-  return `專業角度會把震盪視為等待訊號，重點是量能是否收斂、籌碼是否穩定。目前量價訊號是「${volumePrice}」，籌碼壓力為「${chip}」，題材溫度「${heat}」。`;
+  return `Pro 綜合判讀：量價為「${volumePrice}」、籌碼為「${chip}」、題材溫度「${heat}」，事件影響期約 ${horizon}。${action}`;
 }
 
-export function ProMetricsCard({ stock }: ProMetricsCardProps) {
+export function ProMetricsCard({ stock, investorMode }: ProMetricsCardProps) {
   const metrics = [
     { label: "成交量", value: formatVolume(stock.quoteVolume), note: "TWSE" },
     { label: "流動性", value: getLiquidityText(stock), note: "量能觀察" },
     { label: "量價關係", value: getVolumePriceText(stock), note: "價量判讀" },
     { label: "籌碼壓力", value: getChipText(stock), note: "法人/主力" },
-    { label: "題材溫度", value: getThemeHeatText(stock), note: "市場期待" },
-    { label: "波動風險", value: stock.temperature, note: "風險模型" }
+    { label: "週轉熱度", value: getTurnoverText(stock), note: "短線資金" },
+    { label: "事件期限", value: getEventHorizon(stock), note: "影響週期" }
   ];
 
   return (
@@ -112,7 +180,8 @@ export function ProMetricsCard({ stock }: ProMetricsCardProps) {
         <Text style={styles.title}>Pro 專業指標</Text>
         <Text style={styles.badge}>付費預覽</Text>
       </View>
-      <Text style={styles.summary}>{getProSummary(stock)}</Text>
+      <Text style={styles.summary}>{getProSummary(stock, investorMode)}</Text>
+
       <View style={styles.grid}>
         {metrics.map((metric) => (
           <View key={metric.label} style={styles.metric}>
@@ -122,8 +191,14 @@ export function ProMetricsCard({ stock }: ProMetricsCardProps) {
           </View>
         ))}
       </View>
+
+      <View style={styles.peerBox}>
+        <Text style={styles.peerTitle}>同族群比較</Text>
+        <Text style={styles.peerText}>{getPeers(stock).join("、")}</Text>
+      </View>
+
       <Text style={styles.footer}>
-        正式版可解鎖法人買賣超、主力籌碼、週轉率、量價背離與同族群比較。
+        正式版可接法人買賣超、主力籌碼、融資融券、週轉率、同族群強弱排名與事件影響追蹤。
       </Text>
     </Card>
   );
@@ -150,18 +225,18 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: colors.gold
   },
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.sm,
-    marginTop: spacing.md
-  },
   summary: {
     marginTop: spacing.md,
     color: colors.text,
     fontSize: 14,
     lineHeight: 23,
     fontWeight: "700"
+  },
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+    marginTop: spacing.md
   },
   metric: {
     width: "48%",
@@ -187,6 +262,26 @@ const styles = StyleSheet.create({
     color: colors.gold,
     fontSize: 11,
     fontWeight: "800"
+  },
+  peerBox: {
+    marginTop: spacing.md,
+    padding: spacing.md,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.softCard
+  },
+  peerTitle: {
+    color: colors.gold,
+    fontSize: 12,
+    fontWeight: "900"
+  },
+  peerText: {
+    marginTop: spacing.xs,
+    color: colors.text,
+    fontSize: 14,
+    lineHeight: 22,
+    fontWeight: "700"
   },
   footer: {
     marginTop: spacing.md,
