@@ -11,12 +11,15 @@ import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
 import { StockForecastCard, type ForecastItem } from "../components/StockForecastCard";
 import { StockStatusCard } from "../components/StockStatusCard";
+import { WeekendBriefingCard } from "../components/WeekendBriefingCard";
 import { colors, radius, spacing } from "../theme";
-import type { StockCardData } from "../types";
+import type { StockCardData, UserPreferences } from "../types";
 
 type StockDetailScreenProps = {
   stocks: StockCardData[];
   selectedStock: StockCardData | null;
+  weekendMode: boolean;
+  preferences: UserPreferences;
   onSelectStock: (symbol: string) => void;
   onBackToList: () => void;
   onFindStocks: () => void;
@@ -212,9 +215,13 @@ function buildImpactItems(stock: StockCardData): ImpactItem[] {
 
 function StockInsightDetail({
   stock,
+  weekendMode,
+  preferences,
   onBackToList
 }: {
   stock: StockCardData;
+  weekendMode: boolean;
+  preferences: UserPreferences;
   onBackToList: () => void;
 }) {
   const riskFill =
@@ -233,7 +240,7 @@ function StockInsightDetail({
         <Badge label={stock.temperature} tone={stock.temperatureTone} />
       </View>
       <View style={styles.detailMoveCard}>
-        <Text style={styles.detailMoveLabel}>今日漲跌</Text>
+        <Text style={styles.detailMoveLabel}>{weekendMode ? "最近交易日" : "今日漲跌"}</Text>
         <Text
           style={[
             styles.detailMoveValue,
@@ -245,29 +252,41 @@ function StockInsightDetail({
         </Text>
       </View>
 
-      <SectionTitle title="今日股市重點" />
+      <SectionTitle title={weekendMode ? "上週重點" : "今日股市重點"} />
       <Card soft>
         <Text style={styles.detailNews}>{stock.aiNews}</Text>
         <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
-        {stock.referenceSources.length > 0 && (
+        {preferences.showSources && stock.referenceSources.length > 0 && (
           <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
         )}
       </Card>
 
-      <SectionTitle title="原因鏈" />
-      <CauseChainCard stock={stock} />
+      {preferences.showCauseChain && (
+        <>
+          <SectionTitle title="原因鏈" />
+          <CauseChainCard stock={stock} />
+        </>
+      )}
 
       <SectionTitle title="風險溫度" />
       <RiskTemperatureCard temperature={stock.temperature} fill={riskFill} note={stock.reminder} />
 
-      <SectionTitle
-        title="天氣預報"
-        caption={`依照 ${getSourceLabel(stock)}，推估今天、明天與未來一週。`}
-      />
-      <StockForecastCard items={buildForecastItems(stock)} />
+      {preferences.showForecast && (
+        <>
+          <SectionTitle
+            title={weekendMode ? "下週觀察" : "天氣預報"}
+            caption={`依照 ${getSourceLabel(stock)}，整理接下來要看的方向。`}
+          />
+          <StockForecastCard items={buildForecastItems(stock)} />
+        </>
+      )}
 
-      <SectionTitle title="影響來源拆解" />
-      <ImpactBreakdownCard items={buildImpactItems(stock)} />
+      {preferences.showImpactBreakdown && preferences.explanationLevel !== "simple" && (
+        <>
+          <SectionTitle title="影響來源拆解" />
+          <ImpactBreakdownCard items={buildImpactItems(stock)} />
+        </>
+      )}
 
       <SectionTitle title="AI 白話結論" />
       <Card>
@@ -285,12 +304,21 @@ function StockInsightDetail({
 export function StockDetailScreen({
   stocks,
   selectedStock,
+  weekendMode,
+  preferences,
   onSelectStock,
   onBackToList,
   onFindStocks
 }: StockDetailScreenProps) {
   if (selectedStock) {
-    return <StockInsightDetail stock={selectedStock} onBackToList={onBackToList} />;
+    return (
+      <StockInsightDetail
+        stock={selectedStock}
+        weekendMode={weekendMode}
+        preferences={preferences}
+        onBackToList={onBackToList}
+      />
+    );
   }
 
   const hotCount = stocks.filter(
@@ -313,8 +341,8 @@ export function StockDetailScreen({
         </Card>
       </View>
 
-      <SectionTitle title="今日總覽" />
-      <DailyBriefingCard stocks={stocks} />
+      <SectionTitle title={weekendMode ? "週末總覽" : "今日總覽"} />
+      {weekendMode ? <WeekendBriefingCard stocks={stocks} /> : <DailyBriefingCard stocks={stocks} />}
 
       <SectionTitle title="整體風險溫度" />
       <RiskTemperatureCard
@@ -333,6 +361,7 @@ export function StockDetailScreen({
             <StockStatusCard
               key={stock.symbol}
               stock={stock}
+              showSources={preferences.showSources}
               onPress={() => onSelectStock(stock.symbol)}
             />
           ))}

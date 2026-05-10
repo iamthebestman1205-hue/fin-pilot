@@ -8,6 +8,7 @@ import { Card } from "./Card";
 type StockStatusCardProps = {
   stock: StockCardData;
   onPress?: () => void;
+  showSources?: boolean;
 };
 
 function getMoveLabel(stock: StockCardData) {
@@ -41,7 +42,7 @@ function getReferenceLabel(stock: StockCardData) {
   return `參考：${uniqueNames.join("、")}`;
 }
 
-export function StockStatusCard({ stock, onPress }: StockStatusCardProps) {
+export function StockStatusCard({ stock, onPress, showSources = true }: StockStatusCardProps) {
   return (
     <Pressable onPress={onPress}>
       <Card style={styles.card}>
@@ -73,7 +74,7 @@ export function StockStatusCard({ stock, onPress }: StockStatusCardProps) {
           <Text style={styles.newsLabel}>今日股市重點</Text>
           <Text style={styles.newsText}>{stock.aiNews}</Text>
           <Text style={styles.updatedAt}>{getSourceLabel(stock)}</Text>
-          {stock.referenceSources.length > 0 && (
+          {showSources && stock.referenceSources.length > 0 && (
             <Text style={styles.references}>{getReferenceLabel(stock)}</Text>
           )}
         </View>

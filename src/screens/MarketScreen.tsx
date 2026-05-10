@@ -5,11 +5,13 @@ import { ImpactBreakdownCard, type ImpactItem } from "../components/ImpactBreakd
 import { MarketWeatherCard } from "../components/MarketWeatherCard";
 import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
+import { WeekendBriefingCard } from "../components/WeekendBriefingCard";
 import { colors, spacing } from "../theme";
 import type { StockCardData } from "../types";
 
 type MarketScreenProps = {
   stocks: StockCardData[];
+  weekendMode: boolean;
 };
 
 function getMarketMood(stocks: StockCardData[]) {
@@ -86,7 +88,7 @@ function getMarketMood(stocks: StockCardData[]) {
   return { weather, score, summary, method, impacts, reminder };
 }
 
-export function MarketScreen({ stocks }: MarketScreenProps) {
+export function MarketScreen({ stocks, weekendMode }: MarketScreenProps) {
   const mood = getMarketMood(stocks);
 
   return (
@@ -94,7 +96,17 @@ export function MarketScreen({ stocks }: MarketScreenProps) {
       <Text style={styles.appName}>FinPilot</Text>
       <Text style={styles.hero}>不用懂 K 線，也能看懂市場。</Text>
 
-      <SectionTitle title="市場天氣" caption="依照你的追蹤清單，估算今天市場比較像哪種天氣。" />
+      {weekendMode && (
+        <>
+          <SectionTitle title="週末模式" caption="台股休市時，自動改看上週回顧和下週觀察。" />
+          <WeekendBriefingCard stocks={stocks} />
+        </>
+      )}
+
+      <SectionTitle
+        title="市場天氣"
+        caption={weekendMode ? "依照最近交易日與追蹤清單，估算下週開盤前的市場溫度。" : "依照你的追蹤清單，估算今天市場比較像哪種天氣。"}
+      />
       <MarketWeatherCard
         weather={mood.weather}
         score={mood.score}

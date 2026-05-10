@@ -11,6 +11,8 @@ type TwseQuote = {
   d?: string;
   t?: string;
   z?: string;
+  oz?: string;
+  pz?: string;
   y?: string;
 };
 
@@ -71,10 +73,10 @@ export async function fetchTaiwanQuotes(symbols: string[]): Promise<Record<strin
   const result: Record<string, QuoteSnapshot> = {};
 
   data.msgArray?.forEach((quote) => {
-    const current = parseNumber(quote.z);
+    const current = parseNumber(quote.z) ?? parseNumber(quote.oz) ?? parseNumber(quote.pz);
     const previous = parseNumber(quote.y);
 
-    if (!current || !previous) {
+    if (current === null || previous === null) {
       return;
     }
 

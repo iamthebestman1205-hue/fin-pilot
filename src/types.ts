@@ -1,6 +1,7 @@
 export type Tone = "green" | "yellow" | "orange" | "red";
 export type StockCategory = "tech" | "etf" | "finance" | "defensive" | "cyclical";
 export type PriceMove = "up" | "down" | "flat";
+export type ExplanationLevel = "simple" | "standard" | "detailed";
 
 export type ReferenceSource = {
   name: string;
@@ -26,4 +27,12 @@ export type StockCardData = {
   aiNews: string;
   referenceSources: ReferenceSource[];
   updatedAt: string;
+};
+
+export type UserPreferences = {
+  explanationLevel: ExplanationLevel;
+  showCauseChain: boolean;
+  showForecast: boolean;
+  showImpactBreakdown: boolean;
+  showSources: boolean;
 };
