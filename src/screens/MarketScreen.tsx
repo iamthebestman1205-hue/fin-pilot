@@ -103,24 +103,25 @@ export function MarketScreen({ stocks, weekendMode }: MarketScreenProps) {
         </>
       )}
 
-      <SectionTitle
-        title="市場天氣"
-        caption={weekendMode ? "依照最近交易日與追蹤清單，估算下週開盤前的市場溫度。" : "依照你的追蹤清單，估算今天市場比較像哪種天氣。"}
-      />
-      <MarketWeatherCard
-        weather={mood.weather}
-        score={mood.score}
-        summary={mood.summary}
-        method={mood.method}
-      />
+      {!weekendMode && (
+        <>
+          <SectionTitle title="市場天氣" caption="依照你的追蹤清單，估算今天市場比較像哪種天氣。" />
+          <MarketWeatherCard
+            weather={mood.weather}
+            score={mood.score}
+            summary={mood.summary}
+            method={mood.method}
+          />
 
-      <SectionTitle title="影響來源" caption="不講術語，直接說它會怎麼影響你。" />
-      <ImpactBreakdownCard items={mood.impacts} />
+          <SectionTitle title="影響來源" caption="不講術語，直接說它會怎麼影響你。" />
+          <ImpactBreakdownCard items={mood.impacts} />
 
-      <SectionTitle title="今日提醒" />
-      <Card>
-        <Text style={styles.reminder}>{mood.reminder}</Text>
-      </Card>
+          <SectionTitle title="今日提醒" />
+          <Card>
+            <Text style={styles.reminder}>{mood.reminder}</Text>
+          </Card>
+        </>
+      )}
     </Screen>
   );
 }

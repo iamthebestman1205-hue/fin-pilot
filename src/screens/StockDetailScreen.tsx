@@ -75,6 +75,20 @@ function getSimpleConclusion(stock: StockCardData) {
   return `${stock.name}目前還沒有明確方向。先放觀察，不需要急著做決定。`;
 }
 
+function getProFocusText(stock: StockCardData) {
+  const volumeText = stock.quoteVolume
+    ? `成交量約 ${stock.quoteVolume >= 10000 ? `${Math.round(stock.quoteVolume / 1000) / 10}萬張` : `${stock.quoteVolume.toLocaleString()} 張`}`
+    : "成交量需 Pro 資料補齊";
+  const volumePrice =
+    stock.priceMove === "down"
+      ? "重點看是否放量轉弱，以及法人賣壓是否延續"
+      : stock.priceMove === "up"
+        ? "重點看上漲是否有量能支撐，避免只是短線追價"
+        : "重點看量縮整理後，資金往哪邊選方向";
+
+  return `Pro 重點：${volumeText}，${volumePrice}。接下來看籌碼、量價和題材溫度是否同方向。`;
+}
+
 function getForecastWeather(stock: StockCardData) {
   if (stock.temperatureTone === "red") {
     return { today: "⛈ 雷雨", tomorrow: "🌧 陣雨", week: "☁️ 多雲" };
@@ -269,7 +283,13 @@ function StockInsightDetail({
 
       <SectionTitle title={simpleMode ? "超簡單重點" : weekendMode ? "上週重點" : "今日股市重點"} />
       <Card soft>
-        <Text style={styles.detailNews}>{simpleMode ? getSimpleConclusion(stock) : stock.aiNews}</Text>
+        <Text style={styles.detailNews}>
+          {simpleMode
+            ? getSimpleConclusion(stock)
+            : detailedMode
+              ? `${stock.aiNews}\n\n${getProFocusText(stock)}`
+              : stock.aiNews}
+        </Text>
         {!simpleMode && <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>}
         {!simpleMode && preferences.showSources && stock.referenceSources.length > 0 && (
           <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
