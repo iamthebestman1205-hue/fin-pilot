@@ -2,6 +2,8 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Badge } from "../components/Badge";
 import { Card } from "../components/Card";
+import { CauseChainCard } from "../components/CauseChainCard";
+import { DailyBriefingCard } from "../components/DailyBriefingCard";
 import { DailyAiNewsCard } from "../components/DailyAiNewsCard";
 import { ImpactBreakdownCard, type ImpactItem } from "../components/ImpactBreakdownCard";
 import { RiskTemperatureCard } from "../components/RiskTemperatureCard";
@@ -53,9 +55,8 @@ function getReferenceTitle(stock: StockCardData) {
     return "";
   }
 
-  return stock.referenceSources
-    .map((source) => `${source.name}：${source.title}`)
-    .join("\n");
+  const names = stock.referenceSources.map((source) => source.name);
+  return `參考：${Array.from(new Set(names)).join("、")}`;
 }
 
 function getForecastWeather(stock: StockCardData) {
@@ -248,16 +249,13 @@ function StockInsightDetail({
       <Card soft>
         <Text style={styles.detailNews}>{stock.aiNews}</Text>
         <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
+        {stock.referenceSources.length > 0 && (
+          <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
+        )}
       </Card>
 
-      {stock.referenceSources.length > 0 && (
-        <>
-          <SectionTitle title="參考來源" />
-          <Card>
-            <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
-          </Card>
-        </>
-      )}
+      <SectionTitle title="原因鏈" />
+      <CauseChainCard stock={stock} />
 
       <SectionTitle title="風險溫度" />
       <RiskTemperatureCard temperature={stock.temperature} fill={riskFill} note={stock.reminder} />
@@ -314,6 +312,9 @@ export function StockDetailScreen({
           <Text style={styles.statLabel}>偏熱標的</Text>
         </Card>
       </View>
+
+      <SectionTitle title="今日總覽" />
+      <DailyBriefingCard stocks={stocks} />
 
       <SectionTitle title="整體風險溫度" />
       <RiskTemperatureCard

@@ -10,14 +10,14 @@ type DailyAiNewsCardProps = {
 
 function getMoveLabel(stock: StockCardData) {
   if (stock.priceMove === "up") {
-    return "今天上漲";
+    return "上漲";
   }
 
   if (stock.priceMove === "down") {
-    return "今天下跌";
+    return "下跌";
   }
 
-  return "今天震盪";
+  return "震盪";
 }
 
 function getSourceLabel(stock: StockCardData) {
@@ -32,7 +32,7 @@ export function DailyAiNewsCard({ stocks }: DailyAiNewsCardProps) {
   return (
     <Card soft>
       <Text style={styles.title}>股市重點</Text>
-      <Text style={styles.caption}>用今日報價搭配個股事件脈絡，整理成白話重點。</Text>
+      <Text style={styles.caption}>保留最重要的原因，不堆滿新聞。</Text>
       <View style={styles.list}>
         {stocks.map((stock, index) => (
           <View
