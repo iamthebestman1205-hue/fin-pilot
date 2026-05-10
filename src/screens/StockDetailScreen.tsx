@@ -6,6 +6,7 @@ import { CauseChainCard } from "../components/CauseChainCard";
 import { DailyBriefingCard } from "../components/DailyBriefingCard";
 import { DailyAiNewsCard } from "../components/DailyAiNewsCard";
 import { ImpactBreakdownCard, type ImpactItem } from "../components/ImpactBreakdownCard";
+import { ProMetricsCard } from "../components/ProMetricsCard";
 import { RiskTemperatureCard } from "../components/RiskTemperatureCard";
 import { Screen } from "../components/Screen";
 import { SectionTitle } from "../components/SectionTitle";
@@ -60,6 +61,18 @@ function getReferenceTitle(stock: StockCardData) {
 
   const names = stock.referenceSources.map((source) => source.name);
   return `參考：${Array.from(new Set(names)).join("、")}`;
+}
+
+function getSimpleConclusion(stock: StockCardData) {
+  if (stock.priceMove === "up") {
+    return `${stock.name}最近偏強，但先不要只因為漲就追。重點是看這個原因能不能延續。`;
+  }
+
+  if (stock.priceMove === "down") {
+    return `${stock.name}最近轉弱，先確認下跌是短線情緒，還是故事真的變差。`;
+  }
+
+  return `${stock.name}目前還沒有明確方向。先放觀察，不需要急著做決定。`;
 }
 
 function getForecastWeather(stock: StockCardData) {
@@ -226,6 +239,8 @@ function StockInsightDetail({
 }) {
   const riskFill =
     stock.temperatureTone === "red" ? 0.88 : stock.temperatureTone === "orange" ? 0.72 : 0.5;
+  const simpleMode = preferences.explanationLevel === "simple";
+  const detailedMode = preferences.explanationLevel === "detailed";
 
   return (
     <Screen>
@@ -252,11 +267,11 @@ function StockInsightDetail({
         </Text>
       </View>
 
-      <SectionTitle title={weekendMode ? "上週重點" : "今日股市重點"} />
+      <SectionTitle title={simpleMode ? "超簡單重點" : weekendMode ? "上週重點" : "今日股市重點"} />
       <Card soft>
-        <Text style={styles.detailNews}>{stock.aiNews}</Text>
-        <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
-        {preferences.showSources && stock.referenceSources.length > 0 && (
+        <Text style={styles.detailNews}>{simpleMode ? getSimpleConclusion(stock) : stock.aiNews}</Text>
+        {!simpleMode && <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>}
+        {!simpleMode && preferences.showSources && stock.referenceSources.length > 0 && (
           <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
         )}
       </Card>
@@ -270,6 +285,13 @@ function StockInsightDetail({
 
       <SectionTitle title="風險溫度" />
       <RiskTemperatureCard temperature={stock.temperature} fill={riskFill} note={stock.reminder} />
+
+      {detailedMode && (
+        <>
+          <SectionTitle title="Pro 指標" caption="詳細模式預覽，正式版可作為付費解鎖內容。" />
+          <ProMetricsCard stock={stock} />
+        </>
+      )}
 
       {preferences.showForecast && (
         <>
@@ -291,8 +313,9 @@ function StockInsightDetail({
       <SectionTitle title="AI 白話結論" />
       <Card>
         <Text style={styles.conclusion}>
-          {stock.name}
-          的重點不是只看今天漲跌，而是理解「為什麼大家在意它、這件事會怎麼影響價格、你要看哪些簡單訊號」。天氣預報看短線溫度，影響來源拆解看背後原因。
+          {simpleMode
+            ? getSimpleConclusion(stock)
+            : `${stock.name} 的重點不是只看今天漲跌，而是理解「為什麼大家在意它、這件事會怎麼影響價格、你要看哪些訊號」。${detailedMode ? "詳細模式會再加入量、籌碼和波動，給進階投資人更完整的判斷材料。" : "天氣預報看短線溫度，影響來源拆解看背後原因。"}`}
         </Text>
       </Card>
 
@@ -342,7 +365,11 @@ export function StockDetailScreen({
       </View>
 
       <SectionTitle title={weekendMode ? "週末總覽" : "今日總覽"} />
-      {weekendMode ? <WeekendBriefingCard stocks={stocks} /> : <DailyBriefingCard stocks={stocks} />}
+      {weekendMode ? (
+        <WeekendBriefingCard stocks={stocks} />
+      ) : (
+        <DailyBriefingCard stocks={stocks} explanationLevel={preferences.explanationLevel} />
+      )}
 
       <SectionTitle title="整體風險溫度" />
       <RiskTemperatureCard
@@ -362,6 +389,7 @@ export function StockDetailScreen({
               key={stock.symbol}
               stock={stock}
               showSources={preferences.showSources}
+              explanationLevel={preferences.explanationLevel}
               onPress={() => onSelectStock(stock.symbol)}
             />
           ))}

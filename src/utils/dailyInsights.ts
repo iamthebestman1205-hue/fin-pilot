@@ -333,6 +333,7 @@ export function applyDailyInsight(
     priceChangePercent: 0,
     dataSource: hasVerifiedQuote ? "twse" : "demo",
     quoteTime: quote?.quoteTime,
+    quoteVolume: quote?.volume,
     reason: `${stock.name}今天${moveLabel}。市場今天主要在看：${profile.focus}。`,
     reminder: profile.watch,
     aiNews: hasVerifiedQuote

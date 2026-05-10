@@ -24,6 +24,7 @@ export type StockCardData = {
   priceChangePercent: number;
   dataSource: "twse" | "demo" | "unavailable";
   quoteTime?: string;
+  quoteVolume?: number;
   aiNews: string;
   referenceSources: ReferenceSource[];
   updatedAt: string;

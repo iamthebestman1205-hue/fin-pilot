@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { colors, spacing } from "../theme";
-import type { StockCardData } from "../types";
+import type { ExplanationLevel, StockCardData } from "../types";
 import { Badge } from "./Badge";
 import { Card } from "./Card";
 
@@ -9,6 +9,7 @@ type StockStatusCardProps = {
   stock: StockCardData;
   onPress?: () => void;
   showSources?: boolean;
+  explanationLevel?: ExplanationLevel;
 };
 
 function getMoveLabel(stock: StockCardData) {
@@ -42,7 +43,26 @@ function getReferenceLabel(stock: StockCardData) {
   return `參考：${uniqueNames.join("、")}`;
 }
 
-export function StockStatusCard({ stock, onPress, showSources = true }: StockStatusCardProps) {
+function getSimpleNews(stock: StockCardData) {
+  if (stock.priceMove === "up") {
+    return `${stock.name}最近偏強，先看買盤能不能延續。`;
+  }
+
+  if (stock.priceMove === "down") {
+    return `${stock.name}最近轉弱，先看下跌原因是不是會繼續影響。`;
+  }
+
+  return `${stock.name}目前比較像整理，先觀察下一個明確原因。`;
+}
+
+export function StockStatusCard({
+  stock,
+  onPress,
+  showSources = true,
+  explanationLevel = "standard"
+}: StockStatusCardProps) {
+  const simpleMode = explanationLevel === "simple";
+
   return (
     <Pressable onPress={onPress}>
       <Card style={styles.card}>
@@ -69,12 +89,12 @@ export function StockStatusCard({ stock, onPress, showSources = true }: StockSta
             {getMoveLabel(stock)}
           </Text>
         </View>
-        <Text style={styles.reason}>{stock.reason}</Text>
+        {!simpleMode && <Text style={styles.reason}>{stock.reason}</Text>}
         <View style={styles.newsBox}>
-          <Text style={styles.newsLabel}>今日股市重點</Text>
-          <Text style={styles.newsText}>{stock.aiNews}</Text>
-          <Text style={styles.updatedAt}>{getSourceLabel(stock)}</Text>
-          {showSources && stock.referenceSources.length > 0 && (
+          <Text style={styles.newsLabel}>{simpleMode ? "一句話" : "今日股市重點"}</Text>
+          <Text style={styles.newsText}>{simpleMode ? getSimpleNews(stock) : stock.aiNews}</Text>
+          {!simpleMode && <Text style={styles.updatedAt}>{getSourceLabel(stock)}</Text>}
+          {!simpleMode && showSources && stock.referenceSources.length > 0 && (
             <Text style={styles.references}>{getReferenceLabel(stock)}</Text>
           )}
         </View>

@@ -12,10 +12,34 @@ type SettingsScreenProps = {
 };
 
 const levels: Array<{ key: ExplanationLevel; label: string; description: string }> = [
-  { key: "simple", label: "簡單", description: "只看重點和提醒，畫面最乾淨。" },
+  { key: "simple", label: "簡單", description: "像朋友講重點：只看漲跌、白話原因和一句提醒。" },
   { key: "standard", label: "標準", description: "保留原因鏈與天氣預報，適合日常使用。" },
-  { key: "detailed", label: "詳細", description: "顯示更多拆解和來源，適合想深入看的人。" }
+  { key: "detailed", label: "詳細", description: "Pro 預覽：加入成交量、籌碼壓力、波動和更完整拆解。" }
 ];
+
+const levelPresets: Record<ExplanationLevel, UserPreferences> = {
+  simple: {
+    explanationLevel: "simple",
+    showCauseChain: false,
+    showForecast: false,
+    showImpactBreakdown: false,
+    showSources: false
+  },
+  standard: {
+    explanationLevel: "standard",
+    showCauseChain: true,
+    showForecast: true,
+    showImpactBreakdown: true,
+    showSources: true
+  },
+  detailed: {
+    explanationLevel: "detailed",
+    showCauseChain: true,
+    showForecast: true,
+    showImpactBreakdown: true,
+    showSources: true
+  }
+};
 
 function ToggleRow({
   label,
@@ -54,12 +78,13 @@ export function SettingsScreen({ preferences, onChangePreferences }: SettingsScr
             return (
               <Pressable
                 key={level.key}
-                onPress={() => update({ explanationLevel: level.key })}
+                onPress={() => onChangePreferences(levelPresets[level.key])}
                 style={[styles.levelButton, selected && styles.levelButtonActive]}
               >
                 <Text style={[styles.levelLabel, selected && styles.levelLabelActive]}>
                   {level.label}
                 </Text>
+                {level.key === "detailed" && <Text style={styles.proLabel}>PRO</Text>}
               </Pressable>
             );
           })}
@@ -71,6 +96,9 @@ export function SettingsScreen({ preferences, onChangePreferences }: SettingsScr
 
       <SectionTitle title="顯示內容" />
       <Card>
+        <Text style={styles.modeHint}>
+          目前是「{levels.find((level) => level.key === preferences.explanationLevel)?.label}」模式，下面也可以手動微調。
+        </Text>
         <ToggleRow
           label="原因鏈"
           value={preferences.showCauseChain}
@@ -134,11 +162,24 @@ const styles = StyleSheet.create({
   levelLabelActive: {
     color: colors.gold
   },
+  proLabel: {
+    marginTop: 3,
+    color: colors.gold,
+    fontSize: 10,
+    fontWeight: "900"
+  },
   levelDescription: {
     marginTop: spacing.md,
     color: colors.muted,
     fontSize: 14,
     lineHeight: 22,
+    fontWeight: "700"
+  },
+  modeHint: {
+    marginBottom: spacing.sm,
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 20,
     fontWeight: "700"
   },
   toggleRow: {

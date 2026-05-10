@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import { colors, spacing } from "../theme";
-import type { StockCardData } from "../types";
+import type { ExplanationLevel, StockCardData } from "../types";
 import { Card } from "./Card";
 
 type DailyBriefingCardProps = {
   stocks: StockCardData[];
+  explanationLevel?: ExplanationLevel;
 };
 
 function getMoveText(stock: StockCardData) {
@@ -32,7 +33,7 @@ function getBriefingLine(stock: StockCardData) {
   return cause.length > 0 ? cause : stock.reminder;
 }
 
-export function DailyBriefingCard({ stocks }: DailyBriefingCardProps) {
+export function DailyBriefingCard({ stocks, explanationLevel = "standard" }: DailyBriefingCardProps) {
   const sortedStocks = [...stocks]
     .sort((a, b) => getPriorityScore(b) - getPriorityScore(a))
     .slice(0, 3);
@@ -41,11 +42,19 @@ export function DailyBriefingCard({ stocks }: DailyBriefingCardProps) {
   ).length;
   const downCount = stocks.filter((stock) => stock.priceMove === "down").length;
 
+  const simpleMode = explanationLevel === "simple";
+
   return (
     <Card soft>
       <Text style={styles.eyebrow}>今日總覽</Text>
       <Text style={styles.title}>
-        {hotCount > 0 || downCount > 0 ? "今天先看需要注意的股票。" : "今天追蹤清單偏穩。"}
+        {simpleMode
+          ? hotCount > 0 || downCount > 0
+            ? "今天先別急著追。"
+            : "今天先慢慢看。"
+          : hotCount > 0 || downCount > 0
+            ? "今天先看需要注意的股票。"
+            : "今天追蹤清單偏穩。"}
       </Text>
       <Text style={styles.summary}>
         {hotCount > 0 || downCount > 0
@@ -70,7 +79,7 @@ export function DailyBriefingCard({ stocks }: DailyBriefingCardProps) {
                 {getMoveText(stock)}
               </Text>
             </View>
-            <Text style={styles.reason}>{getBriefingLine(stock)}</Text>
+            {!simpleMode && <Text style={styles.reason}>{getBriefingLine(stock)}</Text>}
           </View>
         ))}
       </View>

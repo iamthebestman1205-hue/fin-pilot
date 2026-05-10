@@ -4,6 +4,7 @@ export type QuoteSnapshot = {
   symbol: string;
   priceMove: PriceMove;
   quoteTime: string;
+  volume?: number;
 };
 
 type TwseQuote = {
@@ -14,6 +15,7 @@ type TwseQuote = {
   oz?: string;
   pz?: string;
   y?: string;
+  v?: string;
 };
 
 type TwseResponse = {
@@ -83,7 +85,8 @@ export async function fetchTaiwanQuotes(symbols: string[]): Promise<Record<strin
     result[quote.c] = {
       symbol: quote.c,
       priceMove: getMoveFromPrices(current, previous),
-      quoteTime: quote.d && quote.t ? `${quote.d} ${quote.t}` : "TWSE"
+      quoteTime: quote.d && quote.t ? `${quote.d} ${quote.t}` : "TWSE",
+      volume: parseNumber(quote.v) ?? undefined
     };
   });
 

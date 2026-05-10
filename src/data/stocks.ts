@@ -90,6 +90,7 @@ function makeStock(seed: StockSeed, index: number): StockCardData {
     priceMove: "flat",
     priceChangePercent: 0,
     dataSource: "demo",
+    quoteVolume: undefined,
     status,
     statusTone: isHigh ? "red" : isHot ? "yellow" : "green",
     temperature,
