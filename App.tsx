@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { defaultTrackedSymbols, taiwanStocks } from "./src/data/stocks";
 import { MarketScreen } from "./src/screens/MarketScreen";
@@ -17,11 +18,11 @@ import { applyDailyInsight } from "./src/utils/dailyInsights";
 type TabKey = "market" | "watchlist" | "stock" | "portfolio" | "settings";
 
 const tabs: Array<{ key: TabKey; label: string; icon: string }> = [
-  { key: "market", label: "Market", icon: "M" },
-  { key: "watchlist", label: "Search", icon: "+" },
-  { key: "stock", label: "Stock", icon: "S" },
-  { key: "portfolio", label: "Portfolio", icon: "P" },
-  { key: "settings", label: "Prefs", icon: "◎" }
+  { key: "market", label: "市場", icon: "🌤" },
+  { key: "watchlist", label: "搜尋", icon: "🔍" },
+  { key: "stock", label: "追蹤", icon: "📈" },
+  { key: "portfolio", label: "組合", icon: "🎯" },
+  { key: "settings", label: "設定", icon: "⚙️" }
 ];
 
 const defaultPreferences: UserPreferences = {
@@ -216,14 +217,23 @@ export default function App() {
                 <Pressable
                   key={tab.key}
                   onPress={() => setActiveTab(tab.key)}
-                  style={[styles.tabItem, selected && styles.tabItemActive]}
+                  style={styles.tabItem}
                 >
-                  <Text style={[styles.tabIcon, selected && styles.tabIconActive]}>
-                    {tab.icon}
-                  </Text>
-                  <Text style={[styles.tabLabel, selected && styles.tabLabelActive]}>
-                    {tab.label}
-                  </Text>
+                  {selected ? (
+                    <LinearGradient
+                      colors={["#FACC1526", "#FACC1508"]}
+                      style={styles.tabItemActiveGradient}
+                    >
+                      <View style={styles.tabActiveIndicator} />
+                      <Text style={styles.tabIconActive}>{tab.icon}</Text>
+                      <Text style={styles.tabLabelActive}>{tab.label}</Text>
+                    </LinearGradient>
+                  ) : (
+                    <View style={styles.tabItemInner}>
+                      <Text style={styles.tabIcon}>{tab.icon}</Text>
+                      <Text style={styles.tabLabel}>{tab.label}</Text>
+                    </View>
+                  )}
                 </Pressable>
               );
             })}
@@ -258,29 +268,48 @@ const styles = StyleSheet.create({
   },
   tabItem: {
     flex: 1,
+    borderRadius: radius.lg,
+    overflow: "hidden"
+  },
+  tabItemInner: {
     alignItems: "center",
     justifyContent: "center",
     minHeight: 58,
     borderRadius: radius.lg
   },
-  tabItemActive: {
-    backgroundColor: colors.softCard
+  tabItemActiveGradient: {
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 58,
+    borderRadius: radius.lg,
+    position: "relative"
+  },
+  tabActiveIndicator: {
+    position: "absolute",
+    top: 0,
+    left: "20%" as unknown as number,
+    right: "20%" as unknown as number,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: colors.gold
   },
   tabIcon: {
     color: colors.muted,
-    fontSize: 15,
-    fontWeight: "700"
+    fontSize: 18
   },
   tabIconActive: {
-    color: colors.gold
+    fontSize: 18
   },
   tabLabel: {
-    marginTop: 4,
+    marginTop: 3,
     color: colors.muted,
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: "600"
   },
   tabLabelActive: {
-    color: colors.text
+    marginTop: 3,
+    color: colors.gold,
+    fontSize: 10,
+    fontWeight: "700"
   }
 });
