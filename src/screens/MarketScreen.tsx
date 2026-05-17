@@ -117,7 +117,7 @@ export function MarketScreen({ stocks, weekendMode }: MarketScreenProps) {
           <ImpactBreakdownCard items={mood.impacts} />
 
           <SectionTitle title="今日提醒" />
-          <Card>
+          <Card accent>
             <Text style={styles.reminder}>{mood.reminder}</Text>
           </Card>
         </>

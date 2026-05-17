@@ -213,7 +213,7 @@ export function PortfolioScreen({
       )}
 
       <SectionTitle title="AI 白話提醒" />
-      <Card soft>
+      <Card accent>
         <Text style={styles.aiText}>
           {simpleMode ? getSimplePortfolioText(stocks, model) : model.aiReminder}
         </Text>
