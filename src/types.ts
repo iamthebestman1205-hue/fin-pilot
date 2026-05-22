@@ -1,5 +1,5 @@
 export type Tone = "green" | "yellow" | "orange" | "red";
-export type StockCategory = "tech" | "etf" | "finance" | "defensive" | "cyclical";
+export type StockCategory = "tech" | "etf" | "finance" | "defensive" | "cyclical" | "commodity";
 export type PriceMove = "up" | "down" | "flat";
 export type ExplanationLevel = "simple" | "standard" | "detailed";
 export type InvestorMode = "holding" | "watching";
@@ -28,6 +28,8 @@ export type StockCardData = {
   quoteTime?: string;
   quoteVolume?: number;
   aiNews: string;
+  aiNewsSimple: string;
+  aiNewsDetailed: string;
   referenceSources: ReferenceSource[];
   updatedAt: string;
 };

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --title 'UI/UX overhaul: dynamic risk colors, gradient borders, upgraded tab bar' --body ' *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

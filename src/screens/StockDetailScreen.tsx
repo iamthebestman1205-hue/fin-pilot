@@ -281,18 +281,34 @@ function StockInsightDetail({
         </Text>
       </View>
 
-      <SectionTitle title={simpleMode ? "超簡單重點" : weekendMode ? "上週重點" : "今日股市重點"} />
-      <Card soft>
-        <Text style={styles.detailNews}>
-          {simpleMode
-            ? getSimpleConclusion(stock)
-            : detailedMode
-              ? `${stock.aiNews}\n\n${getProFocusText(stock)}`
-              : stock.aiNews}
-        </Text>
-        {!simpleMode && <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>}
-        {!simpleMode && preferences.showSources && stock.referenceSources.length > 0 && (
-          <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
+      <SectionTitle
+        title={simpleMode ? "超簡單重點" : weekendMode ? "上週重點" : "今日股市重點"}
+        caption={simpleMode ? "一句話結論" : detailedMode ? "Pro 版：核心驅動 + 量能訊號 + 風險評估" : "核心原因 + 接下來看什麼"}
+      />
+      <Card soft={!detailedMode} accent={detailedMode}>
+        {simpleMode ? (
+          <>
+            <Text style={styles.simpleModeLabel}>💡 簡單版</Text>
+            <Text style={styles.detailNews}>{stock.aiNewsSimple}</Text>
+            <Text style={styles.simpleConclusion}>{getSimpleConclusion(stock)}</Text>
+          </>
+        ) : detailedMode ? (
+          <>
+            <Text style={styles.proModeLabel}>⚡ Pro 分析</Text>
+            <Text style={styles.detailNews}>{stock.aiNewsDetailed}</Text>
+            <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
+            {preferences.showSources && stock.referenceSources.length > 0 && (
+              <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
+            )}
+          </>
+        ) : (
+          <>
+            <Text style={styles.detailNews}>{stock.aiNews}</Text>
+            <Text style={styles.detailTime}>{getSourceLabel(stock)}</Text>
+            {preferences.showSources && stock.referenceSources.length > 0 && (
+              <Text style={styles.references}>{getReferenceTitle(stock)}</Text>
+            )}
+          </>
         )}
       </Card>
 
@@ -401,7 +417,7 @@ export function StockDetailScreen({
       {stocks.length > 0 ? (
         <>
           <SectionTitle title="股市重點" />
-          <DailyAiNewsCard stocks={stocks} />
+          <DailyAiNewsCard stocks={stocks} explanationLevel={preferences.explanationLevel} />
 
           <SectionTitle title="我的追蹤清單" />
           {stocks.map((stock) => (
@@ -517,10 +533,29 @@ const styles = StyleSheet.create({
   detailMoveFlat: {
     color: colors.muted
   },
+  simpleModeLabel: {
+    color: colors.green,
+    fontSize: 12,
+    fontWeight: "900",
+    marginBottom: spacing.sm
+  },
+  proModeLabel: {
+    color: colors.gold,
+    fontSize: 12,
+    fontWeight: "900",
+    marginBottom: spacing.sm
+  },
+  simpleConclusion: {
+    marginTop: spacing.md,
+    color: colors.muted,
+    fontSize: 14,
+    lineHeight: 22,
+    fontWeight: "600"
+  },
   detailNews: {
     color: colors.text,
-    fontSize: 17,
-    lineHeight: 28,
+    fontSize: 16,
+    lineHeight: 27,
     fontWeight: "700"
   },
   detailTime: {
