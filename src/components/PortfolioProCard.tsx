@@ -14,8 +14,9 @@ const categoryNames: Record<StockCategory, string> = {
   tech: "科技 / AI",
   etf: "ETF",
   finance: "金融",
-  defensive: "防禦",
-  cyclical: "景氣循環"
+  defensive: "防禦/美債",
+  cyclical: "景氣循環",
+  commodity: "黃金/原物料"
 };
 
 function getDominantCategory(stocks: StockCardData[]) {
@@ -24,7 +25,8 @@ function getDominantCategory(stocks: StockCardData[]) {
     etf: 0,
     finance: 0,
     defensive: 0,
-    cyclical: 0
+    cyclical: 0,
+    commodity: 0
   };
 
   stocks.forEach((stock) => {

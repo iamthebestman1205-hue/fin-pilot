@@ -14,21 +14,67 @@ type MarketScreenProps = {
   weekendMode: boolean;
 };
 
+type SectorStat = {
+  label: string;
+  up: number;
+  total: number;
+  hot: number;
+};
+
+const categoryLabel: Record<string, string> = {
+  tech: "科技股",
+  etf: "ETF",
+  finance: "金融股",
+  defensive: "防禦/債券",
+  cyclical: "循環股",
+  commodity: "黃金/原物料"
+};
+
+function getSectorStats(stocks: StockCardData[]): SectorStat[] {
+  const groups: Record<string, StockCardData[]> = {};
+  for (const s of stocks) {
+    if (!groups[s.category]) groups[s.category] = [];
+    groups[s.category].push(s);
+  }
+
+  return Object.entries(groups)
+    .filter(([, arr]) => arr.length > 0)
+    .map(([cat, arr]) => ({
+      label: categoryLabel[cat] ?? cat,
+      up: arr.filter((s) => s.priceMove === "up").length,
+      total: arr.length,
+      hot: arr.filter((s) => s.temperatureTone === "orange" || s.temperatureTone === "red").length
+    }))
+    .sort((a, b) => b.total - a.total);
+}
+
 function getMarketMood(stocks: StockCardData[]) {
   const total = Math.max(stocks.length, 1);
   const hotCount = stocks.filter(
     (stock) => stock.temperatureTone === "orange" || stock.temperatureTone === "red"
   ).length;
   const redCount = stocks.filter((stock) => stock.temperatureTone === "red").length;
-  const techCount = stocks.filter((stock) => stock.category === "tech").length;
-  const etfCount = stocks.filter((stock) => stock.category === "etf").length;
+  const upCount = stocks.filter((s) => s.priceMove === "up").length;
+  const downCount = stocks.filter((s) => s.priceMove === "down").length;
+
+  const techStocks = stocks.filter((s) => s.category === "tech");
+  const etfStocks = stocks.filter((s) => s.category === "etf");
+  const financeStocks = stocks.filter((s) => s.category === "finance");
+  const cyclicalStocks = stocks.filter((s) => s.category === "cyclical");
+  const defensiveStocks = stocks.filter((s) => s.category === "defensive");
+  const commodityStocks = stocks.filter((s) => s.category === "commodity");
+
+  const techUp = techStocks.filter((s) => s.priceMove === "up").length;
+  const etfUp = etfStocks.filter((s) => s.priceMove === "up").length;
+  const finUp = financeStocks.filter((s) => s.priceMove === "up").length;
+  const defUp = defensiveStocks.filter((s) => s.priceMove === "up").length;
 
   const hotRatio = hotCount / total;
-  const techRatio = techCount / total;
-  const etfRatio = etfCount / total;
+  const techRatio = techStocks.length / total;
+  const upRatio = upCount / total;
   const score = Math.min(
     99,
-    Math.round(26 + hotRatio * 42 + techRatio * 20 + redCount * 10)
+    Math.round(24 + hotRatio * 40 + techRatio * 18 + redCount * 8 + (upRatio > 0.6 ? 8 : 0))
   );
 
   const weather =
@@ -43,40 +89,67 @@ function getMarketMood(stocks: StockCardData[]) {
           ? "市場氣氛偏穩，部分題材仍有支撐，但還是要留意熱門股的短線震盪。"
           : "追蹤清單目前風險溫度不高，市場比較像可以慢慢觀察的天氣。";
 
-  const method = `用你的 ${stocks.length} 檔追蹤股票估算：偏熱或高溫 ${hotCount} 檔、科技股 ${techCount} 檔、ETF ${etfCount} 檔。高溫越多、科技集中越高，天氣越容易轉陰。`;
+  // 分產業評估
+  const techLine = techStocks.length > 0
+    ? `科技股 ${techUp}/${techStocks.length} 上漲${techStocks.filter((s) => s.temperatureTone === "red" || s.temperatureTone === "orange").length > 0 ? "、有高溫標的" : ""}`
+    : null;
+  const etfLine = etfStocks.length > 0
+    ? `ETF ${etfUp}/${etfStocks.length} 上漲`
+    : null;
+  const finLine = financeStocks.length > 0
+    ? `金融股 ${finUp}/${financeStocks.length} 上漲`
+    : null;
+  const cyclLine = cyclicalStocks.length > 0
+    ? `循環股 ${cyclicalStocks.filter((s) => s.priceMove === "up").length}/${cyclicalStocks.length} 上漲`
+    : null;
+  const defLine = defensiveStocks.length > 0
+    ? `防禦/債券 ${defUp}/${defensiveStocks.length} 上漲`
+    : null;
+  const comLine = commodityStocks.length > 0
+    ? `黃金/原物料 ${commodityStocks.filter((s) => s.priceMove === "up").length}/${commodityStocks.length} 上漲`
+    : null;
+
+  const sectorLines = [techLine, etfLine, finLine, cyclLine, defLine, comLine].filter(Boolean);
+  const method = stocks.length === 0
+    ? "先加入追蹤股票，才能估算市場天氣。"
+    : `根據你的 ${stocks.length} 檔追蹤股票（今天 ${upCount} 漲 ${downCount} 跌）：${sectorLines.join("；")}。高溫越多、科技集中越高，天氣越容易轉陰。`;
+
+  const sectorStats = getSectorStats(stocks);
 
   const impacts: ImpactItem[] = [
     {
-      title: "熱門題材有沒有過熱",
-      effect: hotRatio >= 0.5 ? "偏熱" : "可控",
-      plain:
-        hotRatio >= 0.5
-          ? "你的清單裡不少股票已經偏熱，代表市場期待高。這時候最怕的不是公司變差，而是好消息不夠好。"
-          : "偏熱股票還沒有占多數，市場情緒比較沒有一面倒，短線壓力相對可控。"
+      title: "今天整體漲跌狀況",
+      effect: upCount > downCount ? `${upCount} 漲 ${downCount} 跌` : upCount < downCount ? `${downCount} 跌 ${upCount} 漲` : "漲跌接近",
+      plain: upCount > downCount
+        ? `你的 ${total} 檔追蹤股票今天有 ${upCount} 檔上漲、${downCount} 檔下跌。整體偏多，但還是要看是題材驅動還是只有情緒推升。`
+        : upCount < downCount
+          ? `今天有 ${downCount} 檔下跌、${upCount} 檔上漲。大多數標的轉弱，要確認是短線整理還是風險上升的訊號。`
+          : `今天漲跌差不多，市場方向不明確，可能正在等一個新訊號。`
     },
     {
-      title: "科技股占比",
-      effect: techRatio >= 0.5 ? "集中" : "分散",
-      plain:
-        techRatio >= 0.5
-          ? "科技與 AI 題材占比較高，市場好時會很有感，但一旦資金從科技股撤出，波動也會被放大。"
-          : "科技股不是唯一主軸，清單裡還有其他類型標的，整體比較不會只被 AI 題材牽動。"
+      title: "科技/AI 題材溫度",
+      effect: techStocks.length === 0 ? "未追蹤" : hotCount >= techStocks.length * 0.5 ? "偏熱" : "可控",
+      plain: techStocks.length === 0
+        ? "你的追蹤清單裡沒有科技股，AI 題材的起伏對你的清單影響比較小。"
+        : hotCount >= techStocks.length * 0.5
+          ? `你的 ${techStocks.length} 檔科技股裡，今天 ${techUp} 檔上漲，且偏熱標的較多。市場期待偏高，好消息不夠好也可能引發回調。`
+          : `你的 ${techStocks.length} 檔科技股今天 ${techUp} 檔上漲。溫度還在可控範圍，繼續觀察訂單和需求訊號。`
     },
     {
-      title: "ETF 是分散還是同一包題材",
-      effect: etfRatio >= 0.5 ? "要拆開看" : "影響中等",
-      plain:
-        etfRatio >= 0.5
-          ? "ETF 多不一定代表很分散。若成分股都集中在半導體、高股息或美股科技，實際風險可能還是同一種。"
-          : "ETF 比重沒有壓過其他類別，對整體市場天氣的影響比較像穩定器，不是唯一方向盤。"
+      title: "防禦/債券/黃金訊號",
+      effect: (defensiveStocks.length + commodityStocks.length) > 0 ? (defUp + commodityStocks.filter((s) => s.priceMove === "up").length > (defensiveStocks.length + commodityStocks.length) / 2 ? "避險需求升溫" : "中性") : "未追蹤",
+      plain: (defensiveStocks.length + commodityStocks.length) === 0
+        ? "你的清單裡沒有防禦型、美債或黃金標的。如果市場轉保守，你的清單可能缺少緩衝。"
+        : defUp + commodityStocks.filter((s) => s.priceMove === "up").length > (defensiveStocks.length + commodityStocks.length) / 2
+          ? "防禦型標的（美債、黃金等）今天相對強，通常代表部分資金在尋找避風港，可能是市場情緒轉保守的訊號。"
+          : "防禦型標的今天沒有明顯走強，市場風險偏好還算穩定，資金還沒有大量撤往安全資產。"
     },
     {
       title: "今天該做什麼",
       effect: score >= 64 ? "先降速" : "可觀察",
-      plain:
-        score >= 64
-          ? "如果想加碼，先問自己：這檔今天的新消息，是真的改善基本面，還是只是市場又更興奮？"
-          : "可以繼續觀察清單裡風險溫度是否連續升高，還不用把一天漲跌看得太重。"
+      plain: score >= 64
+        ? "如果想加碼，先問自己：這檔今天的消息，是真的改善基本面，還是只是市場又更興奮？高溫環境裡，好消息往往已被提前反映。"
+        : "目前風險溫度偏低，可以繼續觀察清單裡風險溫度是否連續升高，不用把一天漲跌看得太重。"
     }
   ];
 
@@ -85,7 +158,7 @@ function getMarketMood(stocks: StockCardData[]) {
       ? "今天的重點不是找最會漲的股票，而是分辨哪些標的只是熱、哪些是真的有基本面支持。"
       : "今天比較適合整理追蹤清單，確認每檔股票為什麼值得繼續看。";
 
-  return { weather, score, summary, method, impacts, reminder };
+  return { weather, score, summary, method, impacts, reminder, sectorStats };
 }
 
 export function MarketScreen({ stocks, weekendMode }: MarketScreenProps) {

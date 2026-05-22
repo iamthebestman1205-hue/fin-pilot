@@ -22,8 +22,9 @@ const categoryLabels: Record<StockCategory | "cash", string> = {
   tech: "科技股",
   etf: "ETF",
   finance: "金融",
-  defensive: "防禦",
+  defensive: "防禦/美債",
   cyclical: "循環股",
+  commodity: "黃金/原物料",
   cash: "現金"
 };
 
@@ -33,6 +34,7 @@ const categoryColors: Record<StockCategory | "cash", string> = {
   finance: "#60A5FA",
   defensive: "#A78BFA",
   cyclical: colors.orange,
+  commodity: "#F59E0B",
   cash: colors.muted
 };
 
@@ -44,7 +46,8 @@ function getPortfolioModel(stocks: StockCardData[], holdingWeights: HoldingWeigh
     etf: 0,
     finance: 0,
     defensive: 0,
-    cyclical: 0
+    cyclical: 0,
+    commodity: 0
   };
 
   stocks.forEach((stock) => {
@@ -57,7 +60,7 @@ function getPortfolioModel(stocks: StockCardData[], holdingWeights: HoldingWeigh
       : stocks.length,
     1
   );
-  const categories: StockCategory[] = ["tech", "etf", "finance", "defensive", "cyclical"];
+  const categories: StockCategory[] = ["tech", "etf", "finance", "defensive", "cyclical", "commodity"];
   const allocations: AllocationItem[] = categories
     .map((category) => ({
       label: categoryLabels[category],
