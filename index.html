@@ -163,7 +163,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 @keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* Page offset for ticker */
-.page{padding-top:28px}
+.page{padding-top:28px;padding-bottom:calc(var(--tabh) + 40px)}
 .ph{top:28px}
 
 /* Weekly Report */
@@ -263,7 +263,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="sc">
 
     <!-- Weekly Banner -->
-    <div class="weekly-banner" id="weekly-banner-card" onclick="switchTab('weekly')">
+    <div class="weekly-banner" id="weekly-banner-card" onclick="openWeeklySheet()">
       <div class="wb-tag"><span>📅</span><span id="wb-tag-text">週報</span></div>
       <div class="wb-title" id="wb-title">本週市場週報</div>
       <div class="wb-sub" id="wb-sub">點擊查看本週完整市場總結、表現排行與下週展望。</div>
@@ -482,101 +482,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 <div id="page-portfolio" class="page">
   <div class="ph">
     <div class="ph-title">投資組合</div>
-    <div class="ph-sub">健康度概覽</div>
+    <div class="ph-sub" id="portfolio-sub">根據追蹤清單產生</div>
   </div>
-  <div class="sc">
-
-    <div class="card-gold">
-      <div class="st">投資組合健康度</div>
-      <div class="ph-score">
-        <div class="ph-emoji">📊</div>
-        <div>
-          <div class="ph-tag">PORTFOLIO HEALTH</div>
-          <div class="ph-val">中等偏積極</div>
-        </div>
-      </div>
-      <div style="font-size:13px;color:var(--sub);line-height:1.6">
-        集中在科技與 AI 供應鏈，報酬潛力高，短期波動也相對大。
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="st">資產配置</div>
-      <div class="alloc-row">
-        <div class="alloc-meta"><span>🖥 科技股</span><span style="color:var(--gold);font-weight:600">72%</span></div>
-        <div class="alloc-track"><div class="alloc-bar abar-tech" style="width:72%"></div></div>
-      </div>
-      <div class="alloc-row">
-        <div class="alloc-meta"><span>📦 ETF</span><span style="color:var(--green);font-weight:600">20%</span></div>
-        <div class="alloc-track"><div class="alloc-bar abar-etf" style="width:20%"></div></div>
-      </div>
-      <div class="alloc-row">
-        <div class="alloc-meta"><span>💵 現金</span><span style="color:#8b5cf6;font-weight:600">8%</span></div>
-        <div class="alloc-track"><div class="alloc-bar abar-cash" style="width:8%"></div></div>
-      </div>
-    </div>
-
-    <!-- Donut visual using SVG -->
-    <div class="card">
-      <div class="st">配置比例圖</div>
-      <div style="display:flex;align-items:center;gap:20px">
-        <svg width="110" height="110" viewBox="0 0 110 110">
-          <!-- Total circumference of r=40: 251.3 -->
-          <!-- Tech 72%: 181 -->
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#27272F" stroke-width="16"/>
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#FACC15" stroke-width="16"
-            stroke-dasharray="181 251" stroke-dashoffset="63" stroke-linecap="round"/>
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#34D399" stroke-width="16"
-            stroke-dasharray="50 251" stroke-dashoffset="-118" stroke-linecap="round"/>
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#8b5cf6" stroke-width="16"
-            stroke-dasharray="20 251" stroke-dashoffset="-168" stroke-linecap="round"/>
-          <text x="55" y="59" text-anchor="middle" fill="#F9FAFB" font-size="13" font-weight="700">72%</text>
-          <text x="55" y="70" text-anchor="middle" fill="#9CA3AF" font-size="8">科技股</text>
-        </svg>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;border-radius:3px;background:var(--gold)"></div>
-            <span style="font-size:12px">科技股 72%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;border-radius:3px;background:var(--green)"></div>
-            <span style="font-size:12px">ETF 20%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;border-radius:3px;background:#8b5cf6"></div>
-            <span style="font-size:12px">現金 8%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="alert-card">
-      <div style="font-size:20px;flex-shrink:0;margin-top:2px">🔍</div>
-      <div>
-        <div style="font-size:12px;font-weight:600;margin-bottom:4px">集中度提醒</div>
-        <div class="alert-text">你的投資組合偏向科技與 AI 供應鏈，上漲時很有感，修正時波動也大。</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="st">風險溫度計</div>
-      <div class="thermo-wrap">
-        <div class="thermo-track"><div class="thermo-fill" style="width:58%"></div></div>
-        <div class="thermo-lbl" style="color:var(--orange)">🌡 偏熱</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px">
-        <span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span>
-      </div>
-    </div>
-
-    <div class="card-soft">
-      <div class="st">AI 白話提醒</div>
-      <div style="font-size:14px;line-height:1.7">
-        這個配置適合對科技趨勢有信心、能承受短期波動的投資人。如果你希望睡得更好，可以考慮提高 ETF 或現金比例，把風險分散開來。
-      </div>
-    </div>
-
-  </div>
+  <div class="sc" id="portfolio-content"></div>
 </div>
 
 
@@ -586,23 +494,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   <div class="ticker-scroll">
     <div class="ticker-inner" id="ticker-inner"></div>
   </div>
-</div>
-
-<!-- Weekly Report Page -->
-<div id="page-weekly" class="page">
-  <div class="ph">
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div class="ph-title">📅 週報</div>
-        <div class="ph-sub" id="weekly-ph-sub">本週市場總結</div>
-      </div>
-      <div id="weekly-live-badge" style="display:flex;align-items:center;gap:5px;background:var(--red-dim);border:1px solid var(--red);border-radius:20px;padding:4px 10px">
-        <span style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.2s infinite;display:inline-block"></span>
-        <span style="font-size:10px;font-weight:700;color:var(--red)">本週發布</span>
-      </div>
-    </div>
-  </div>
-  <div class="sc" id="weekly-content"></div>
 </div>
 
 <!-- Bottom Sheet (impact detail / weather detail / focus detail) -->
@@ -659,30 +550,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </div>
 
 <!-- Tab Bar -->
-<nav class="tabbar" style="--tabh:60px">
+<nav class="tabbar">
   <div class="titem active" id="tab-market" onclick="switchTab('market')">
-    <div class="titem-icon" style="font-size:19px">🌤</div>
+    <div class="titem-icon">🌤</div>
     <div class="titem-lbl">市場</div>
   </div>
   <div class="titem" id="tab-search" onclick="switchTab('search')">
-    <div class="titem-icon" style="font-size:19px">🔍</div>
+    <div class="titem-icon">🔍</div>
     <div class="titem-lbl">搜尋</div>
   </div>
   <div class="titem" id="tab-watchlist" onclick="switchTab('watchlist')">
-    <div class="titem-icon" style="font-size:19px">🔖</div>
+    <div class="titem-icon">🔖</div>
     <div class="titem-lbl">追蹤</div>
   </div>
   <div class="titem" id="tab-industries" onclick="switchTab('industries')">
-    <div class="titem-icon" style="font-size:19px">🏭</div>
+    <div class="titem-icon">🏭</div>
     <div class="titem-lbl">產業</div>
   </div>
-  <div class="titem" id="tab-weekly" onclick="switchTab('weekly')" style="position:relative">
-    <div class="titem-icon" style="font-size:19px">📅</div>
-    <div class="titem-lbl">週報</div>
-    <div id="weekly-dot" style="display:none;position:absolute;top:7px;right:calc(50% - 14px);width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg)"></div>
-  </div>
   <div class="titem" id="tab-portfolio" onclick="switchTab('portfolio')">
-    <div class="titem-icon" style="font-size:19px">📊</div>
+    <div class="titem-icon">📊</div>
     <div class="titem-lbl">組合</div>
   </div>
 </nav>
@@ -2097,6 +1983,7 @@ function hideDetail() {
 function addToWatchlist(id) {
   if (!watchlist.includes(id)) watchlist.push(id);
   renderWatchlist();
+  if (currentTab === 'portfolio') renderPortfolio();
   const btn = document.querySelector('#d-content button');
   if (btn) {
     btn.textContent = '－ 移除追蹤';
@@ -2110,6 +1997,7 @@ function addToWatchlist(id) {
 function removeFromWatchlist(id) {
   watchlist = watchlist.filter(x=>x!==id);
   renderWatchlist();
+  if (currentTab === 'portfolio') renderPortfolio();
   const btn = document.querySelector('#d-content button');
   if (btn) {
     btn.textContent = '＋ 加入追蹤';
@@ -2555,6 +2443,217 @@ function showFocusDetail(key) {
 }
 
 // ══════════════════════════════════════════════
+//  PORTFOLIO (dynamic from watchlist)
+// ══════════════════════════════════════════════
+const IND_META = {
+  '科技':  {icon:'💻', color:'#FACC15'},
+  '金融':  {icon:'🏦', color:'#60A5FA'},
+  '能源':  {icon:'⚡', color:'#FB923C'},
+  '醫療':  {icon:'🏥', color:'#34D399'},
+  '消費':  {icon:'🛍', color:'#A78BFA'},
+  'ETF':   {icon:'📦', color:'#34D399'},
+  '原物料':{icon:'🪨', color:'#FCD34D'},
+  '房地產':{icon:'🏢', color:'#60A5FA'},
+};
+
+function renderPortfolio() {
+  const c = document.getElementById('portfolio-content');
+  const sub = document.getElementById('portfolio-sub');
+  const wlStocks = watchlist.map(id=>STOCKS.find(s=>s.id===id)).filter(Boolean);
+
+  if (wlStocks.length === 0) {
+    if (sub) sub.textContent = '尚未追蹤任何股票';
+    c.innerHTML = `<div class="sc-empty" style="padding-top:60px">
+      <div style="font-size:36px;margin-bottom:12px">📊</div>
+      <div style="font-weight:600;margin-bottom:6px">組合是空的</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--sub)">到「搜尋」頁追蹤股票，<br>組合就會自動幫你分析。</div>
+    </div>`;
+    return;
+  }
+
+  if (sub) sub.textContent = `根據 ${wlStocks.length} 支追蹤股票分析`;
+
+  // ── 1. 產業分布 ──
+  const indMap = {};
+  wlStocks.forEach(s => { indMap[s.industry] = (indMap[s.industry]||0) + 1; });
+  const total = wlStocks.length;
+  let slices = Object.entries(indMap)
+    .map(([ind,cnt]) => ({ ind, cnt, pct: Math.round(cnt/total*100) }))
+    .sort((a,b) => b.pct - a.pct);
+  // Fix rounding so sum = 100
+  const diff = 100 - slices.reduce((s,x)=>s+x.pct,0);
+  if (slices.length) slices[0].pct += diff;
+
+  // ── 2. 風險評分 ──
+  const riskW = {low:20, warm:45, hot:68, high:88};
+  const avgRisk = wlStocks.reduce((s,x)=>s+(riskW[x.risk]||45),0) / wlStocks.length;
+  const riskLabel = avgRisk<35 ? {l:'🌡 低溫',c:'var(--green)'}
+                  : avgRisk<55 ? {l:'🌡 中溫',c:'var(--yellow)'}
+                  : avgRisk<72 ? {l:'🌡 偏熱',c:'var(--orange)'}
+                  : {l:'🔴 高溫',c:'var(--red)'};
+
+  // ── 3. 健康度評估 ──
+  const topPct  = slices[0]?.pct || 0;
+  const riskCnt = wlStocks.filter(s=>s.risk==='high').length;
+  const stabCnt = wlStocks.filter(s=>s.status==='stable').length;
+
+  let healthEmoji, healthLabel, healthDesc;
+  if (avgRisk < 35 && topPct < 60) {
+    healthEmoji='🛡'; healthLabel='穩健保守';
+    healthDesc=`你的組合以低波動資產為主，防禦性強，適合不希望睡前還在擔心市場的投資人。`;
+  } else if (avgRisk < 55 && topPct < 70) {
+    healthEmoji='⚖️'; healthLabel='均衡中性';
+    healthDesc=`你的組合兼顧成長與穩定，分散效果不錯。市場上漲時能參與，市場修正時也有緩衝。`;
+  } else if (avgRisk < 72) {
+    healthEmoji='📊'; healthLabel='中等偏積極';
+    healthDesc=`你的組合偏向成長型資產。上漲時很有感，但市場修正時波動也會比較大，要有心理準備。`;
+  } else {
+    healthEmoji='🔥'; healthLabel='高度積極';
+    healthDesc=`你的組合集中在高波動資產。報酬潛力大，但風險也高。建議確認自己能承受短期大幅波動再繼續持有。`;
+  }
+
+  // ── 4. 集中度提醒 ──
+  let concentrationAlert = '';
+  if (topPct >= 70) {
+    const topInd = slices[0].ind;
+    concentrationAlert = `<div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0">⚠️</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">集中度偏高</div>
+        <div class="alert-text">${topInd}佔 ${topPct}%，單一產業集中度過高。考慮加入其他產業的股票來分散風險。</div>
+      </div>
+    </div>`;
+  } else if (slices.length === 1) {
+    concentrationAlert = `<div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0">🔍</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">建議增加多元性</div>
+        <div class="alert-text">目前全部集中在${slices[0].ind}，建議追蹤其他產業的股票來分散風險。</div>
+      </div>
+    </div>`;
+  } else if (riskCnt >= 2) {
+    concentrationAlert = `<div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0">⚠️</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">高風險股票偏多</div>
+        <div class="alert-text">組合中有 ${riskCnt} 支「風險升高」的股票，整體波動性較大。</div>
+      </div>
+    </div>`;
+  }
+
+  // ── 5. AI 建議 ──
+  const diversityScore = slices.length;
+  let aiText = '';
+  if (diversityScore === 1) {
+    aiText = `你的組合目前只有 ${slices[0].ind} 一個產業。這樣的好處是主題很清晰，壞處是「一旦這個產業不好，整個組合都會受影響」。就像把所有雞蛋放在一個籃子裡。如果你對這個產業很有信心，沒問題；但如果想睡得安穩一點，可以考慮加入 ETF 或其他產業的股票來分散。`;
+  } else if (diversityScore <= 3) {
+    aiText = `你的組合橫跨 ${slices.length} 個產業，分散效果還可以。目前比重最高的是${slices[0].ind}（${slices[0].pct}%）。整體而言是有主軸但不完全集中的配置，算是一個合理的起點。`;
+  } else {
+    aiText = `你追蹤了 ${slices.length} 個不同產業的股票，分散效果相當好。市場有輪動時，不同產業可以互補，減少整體波動。這種配置適合長期持有，不需要每天盯盤。`;
+  }
+  if (riskCnt > 0) aiText += ` 另外，你有 ${riskCnt} 支標記為「風險升高」的股票（${wlStocks.filter(s=>s.risk==='high').map(s=>s.name).join('、')}），建議定期追蹤它們的最新狀況。`;
+
+  // ── 6. Donut Chart (CSS conic-gradient) ──
+  let conicStr = '';
+  let cumPct = 0;
+  slices.forEach(s => {
+    const col = (IND_META[s.ind]||{}).color||'#9CA3AF';
+    conicStr += `${col} ${cumPct}% ${cumPct+s.pct}%, `;
+    cumPct += s.pct;
+  });
+  conicStr = conicStr.replace(/, $/, '');
+
+  const legendHtml = slices.map(s=>{
+    const col = (IND_META[s.ind]||{}).color||'#9CA3AF';
+    return `<div style="display:flex;align-items:center;gap:8px">
+      <div style="width:10px;height:10px;border-radius:3px;background:${col};flex-shrink:0"></div>
+      <span style="font-size:12px">${(IND_META[s.ind]||{}).icon||''} ${s.ind} ${s.pct}%</span>
+    </div>`;
+  }).join('');
+
+  // ── 7. Allocation bars ──
+  const allocHtml = slices.map(s=>{
+    const col = (IND_META[s.ind]||{}).color||'#9CA3AF';
+    const icon = (IND_META[s.ind]||{}).icon||'';
+    return `<div class="alloc-row">
+      <div class="alloc-meta">
+        <span>${icon} ${s.ind}</span>
+        <span style="color:${col};font-weight:700">${s.pct}%</span>
+      </div>
+      <div class="alloc-track">
+        <div class="alloc-bar" style="width:${s.pct}%;background:${col};transition:width .5s"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── 8. Stock list in portfolio ──
+  const statusMap = {stable:['🟢','bg-green'],watch:['🟡','bg-yellow'],risk:['🔴','bg-red']};
+  const stockListHtml = wlStocks.map(s=>{
+    const [dot,sc] = statusMap[s.status]||['⚪','bg-neutral'];
+    return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showDetail('${s.id}')">
+      <span style="font-size:16px">${dot}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${s.name}</div>
+        <div style="font-size:10px;color:var(--sub)">${s.id} · ${s.industry}</div>
+      </div>
+      <span class="badge ${sc}" style="font-size:10px">${s.status==='stable'?'穩定':s.status==='watch'?'觀察中':'風險升高'}</span>
+    </div>`;
+  }).join('').replace(/border-bottom[^;]+;([^"]*)"[^>]*>(?=[^<]*<\/div>\s*$)/,'$1">');
+
+  // ── Render ──
+  c.innerHTML = `
+    <div class="card-gold">
+      <div class="st">投資組合健康度</div>
+      <div class="ph-score">
+        <div class="ph-emoji">${healthEmoji}</div>
+        <div>
+          <div class="ph-tag">PORTFOLIO HEALTH</div>
+          <div class="ph-val">${healthLabel}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--sub);line-height:1.6;margin-top:4px">${healthDesc}</div>
+    </div>
+
+    <div class="card">
+      <div class="st">配置比例圖</div>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(${conicStr});-webkit-mask:radial-gradient(transparent 32px,black 32px);mask:radial-gradient(transparent 32px,black 32px);flex-shrink:0"></div>
+        <div style="display:flex;flex-direction:column;gap:9px;flex:1">${legendHtml}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="st">產業分布</div>
+      ${allocHtml}
+    </div>
+
+    ${concentrationAlert}
+
+    <div class="card">
+      <div class="st">風險溫度計</div>
+      <div class="thermo-wrap">
+        <div class="thermo-track"><div class="thermo-fill" style="width:${Math.round(avgRisk)}%"></div></div>
+        <div class="thermo-lbl" style="color:${riskLabel.c}">${riskLabel.l}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px">
+        <span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="st">追蹤中的股票（${wlStocks.length} 支）</div>
+      ${stockListHtml.replace(/<div[^>]*>(?=[^<]*<\/div>\s*$)/,s=>s.replace('border-bottom:1px solid var(--border);',''))}
+    </div>
+
+    <div class="card-soft">
+      <div class="st">AI 白話提醒</div>
+      <div style="font-size:14px;line-height:1.8">${aiText}</div>
+      <div style="font-size:10px;color:var(--sub);margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">⚠️ 追蹤清單不等於實際持倉。這裡的分析基於你追蹤的股票，不構成投資建議。</div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
 //  LIVE TICKER DATA
 // ══════════════════════════════════════════════
 const TICKER_STOCKS = [
@@ -2679,46 +2778,33 @@ const WEEKLY_DATA = {
 
 function renderWeekly() {
   const now = new Date();
-  const day = now.getDay(); // 0=Sun, 6=Sat
+  const day = now.getDay();
   const isWeekend = day === 0 || day === 6;
 
-  // Update header badge
-  const badge = document.getElementById('weekly-live-badge');
-  const phSub = document.getElementById('weekly-ph-sub');
-  const dot = document.getElementById('weekly-dot');
-
-  if (isWeekend) {
-    if (badge) { badge.style.display='flex'; }
-    if (phSub) phSub.textContent = '週末版 · 本週完整回顧';
-    if (dot) dot.style.display='block';
-  } else {
-    if (badge) { badge.innerHTML=`<span style="font-size:10px;font-weight:700;color:var(--sub)">平日版（週末更新）</span>`; badge.style.background='transparent'; badge.style.border='1px solid var(--border)'; }
-    if (phSub) phSub.textContent = '上週回顧 · 本週展望';
-    if (dot) dot.style.display='none';
-  }
-
-  // Update market page banner
+  // Update market page banner only
   const wbTitle = document.getElementById('wb-title');
-  const wbSub = document.getElementById('wb-sub');
-  const wbTag = document.getElementById('wb-tag-text');
+  const wbSub   = document.getElementById('wb-sub');
+  const wbTag   = document.getElementById('wb-tag-text');
   if (isWeekend) {
     if (wbTag) wbTag.innerHTML = '📅 週報 <span style="background:var(--red);color:#fff;border-radius:4px;padding:1px 6px;font-size:9px;margin-left:4px">NEW</span>';
     if (wbTitle) wbTitle.textContent = '本週市場週報已發布';
-    if (wbSub) wbSub.textContent = '點擊查看本週完整回顧、表現排行、下週重要日程與 AI 白話總結。';
+    if (wbSub) wbSub.textContent = '點擊查看本週完整回顧、表現排行、下週日程與 AI 白話總結。';
   } else {
-    const daysToWeekend = day === 5 ? 1 : (6 - day);
+    const daysLeft = day === 5 ? 1 : (6 - day);
     if (wbTag) wbTag.textContent = '📅 週報';
-    if (wbTitle) wbTitle.textContent = `${daysToWeekend === 1 ? '明天' : `還有 ${daysToWeekend} 天`}發布本週週報`;
-    if (wbSub) wbSub.textContent = '每週六早上 09:00 發布，包含本週市場回顧、個股排行與下週展望。';
+    if (wbTitle) wbTitle.textContent = daysLeft === 1 ? '明天發布本週週報' : `還有 ${daysLeft} 天發布本週週報`;
+    if (wbSub) wbSub.textContent = '每週六 09:00 發布，包含本週市場回顧、個股排行與下週展望。';
   }
+}
 
-  const c = document.getElementById('weekly-content');
-  if (!c) return;
+function openWeeklySheet() {
+  const now = new Date();
+  const isWeekend = now.getDay() === 0 || now.getDay() === 6;
 
   const gainersHtml = WEEKLY_DATA.topGainers.map(s=>`
     <div class="perf-row">
       <div class="perf-rank">${s.rank}</div>
-      <div style="flex:1;cursor:pointer" onclick="showDetail('${s.id}')">
+      <div style="flex:1;cursor:pointer" onclick="closeBSheet();showDetail('${s.id}')">
         <div class="perf-name">${s.name} <span style="font-size:10px;color:var(--gold)">${s.id}</span></div>
         <div class="perf-sub">${s.reason}</div>
       </div>
@@ -2728,7 +2814,7 @@ function renderWeekly() {
   const losersHtml = WEEKLY_DATA.topLosers.map(s=>`
     <div class="perf-row">
       <div class="perf-rank" style="font-size:13px;font-weight:700;color:var(--sub)">${s.rank}</div>
-      <div style="flex:1;cursor:pointer" onclick="showDetail('${s.id}')">
+      <div style="flex:1;cursor:pointer" onclick="closeBSheet();showDetail('${s.id}')">
         <div class="perf-name">${s.name} <span style="font-size:10px;color:var(--gold)">${s.id}</span></div>
         <div class="perf-sub">${s.reason}</div>
       </div>
@@ -2738,71 +2824,74 @@ function renderWeekly() {
   const eventsHtml = WEEKLY_DATA.keyEvents.map(e=>`
     <div class="cal-row">
       <div class="cal-date">${e.day}</div>
-      <div>
-        <div class="cal-text">${e.text}</div>
-        <div class="cal-impact" style="color:${e.impactC}">${e.impact}</div>
-      </div>
+      <div><div class="cal-text">${e.text}</div>
+      <div class="cal-impact" style="color:${e.impactC}">${e.impact}</div></div>
     </div>`).join('');
 
   const nextHtml = WEEKLY_DATA.nextWeek.map(e=>`
     <div class="cal-row">
       <div class="cal-date">${e.day}</div>
-      <div>
-        <div class="cal-text">${e.text}</div>
-        <div class="cal-impact" style="color:${e.impactC}">${e.impact}</div>
-      </div>
+      <div><div class="cal-text">${e.text}</div>
+      <div class="cal-impact" style="color:${e.impactC}">${e.impact}</div></div>
     </div>`).join('');
 
   const weekdayNote = isWeekend ? '' : `
-    <div class="alert-card" style="margin-bottom:4px">
-      <div style="font-size:18px;flex-shrink:0">📌</div>
-      <div>
-        <div style="font-size:12px;font-weight:700;margin-bottom:3px">顯示上週資料</div>
-        <div style="font-size:12px;color:var(--sub);line-height:1.5">週報於每週六 09:00 正式更新。目前顯示上週回顧，下週展望仍有效。</div>
-      </div>
+    <div style="background:var(--card-soft);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:16px">
+      <span style="font-size:16px">📌</span>
+      <div style="font-size:12px;color:var(--sub);line-height:1.5">顯示上週資料，週報每週六 09:00 正式更新。</div>
     </div>`;
 
-  c.innerHTML = `
-    ${weekdayNote}
-    <div class="card-gold">
-      <div class="weekly-weather-big">
-        <span class="weekly-weather-emoji">${WEEKLY_DATA.weather.icon}</span>
-        <div class="weekly-weather-title">本週天氣：${WEEKLY_DATA.weather.label}</div>
-        <div class="weekly-weather-sub">${WEEKLY_DATA.weather.desc}</div>
+  openBSheet(`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">📅 週報</div>
+        <div style="font-size:20px;font-weight:700">本週市場總結</div>
       </div>
+      ${isWeekend ? `<div style="display:flex;align-items:center;gap:5px;background:var(--red-dim);border:1px solid var(--red);border-radius:20px;padding:4px 10px"><span style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.2s infinite;display:inline-block"></span><span style="font-size:10px;font-weight:700;color:var(--red)">本週版</span></div>` : ''}
     </div>
 
-    <div class="card-soft">
-      <div class="st">本週市場摘要</div>
-      <div style="font-size:14px;line-height:1.7;color:var(--text)">${WEEKLY_DATA.summary}</div>
+    ${weekdayNote}
+
+    <div style="text-align:center;background:var(--card-soft);border-radius:12px;padding:20px 16px;margin-bottom:16px">
+      <div style="font-size:52px;margin-bottom:6px">${WEEKLY_DATA.weather.icon}</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">本週天氣：${WEEKLY_DATA.weather.label}</div>
+      <div style="font-size:13px;color:var(--sub);line-height:1.6">${WEEKLY_DATA.weather.desc}</div>
     </div>
 
-    <div class="card">
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:16px">
+      <div class="st">本週摘要</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--text)">${WEEKLY_DATA.summary}</div>
+    </div>
+
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
       <div class="st">🏆 本週漲幅前三</div>
       ${gainersHtml}
     </div>
 
-    <div class="card">
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
       <div class="st">📉 本週跌幅前三</div>
       ${losersHtml}
     </div>
 
-    <div class="card">
-      <div class="st">本週重要事件回顧</div>
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="st">本週重要事件</div>
       ${eventsHtml}
     </div>
 
-    <div class="card">
-      <div class="st">下週重要日程 ⚠️ 提前準備</div>
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="st">⚠️ 下週重要日程</div>
       ${nextHtml}
     </div>
 
-    <div class="card-gold">
+    <div style="background:var(--card);border:1px solid var(--gold-border);border-radius:10px;padding:14px;position:relative;overflow:hidden;margin-bottom:4px">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)"></div>
       <div class="st">AI 週報白話總結</div>
-      <div style="font-size:14px;line-height:1.8;color:var(--text)">${WEEKLY_DATA.aiSummary}</div>
-      <div style="font-size:10px;color:var(--sub);margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">⚠️ 以上內容僅供參考，不構成投資建議。週報每週六 09:00 更新。</div>
+      <div style="font-size:13px;line-height:1.8;color:var(--text)">${WEEKLY_DATA.aiSummary}</div>
     </div>
-  `;
+
+    <div style="font-size:10px;color:var(--sub);line-height:1.5;margin-top:10px;margin-bottom:16px">⚠️ 以上內容僅供參考，不構成投資建議。週報每週六 09:00 更新。</div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
 }
 
 // ══════════════════════════════════════════════
@@ -2823,7 +2912,7 @@ const _switchTabPatched = function(tab) {
   if (tab === 'watchlist') renderWatchlist();
   if (tab === 'search') renderBrowse(browsing);
   if (tab === 'industries') renderIndustries();
-  if (tab === 'weekly') renderWeekly();
+  if (tab === 'portfolio') renderPortfolio();
 };
 // Reassign globally
 window.switchTab = _switchTabPatched;
@@ -2847,6 +2936,7 @@ function buildMarketStats() {
 // ══════════════════════════════════════════════
 initMarketChart();
 renderWatchlist();
+renderPortfolio();
 renderBrowse('科技');
 renderIndustries();
 renderWeekly();

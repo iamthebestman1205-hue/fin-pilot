@@ -148,6 +148,58 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .abar-etf{background:linear-gradient(90deg,var(--green),#059669)}
 .abar-cash{background:linear-gradient(90deg,#6366f1,#8b5cf6)}
 
+/* Live Ticker */
+.ticker-wrap{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:200;background:rgba(5,5,9,.95);border-bottom:1px solid var(--border);height:28px;overflow:hidden;display:flex;align-items:center}
+.ticker-live{font-size:9px;font-weight:800;color:var(--red);letter-spacing:.5px;padding:0 10px;flex-shrink:0;display:flex;align-items:center;gap:4px}
+.ticker-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.ticker-scroll{flex:1;overflow:hidden;position:relative}
+.ticker-inner{display:flex;gap:0;white-space:nowrap;animation:scroll-left 40s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+.ticker-item{display:inline-flex;align-items:center;gap:5px;padding:0 16px;font-size:10px;border-right:1px solid var(--border)}
+.ticker-name{color:var(--sub);font-weight:600}
+.ticker-val{font-weight:700}
+.ticker-up{color:var(--green)}.ticker-dn{color:var(--red)}.ticker-flat{color:var(--sub)}
+@keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Page offset for ticker */
+.page{padding-top:28px;padding-bottom:calc(var(--tabh) + 40px)}
+.ph{top:28px}
+
+/* Weekly Report */
+.weekly-banner{background:linear-gradient(135deg,#1a1408,#111118);border:1px solid var(--gold-border);border-radius:var(--r);padding:18px;cursor:pointer;position:relative;overflow:hidden;transition:transform .1s}
+.weekly-banner:active{transform:scale(.98)}
+.weekly-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.wb-tag{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.wb-title{font-size:17px;font-weight:700;margin-bottom:6px;line-height:1.4}
+.wb-sub{font-size:12px;color:var(--sub);line-height:1.5}
+.wb-cta{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12px;color:var(--gold);font-weight:600}
+
+/* Weekly Page */
+.weekly-section{margin-bottom:4px}
+.weekly-weather-big{text-align:center;padding:24px 0 16px}
+.weekly-weather-emoji{font-size:64px;margin-bottom:8px;display:block}
+.weekly-weather-title{font-size:28px;font-weight:700;letter-spacing:-.5px}
+.weekly-weather-sub{font-size:14px;color:var(--sub);margin-top:6px;line-height:1.6;padding:0 20px}
+.perf-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+.perf-row:last-child{border-bottom:none;padding-bottom:0}
+.perf-row:first-child{padding-top:0}
+.perf-rank{font-size:16px;width:24px;flex-shrink:0;text-align:center}
+.perf-name{flex:1;font-size:13px;font-weight:600}
+.perf-sub{font-size:11px;color:var(--sub)}
+.perf-val{font-size:14px;font-weight:700}
+.cal-row{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
+.cal-row:last-child{border-bottom:none;padding-bottom:0}
+.cal-row:first-child{padding-top:0}
+.cal-date{font-size:11px;color:var(--gold);font-weight:700;width:52px;flex-shrink:0;padding-top:2px}
+.cal-text{font-size:13px;line-height:1.5}
+.cal-impact{font-size:10px;font-weight:700;margin-top:3px}
+.countdown-big{text-align:center;padding:20px 0}
+.countdown-num{font-size:48px;font-weight:800;color:var(--gold)}
+.countdown-lbl{font-size:13px;color:var(--sub);margin-top:4px}
+.update-flash{animation:flash .5s ease}
+@keyframes flash{0%{opacity:1}30%{opacity:.3}100%{opacity:1}}
+
 /* Tab bar */
 .tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--tabh);background:rgba(5,5,9,.9);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;z-index:100}
 .titem{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 0;opacity:.38;transition:opacity .2s}
@@ -160,9 +212,42 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .sparkline{display:flex;align-items:flex-end;gap:2px;height:28px;margin-top:8px}
 .sp-bar{width:6px;border-radius:2px 2px 0 0;min-height:3px}
 
-/* Watchlist header actions */
-.wl-sort{display:flex;gap:8px;align-items:center}
-.sort-lbl{font-size:11px;color:var(--sub)}
+/* Focus items (market page) */
+.focus-item{padding:16px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.focus-item:last-child{border-bottom:none}
+.focus-item:active{background:var(--card-soft)}
+.focus-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.focus-icon{font-size:22px;flex-shrink:0;margin-top:1px}
+.focus-tag{font-size:10px;font-weight:700;letter-spacing:.6px;margin-bottom:3px;text-transform:uppercase}
+.focus-title{font-size:13px;font-weight:600;line-height:1.45}
+.focus-arrow{font-size:18px;color:var(--sub);flex-shrink:0;align-self:center}
+.focus-body{font-size:12px;color:var(--sub);line-height:1.6;margin-bottom:10px}
+.focus-stocks{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--sub)}
+.focus-stocks span{background:var(--card-soft);border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:var(--gold);font-weight:600;font-size:11px}
+
+/* Weather forecast cards */
+.wx-forecast{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px}
+.wx-card{background:var(--card-soft);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;transition:border-color .15s,transform .1s}
+.wx-card:active{transform:scale(.97);border-color:var(--gold-border)}
+.wx-card .wx-period{font-size:9px;color:var(--sub);margin-bottom:6px;font-weight:600;letter-spacing:.4px}
+.wx-card .wx-big{font-size:28px;margin-bottom:5px}
+.wx-card .wx-lbl{font-size:11px;font-weight:700}
+.wx-card .wx-arrow{font-size:11px;color:var(--sub);margin-top:4px}
+
+/* Bottom sheet modal */
+.bsheet-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(5,5,9,.75);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center}
+.bsheet-overlay.open{display:flex}
+.bsheet{background:var(--card);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:0 0 40px;max-width:430px;width:100%;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.bsheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:14px auto 0}
+.bsheet-inner{padding:20px}
+.bsheet-tag{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.bsheet-title{font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:16px;line-height:1.3}
+.bsheet-section{margin-bottom:14px}
+.bsheet-section-lbl{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.bsheet-section-body{font-size:14px;line-height:1.7;color:var(--text)}
+.bsheet-highlight{background:var(--card-soft);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;line-height:1.6;color:var(--sub);margin-top:10px}
+.bsheet-watch{display:flex;align-items:flex-start;gap:8px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;line-height:1.6}
+.bsheet-close{margin-top:20px;width:100%;background:var(--card-soft);border:1px solid var(--border);color:var(--sub);border-radius:12px;padding:13px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer}
 </style>
 </head>
 <body>
@@ -177,6 +262,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
   <div class="sc">
 
+    <!-- Weekly Banner -->
+    <div class="weekly-banner" id="weekly-banner-card" onclick="openWeeklySheet()">
+      <div class="wb-tag"><span>📅</span><span id="wb-tag-text">週報</span></div>
+      <div class="wb-title" id="wb-title">本週市場週報</div>
+      <div class="wb-sub" id="wb-sub">點擊查看本週完整市場總結、表現排行與下週展望。</div>
+      <div class="wb-cta">查看完整週報 ›</div>
+    </div>
+
     <!-- Weather -->
     <div class="card-gold">
       <div class="st">今日市場天氣</div>
@@ -189,19 +282,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <!-- Market Stats Row -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
       <div class="card" style="padding:14px;text-align:center">
-        <div style="font-size:11px;color:var(--sub);margin-bottom:5px">台股</div>
-        <div style="font-size:16px;font-weight:700;color:var(--green)">+0.8%</div>
-        <div style="font-size:10px;color:var(--sub);margin-top:2px">偏強</div>
+        <div style="font-size:10px;color:var(--sub);margin-bottom:5px">台股</div>
+        <div id="mkt-tw-val" style="font-size:16px;font-weight:700;color:var(--green)">+0.80%</div>
+        <div style="font-size:9px;color:var(--sub);margin-top:2px" id="last-updated">即時更新</div>
       </div>
       <div class="card" style="padding:14px;text-align:center">
-        <div style="font-size:11px;color:var(--sub);margin-bottom:5px">美股</div>
-        <div style="font-size:16px;font-weight:700;color:var(--green)">+0.4%</div>
-        <div style="font-size:10px;color:var(--sub);margin-top:2px">穩定</div>
+        <div style="font-size:10px;color:var(--sub);margin-bottom:5px">美股</div>
+        <div id="mkt-us-val" style="font-size:16px;font-weight:700;color:var(--green)">+0.40%</div>
+        <div style="font-size:9px;color:var(--sub);margin-top:2px">S&amp;P 500</div>
       </div>
-      <div class="card" style="padding:14px;text-align:center">
-        <div style="font-size:11px;color:var(--sub);margin-bottom:5px">VIX</div>
-        <div style="font-size:16px;font-weight:700;color:var(--yellow)">18.3</div>
-        <div style="font-size:10px;color:var(--sub);margin-top:2px">中等</div>
+      <div class="card" style="padding:14px;text-align:center;cursor:pointer" onclick="showVixModal()">
+        <div style="font-size:10px;color:var(--sub);margin-bottom:5px">市場緊張度</div>
+        <div style="font-size:22px;margin-bottom:2px">😐</div>
+        <div style="font-size:9px;color:var(--yellow);font-weight:600">普通 ›</div>
       </div>
     </div>
 
@@ -243,30 +336,57 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     </div>
 
     <!-- Hot Topics -->
-    <div class="card">
-      <div class="st">本週市場焦點</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div style="display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:16px">🤖</span>
-          <div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:3px">AI 算力需求持續擴大</div>
-            <div style="font-size:12px;color:var(--sub);line-height:1.5">NVIDIA、台積電、鴻海均受惠，資本支出持續創高。</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:16px 18px 12px;border-bottom:1px solid var(--border)">
+        <div class="st" style="margin-bottom:0">本週市場焦點</div>
+      </div>
+      <div class="focus-item" onclick="showFocusDetail('ai')">
+        <div class="focus-head">
+          <span class="focus-icon">🤖</span>
+          <div style="flex:1">
+            <div class="focus-tag" style="color:var(--green)">AI 算力</div>
+            <div class="focus-title">AI 伺服器需求爆發，供應鏈全面受惠</div>
           </div>
+          <span class="focus-arrow">›</span>
         </div>
-        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:16px">🏦</span>
-          <div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:3px">Fed 降息時機討論</div>
-            <div style="font-size:12px;color:var(--sub);line-height:1.5">通膨數據仍偏高，市場預期年內降息 1～2 次。</div>
+        <div class="focus-body">Microsoft、Google、Meta 三大科技巨頭今年 AI 資本支出合計超過 2000 億美元，帶動 NVIDIA 晶片、台積電先進製程、鴻海廣達伺服器組裝訂單全線爆滿。</div>
+        <div class="focus-stocks">受惠股：<span>NVDA</span><span>2330</span><span>2317</span><span>2382</span></div>
+      </div>
+      <div class="focus-item" onclick="showFocusDetail('fed')">
+        <div class="focus-head">
+          <span class="focus-icon">🏦</span>
+          <div style="flex:1">
+            <div class="focus-tag" style="color:var(--yellow)">利率政策</div>
+            <div class="focus-title">Fed 降息時機持續延後，市場重新定價</div>
           </div>
+          <span class="focus-arrow">›</span>
         </div>
-        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
-          <span style="font-size:16px">🌏</span>
-          <div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:3px">地緣政治風險升溫</div>
-            <div style="font-size:12px;color:var(--sub);line-height:1.5">中東局勢持續，油價短線有支撐，能源股受關注。</div>
+        <div class="focus-body">4 月 CPI 年增 3.4%，高於市場預期，讓年內降息空間縮小。市場從預期降息 3 次下修至 1～2 次。高利率環境下，成長股估值受到壓力，但獲利能力強的公司仍具優勢。</div>
+        <div class="focus-stocks">影響股：<span>JPM</span><span>V</span><span>AMT</span><span>NEE</span></div>
+      </div>
+      <div class="focus-item" onclick="showFocusDetail('geo')">
+        <div class="focus-head">
+          <span class="focus-icon">🌏</span>
+          <div style="flex:1">
+            <div class="focus-tag" style="color:var(--orange)">地緣政治</div>
+            <div class="focus-title">中東局勢膠著，稀土出口管制升級</div>
           </div>
+          <span class="focus-arrow">›</span>
         </div>
+        <div class="focus-body">中東地區衝突持續，布蘭特原油維持 80 美元以上。同時，中國對稀土和半導體設備的出口限制進一步擴大，科技供應鏈多元化布局加速，台灣、日本、東南亞受惠。</div>
+        <div class="focus-stocks">注意股：<span>XOM</span><span>GOLD</span><span>2330</span></div>
+      </div>
+      <div class="focus-item" onclick="showFocusDetail('glp1')">
+        <div class="focus-head">
+          <span class="focus-icon">💊</span>
+          <div style="flex:1">
+            <div class="focus-tag" style="color:var(--purple)">醫療革命</div>
+            <div class="focus-title">GLP-1 減重藥需求持續超預期</div>
+          </div>
+          <span class="focus-arrow">›</span>
+        </div>
+        <div class="focus-body">Eli Lilly 的 Mounjaro 與 Wegovy 全球供不應求，市場規模預估 2030 年將達 1500 億美元。這不只是減重藥，研究顯示對心血管、腎臟病也有正面效果，應用範圍持續擴大。</div>
+        <div class="focus-stocks">受惠股：<span>LLY</span><span>JNJ</span></div>
       </div>
     </div>
 
@@ -275,39 +395,51 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 
 <!-- ═══════════════════════════════
-     PAGE: WATCHLIST
+     PAGE: SEARCH
 ═══════════════════════════════ -->
-<div id="page-watchlist" class="page">
+<div id="page-search" class="page">
   <div class="ph">
-    <div class="ph-title">我的股票</div>
-    <div class="ph-sub" id="wl-count">追蹤 0 支股票</div>
+    <div class="ph-title">搜尋股票</div>
+    <div class="ph-sub">輸入代號、名稱或產業</div>
   </div>
 
   <div class="search-wrap">
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input id="stock-search" type="text" placeholder="搜尋股票代號或名稱…" oninput="onSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      <input id="stock-search" type="text" placeholder="例如：台積電、NVDA、科技…" oninput="onSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
       <span class="clear-btn" id="clear-btn" onclick="clearSearch()" style="display:none">✕</span>
     </div>
   </div>
 
+  <!-- Default: browse by industry chips -->
+  <div id="search-browse" style="padding:0 16px">
+    <div class="st" style="margin-bottom:10px;margin-top:4px">依產業瀏覽</div>
+    <div class="chip-row" id="browse-chips" style="margin-bottom:14px"></div>
+    <div id="browse-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
   <!-- Search results -->
   <div id="search-results" style="display:none;padding:0 16px">
-    <div class="st" style="margin-bottom:8px;margin-top:4px">搜尋結果</div>
+    <div class="st" style="margin-bottom:8px;margin-top:4px" id="search-results-label">搜尋結果</div>
     <div id="results-list" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
+</div>
 
-  <!-- Industry filter chips -->
-  <div style="padding:10px 16px 0;display:none" id="wl-filter-wrap">
-    <div class="chip-row" id="wl-chips"></div>
+
+<!-- ═══════════════════════════════
+     PAGE: WATCHLIST (追蹤清單)
+═══════════════════════════════ -->
+<div id="page-watchlist" class="page">
+  <div class="ph">
+    <div class="ph-title">我的追蹤</div>
+    <div class="ph-sub" id="wl-count">追蹤 0 支股票</div>
   </div>
 
-  <!-- Watchlist -->
   <div class="sc" id="watchlist-container">
     <div class="sc-empty">
-      <div style="font-size:32px;margin-bottom:10px">📋</div>
+      <div style="font-size:36px;margin-bottom:12px">🔖</div>
       <div style="font-weight:600;margin-bottom:6px">還沒有追蹤股票</div>
-      <div style="font-size:12px">搜尋股票並點擊 ＋ 加入追蹤</div>
+      <div style="font-size:12px;line-height:1.6">到「搜尋」頁找到股票，<br>點擊 ＋ 就能加入這裡</div>
     </div>
   </div>
 </div>
@@ -350,103 +482,72 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 <div id="page-portfolio" class="page">
   <div class="ph">
     <div class="ph-title">投資組合</div>
-    <div class="ph-sub">健康度概覽</div>
+    <div class="ph-sub" id="portfolio-sub">根據追蹤清單產生</div>
   </div>
-  <div class="sc">
+  <div class="sc" id="portfolio-content"></div>
+</div>
 
-    <div class="card-gold">
-      <div class="st">投資組合健康度</div>
-      <div class="ph-score">
-        <div class="ph-emoji">📊</div>
-        <div>
-          <div class="ph-tag">PORTFOLIO HEALTH</div>
-          <div class="ph-val">中等偏積極</div>
-        </div>
-      </div>
-      <div style="font-size:13px;color:var(--sub);line-height:1.6">
-        集中在科技與 AI 供應鏈，報酬潛力高，短期波動也相對大。
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="st">資產配置</div>
-      <div class="alloc-row">
-        <div class="alloc-meta"><span>🖥 科技股</span><span style="color:var(--gold);font-weight:600">72%</span></div>
-        <div class="alloc-track"><div class="alloc-bar abar-tech" style="width:72%"></div></div>
-      </div>
-      <div class="alloc-row">
-        <div class="alloc-meta"><span>📦 ETF</span><span style="color:var(--green);font-weight:600">20%</span></div>
-        <div class="alloc-track"><div class="alloc-bar abar-etf" style="width:20%"></div></div>
-      </div>
-      <div class="alloc-row">
-        <div class="alloc-meta"><span>💵 現金</span><span style="color:#8b5cf6;font-weight:600">8%</span></div>
-        <div class="alloc-track"><div class="alloc-bar abar-cash" style="width:8%"></div></div>
-      </div>
-    </div>
-
-    <!-- Donut visual using SVG -->
-    <div class="card">
-      <div class="st">配置比例圖</div>
-      <div style="display:flex;align-items:center;gap:20px">
-        <svg width="110" height="110" viewBox="0 0 110 110">
-          <!-- Total circumference of r=40: 251.3 -->
-          <!-- Tech 72%: 181 -->
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#27272F" stroke-width="16"/>
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#FACC15" stroke-width="16"
-            stroke-dasharray="181 251" stroke-dashoffset="63" stroke-linecap="round"/>
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#34D399" stroke-width="16"
-            stroke-dasharray="50 251" stroke-dashoffset="-118" stroke-linecap="round"/>
-          <circle cx="55" cy="55" r="40" fill="none" stroke="#8b5cf6" stroke-width="16"
-            stroke-dasharray="20 251" stroke-dashoffset="-168" stroke-linecap="round"/>
-          <text x="55" y="59" text-anchor="middle" fill="#F9FAFB" font-size="13" font-weight="700">72%</text>
-          <text x="55" y="70" text-anchor="middle" fill="#9CA3AF" font-size="8">科技股</text>
-        </svg>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;border-radius:3px;background:var(--gold)"></div>
-            <span style="font-size:12px">科技股 72%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;border-radius:3px;background:var(--green)"></div>
-            <span style="font-size:12px">ETF 20%</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;border-radius:3px;background:#8b5cf6"></div>
-            <span style="font-size:12px">現金 8%</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="alert-card">
-      <div style="font-size:20px;flex-shrink:0;margin-top:2px">🔍</div>
-      <div>
-        <div style="font-size:12px;font-weight:600;margin-bottom:4px">集中度提醒</div>
-        <div class="alert-text">你的投資組合偏向科技與 AI 供應鏈，上漲時很有感，修正時波動也大。</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="st">風險溫度計</div>
-      <div class="thermo-wrap">
-        <div class="thermo-track"><div class="thermo-fill" style="width:58%"></div></div>
-        <div class="thermo-lbl" style="color:var(--orange)">🌡 偏熱</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px">
-        <span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span>
-      </div>
-    </div>
-
-    <div class="card-soft">
-      <div class="st">AI 白話提醒</div>
-      <div style="font-size:14px;line-height:1.7">
-        這個配置適合對科技趨勢有信心、能承受短期波動的投資人。如果你希望睡得更好，可以考慮提高 ETF 或現金比例，把風險分散開來。
-      </div>
-    </div>
-
+<!-- Live Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-live"><span class="ticker-dot"></span>LIVE</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner" id="ticker-inner"></div>
   </div>
 </div>
 
+<!-- Bottom Sheet (impact detail / weather detail / focus detail) -->
+<div class="bsheet-overlay" id="bsheet-overlay" onclick="if(event.target===this)closeBSheet()">
+  <div class="bsheet">
+    <div class="bsheet-handle"></div>
+    <div class="bsheet-inner" id="bsheet-content"></div>
+  </div>
+</div>
+
+<!-- VIX / 市場緊張度 Modal -->
+<div id="vix-modal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(5,5,9,.8);backdrop-filter:blur(8px);align-items:flex-end;justify-content:center" onclick="if(event.target===this)hideVixModal()">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:24px 20px 40px;max-width:430px;width:100%">
+    <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px"></div>
+    <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1.2px;margin-bottom:10px">市場緊張度</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <span style="font-size:40px">😐</span>
+      <div>
+        <div style="font-size:22px;font-weight:700">普通</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:2px">市場沒有特別恐慌，也沒有特別興奮</div>
+      </div>
+    </div>
+    <div style="background:var(--card-soft);border-radius:12px;padding:16px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">這個數字代表什麼？</div>
+      <div style="font-size:13px;color:var(--sub);line-height:1.7">市場緊張度反映的是大家對股市的「情緒溫度」。當數值很高，代表投資人很害怕、市場波動大；當數值很低，代表大家很放鬆、市場平靜。</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:20px">
+      <div style="text-align:center;background:var(--card-soft);border-radius:10px;padding:10px 6px">
+        <div style="font-size:20px;margin-bottom:4px">😴</div>
+        <div style="font-size:10px;font-weight:600;color:var(--green)">平靜</div>
+        <div style="font-size:9px;color:var(--sub);margin-top:2px">市場很穩定</div>
+      </div>
+      <div style="text-align:center;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:10px;padding:10px 6px">
+        <div style="font-size:20px;margin-bottom:4px">😐</div>
+        <div style="font-size:10px;font-weight:600;color:var(--yellow)">普通</div>
+        <div style="font-size:9px;color:var(--sub);margin-top:2px">目前狀態</div>
+      </div>
+      <div style="text-align:center;background:var(--card-soft);border-radius:10px;padding:10px 6px">
+        <div style="font-size:20px;margin-bottom:4px">😟</div>
+        <div style="font-size:10px;font-weight:600;color:var(--orange)">緊張</div>
+        <div style="font-size:9px;color:var(--sub);margin-top:2px">波動開始大</div>
+      </div>
+      <div style="text-align:center;background:var(--card-soft);border-radius:10px;padding:10px 6px">
+        <div style="font-size:20px;margin-bottom:4px">😱</div>
+        <div style="font-size:10px;font-weight:600;color:var(--red)">恐慌</div>
+        <div style="font-size:9px;color:var(--sub);margin-top:2px">市場大跌中</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--sub);line-height:1.6;padding:12px;background:var(--card-soft);border-radius:10px">
+      💡 <strong style="color:var(--text)">小提醒：</strong>市場「恐慌」時，反而常常是長期投資人的買入機會。市場「平靜」時，要小心過度樂觀。
+    </div>
+    <button onclick="hideVixModal()" style="margin-top:16px;width:100%;background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);border-radius:12px;padding:13px;font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer">我了解了</button>
+  </div>
+</div>
 
 <!-- Tab Bar -->
 <nav class="tabbar">
@@ -454,9 +555,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <div class="titem-icon">🌤</div>
     <div class="titem-lbl">市場</div>
   </div>
+  <div class="titem" id="tab-search" onclick="switchTab('search')">
+    <div class="titem-icon">🔍</div>
+    <div class="titem-lbl">搜尋</div>
+  </div>
   <div class="titem" id="tab-watchlist" onclick="switchTab('watchlist')">
-    <div class="titem-icon">📋</div>
-    <div class="titem-lbl">股票</div>
+    <div class="titem-icon">🔖</div>
+    <div class="titem-lbl">追蹤</div>
   </div>
   <div class="titem" id="tab-industries" onclick="switchTab('industries')">
     <div class="titem-icon">🏭</div>
@@ -479,7 +584,31 @@ const STOCKS = [
    tip:'🔍 注意出口管制政策與下季財測。',
    spark:[55,60,58,70,85,80,90],thermo:75,
    periods:[['最近 1 週','up',60,'小幅上升'],['最近 1 月','up',85,'大幅上升'],['最近 3 月','up',72,'震盪偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','估值偏高','orange']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'本週 AI 晶片訂單能見度仍高，市場情緒偏正向，但漲多後短線可能出現獲利了結賣壓。',
+       watch:'注意大型法人持倉變化與期貨未平倉量，若出現異常減少可能預示短線回落。'},
+     mid:{icon:'⛅',label:'多雲時晴',period:'中期（1個月）',color:'var(--text)',
+       why:'Q2 財報季即將到來，市場等待業績驗證估值是否合理。若財測低於預期，修正幅度可能達 15–20%。',
+       watch:'重點觀察下季財測指引（Guidance）與資料中心客戶採購預算變化。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'AI 基礎設施建設週期至少持續 3–5 年，NVIDIA 在 GPU 生態系的護城河極深，長期成長邏輯仍強。',
+       watch:'長期關注 AMD、Intel 的追趕進度，以及 Google、Amazon 自研 AI 晶片的市佔率變化。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'聯準會雖維持高利率，但降息預期支撐成長股估值。科技股在「AI 敘事」驅動下，資金持續流入，整體大環境對 NVIDIA 有利。',
+      watch:'觀察重點：Fed 利率決策、美國科技股資金流向'},
+     {icon:'🏭',label:'AI 產業',badge:'偏強',cls:'green',
+      why:'AI 算力需求爆炸性成長，Microsoft、Google、Meta、Amazon 四大雲端業者今年 AI 資本支出合計超過 2000 億美元，直接帶動 GPU 需求，NVIDIA 是最直接受益者。',
+      watch:'觀察重點：各大雲端業者季報中 AI 資本支出數字'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',
+      why:'NVIDIA 毛利率突破 78%，遠高於一般半導體公司，顯示定價能力極強。但 Blackwell 系列量產爬坡是否順利，是短期最大變數。',
+      watch:'觀察重點：Blackwell 出貨量、資料中心業務季增率'},
+     {icon:'⚠️',label:'風險',badge:'估值偏高',cls:'orange',
+      why:'目前本益比超過 35 倍，遠高於歷史均值。這意味著市場對未來成長已有非常高的期待。一旦財測不如預期，或宏觀環境惡化，股價修正空間較大。',
+      watch:'注意美國對中國 AI 晶片出口管制是否進一步收緊，影響約 20% 收入'},
+   ],
    ai:'Nvidia 是這波 AI 浪潮最直接的受益者。算力需求強勁是真實的，但當期待已被充分定價，任何財測不如預期都可能造成震盪。建議設好停損點再持有。'},
 
   {id:'AAPL',name:'Apple',market:'USD',industry:'科技',status:'stable',risk:'warm',
@@ -487,7 +616,31 @@ const STOCKS = [
    tip:'✅ 長期持有者的穩定選擇。',
    spark:[70,68,72,71,75,73,78],thermo:45,
    periods:[['最近 1 週','mid',42,'小幅震盪'],['最近 1 月','up',55,'穩步上升'],['最近 3 月','up',60,'偏強整理']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲時晴',period:'短期（本週）',color:'var(--text)',
+       why:'本週缺乏重大催化劑，股價可能橫向整理。iPhone 換機數據疲軟的消息仍壓著市場情緒。',
+       watch:'注意 App Store 收入數據與分析師評等調整動態。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',
+       why:'Apple Intelligence AI 功能預計在下個季度更廣泛推出，市場期待帶動新一波換機潮，有機會成為正向催化劑。',
+       watch:'關注 WWDC 大會公告與 iPhone 17 系列 AI 功能規格揭露。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'Apple 服務業務（App Store、訂閱、金融服務）毛利率超過 70%，是長期獲利成長的核心引擎。即使硬體銷量平淡，服務收入仍能支撐股價。',
+       watch:'長期觀察 Apple Intelligence 是否真正帶動換機需求，以及印度市場的擴展進度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',
+      why:'高利率環境對 Apple 影響相對有限，因為它持有大量現金且服務業務現金流穩定。但科技股整體估值壓縮時，Apple 也難以獨善其身。',
+      watch:'觀察美股整體本益比水位與機構資金流向'},
+     {icon:'🏭',label:'科技消費產業',badge:'偏強',cls:'green',
+      why:'AI 功能正在成為消費電子的核心賣點，Apple 推出 Apple Intelligence 讓 iPhone 重新獲得市場關注，有助抵禦三星、小米的競爭壓力。',
+      watch:'觀察 AI 手機功能滲透率與 iPhone 季度銷量'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',
+      why:'Apple 服務業務年收入已達 850 億美元，毛利率 73%，是公司獲利的最大支柱。即使 iPhone 銷量平淡，服務收入成長仍能撐住整體業績。',
+      watch:'服務業務季增率是否維持雙位數成長'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',
+      why:'中國市場是 Apple 最大風險，佔收入約 18%。中美貿易摩擦、中國消費者轉向華為，都可能對業績造成壓力。',
+      watch:'注意中國市場 iPhone 市佔率與華為旗艦機的競爭動態'},
+   ],
    ai:'Apple 是科技股中相對穩健的選擇。服務業務毛利率高且持續成長，AI 功能有機會帶動新一輪換機潮，整體風險可控。'},
 
   {id:'MSFT',name:'Microsoft',market:'USD',industry:'科技',status:'stable',risk:'warm',
@@ -495,7 +648,31 @@ const STOCKS = [
    tip:'✅ AI 企業軟體龍頭，長期邏輯明確。',
    spark:[65,67,66,70,72,71,75],thermo:48,
    periods:[['最近 1 週','up',50,'小幅上升'],['最近 1 月','up',62,'穩定成長'],['最近 3 月','up',65,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'Azure 雲端成長動能持續，企業 AI 採購需求短期內不會轉弱，股價短線支撐穩固。',
+       watch:'注意本週是否有大型企業客戶公告 AI 採購合約。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',
+       why:'Copilot 商業版訂閱持續成長，每月新增企業客戶數量創高，AI 軟體商業化進展超出預期。',
+       watch:'關注 Azure AI 業務季增率是否維持 28% 以上。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'Microsoft 的企業生態系（Office、Teams、Azure）是最適合嵌入 AI 的商業環境。Copilot 每用戶可增加約 30 美元月費，長期收入爆發力強。',
+       watch:'觀察企業 AI 訂閱滲透率與 OpenAI 合作關係的持續性。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'企業數位轉型需求在高利率環境下未見明顯放緩，Microsoft 企業級產品具有剛性需求，受總經波動影響相對小。',
+      watch:'觀察企業 IT 支出調查數據'},
+     {icon:'🏭',label:'AI 企業軟體',badge:'偏強',cls:'green',
+      why:'AI 正在重塑企業軟體市場，Microsoft 透過深度整合 OpenAI 技術，在辦公室軟體、雲端、資安等領域全面領先，競爭對手難以短期追上。',
+      watch:'觀察 GitHub Copilot 付費用戶數與 Copilot 企業版採購進展'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',
+      why:'Microsoft 商業雲端年收入已達 1350 億美元，Azure 成長率重新加速至 31%，整體獲利品質高，自由現金流充沛。',
+      watch:'Azure 成長率是否維持 30% 以上是關鍵指標'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',
+      why:'估值已反映大量成長期待，本益比約 32 倍。若 AI 商業化進展不如預期，或有重大監管事件（反壟斷），可能引發估值修正。',
+      watch:'注意歐盟對 Microsoft-OpenAI 獨家合作的反壟斷調查進展'},
+   ],
    ai:'Microsoft 藉由 OpenAI 的深度合作在 AI 軟體層取得先機，Copilot 商業化進展順利，雲端業務穩健。對想參與 AI 但不想押注硬體的投資人是不錯的選擇。'},
 
   {id:'GOOGL',name:'Google (Alphabet)',market:'USD',industry:'科技',status:'watch',risk:'warm',
@@ -503,7 +680,31 @@ const STOCKS = [
    tip:'🔍 觀察 AI 搜尋對廣告收入的影響。',
    spark:[60,62,58,55,60,63,65],thermo:52,
    periods:[['最近 1 週','up',42,'小幅反彈'],['最近 1 月','mid',38,'震盪整理'],['最近 3 月','mid',45,'橫盤偏強']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌥',label:'偏陰',period:'短期（本週）',color:'var(--sub)',
+       why:'市場對 Google 搜尋廣告是否受 AI 替代的疑慮仍在，短線情緒偏保守，缺乏明確正向催化劑。',
+       watch:'注意本週是否有 AI 搜尋使用率或廣告主支出數據更新。'},
+     mid:{icon:'⛅',label:'多雲時晴',period:'中期（1個月）',color:'var(--text)',
+       why:'GCP（Google Cloud）成長加速至 28%，有機會成為下季正向驚喜。Gemini AI 整合進展若超預期，有助於股價回升。',
+       watch:'關注下季財報中 GCP 成長率與廣告 RPM（每千次曝光收益）變化。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',
+       why:'Google 仍掌握全球 90% 的搜尋市場，且廣告護城河極深。即使 AI 搜尋帶來衝擊，Google 也在同步整合 Gemini，長期競爭力仍強。',
+       watch:'長期觀察 AI Overview（AI 搜尋摘要）對廣告點擊率的實際影響數據。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',
+      why:'廣告市場景氣與 GDP 成長高度相關，目前美國就業市場仍穩健，廣告主支出沒有大幅收縮，大環境對 Google 廣告業務屬中性。',
+      watch:'觀察美國零售廣告支出與企業行銷預算調查'},
+     {icon:'🏭',label:'搜尋與雲端',badge:'偏強',cls:'green',
+      why:'雖然 ChatGPT、Perplexity 等 AI 搜尋工具興起，但 Google 的使用者習慣黏性極強，短期份額流失有限。GCP 雲端成長持續加速，提供新的成長引擎。',
+      watch:'觀察 Google 搜尋市佔率月度數據（StatCounter）'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',
+      why:'Google 廣告業務利潤率高達 35%，YouTube 廣告持續成長，但 AI 整合的研發費用大幅上升，短期對獲利有一定壓力。',
+      watch:'觀察研發費用佔收入比例是否持續上升'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',
+      why:'最大風險是 AI 搜尋改變用戶行為，導致廣告收入結構性下滑。另外，美國司法部對 Google 搜尋壟斷的訴訟也是潛在的不確定因素。',
+      watch:'注意美國搜尋反壟斷訴訟判決進展'},
+   ],
    ai:'Google 面臨 AI 原生搜尋挑戰，但廣告護城河深且 GCP 具競爭力。短期不確定性較高，長期技術實力仍強。'},
 
   {id:'META',name:'Meta Platforms',market:'USD',industry:'科技',status:'stable',risk:'warm',
@@ -511,7 +712,31 @@ const STOCKS = [
    tip:'✅ 獲利能力強，AI 廣告邏輯清晰。',
    spark:[55,60,65,68,72,75,80],thermo:50,
    periods:[['最近 1 週','up',60,'穩步上升'],['最近 1 月','up',72,'明顯走強'],['最近 3 月','up',78,'持續上漲']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'Reels 廣告收入持續強勁，AI 推薦演算法讓用戶使用時間再創新高，短線情緒正向。',
+       watch:'注意每日活躍用戶（DAU）數據與廣告主 ROI 回饋。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',
+       why:'AI 廣告定向技術讓廣告主願意提高預算，CPM（每千次曝光成本）持續上升，中期獲利能見度高。',
+       watch:'關注下季廣告收入季增率是否維持 25% 以上。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'Meta 持有 Facebook、Instagram、WhatsApp 三大平台，全球月活用戶超過 30 億，廣告護城河極深。AI 廣告技術長期持續提升，成長邏輯清晰。',
+       watch:'長期觀察 WhatsApp 商業化進度與 AR/VR 眼鏡實際銷量。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'廣告市場景氣維持，電商廣告需求強勁。Meta 廣告以中小型電商為主要客戶群，這個族群的廣告支出相對穩定。',
+      watch:'觀察美國中小企業信心指數與廣告支出趨勢'},
+     {icon:'🏭',label:'社群媒體廣告',badge:'偏強',cls:'green',
+      why:'AI 驅動的廣告效率大幅提升，廣告主每投入 1 美元獲得的回報（ROAS）明顯改善，推動廣告預算持續向 Meta 集中。',
+      watch:'觀察 Meta 廣告點擊率與轉換率的季度變化'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',
+      why:'Meta 2024 年自由現金流超過 500 億美元，毛利率達 80%，是科技股中現金創造能力最強的公司之一。大規模回購計畫支撐每股盈餘成長。',
+      watch:'注意 AI 研發資本支出是否過度拉高成本'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',
+      why:'青少年用戶使用時間下滑是長期隱憂，歐盟數據隱私法規（GDPR）和美國監管壓力持續，可能影響廣告定向精準度。',
+      watch:'注意歐盟對 Meta 廣告業務的監管裁決'},
+   ],
    ai:'Meta 是這波 AI 廣告紅利最直接受益者之一，Reels 廣告收入持續高速成長，整體基本面改善明顯。'},
 
   {id:'AMZN',name:'Amazon',market:'USD',industry:'科技',status:'stable',risk:'warm',
@@ -519,7 +744,31 @@ const STOCKS = [
    tip:'✅ 雲端 + 電商雙引擎，長期邏輯強。',
    spark:[58,60,62,65,63,68,72],thermo:50,
    periods:[['最近 1 週','up',48,'小幅上升'],['最近 1 月','up',60,'穩步成長'],['最近 3 月','up',65,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'AWS AI 訂單持續增加，電商旺季備貨效應帶動物流業務，短線無明顯利空。',
+       watch:'注意 Prime 會員訂閱數與 AWS 新客戶簽約狀況。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',
+       why:'AWS 成長率重新加速，AI 工作負載是最大驅動力。廣告業務也意外成為高毛利新引擎，中期獲利改善幅度大。',
+       watch:'關注 AWS 成長率是否重回 20% 以上。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'Amazon 的護城河來自電商網絡效應、AWS 技術積累、Prime 生態系三重加持，是難以被複製的商業模式，長期競爭優勢明確。',
+       watch:'長期觀察 AWS vs Azure vs GCP 市佔率消長與 Kuiper 衛星計畫進展。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'消費者支出雖受高利率壓力，但 Amazon 的低價優勢讓它在消費降級環境中反而受惠。企業雲端支出維持穩健。',
+      watch:'觀察美國消費者信心指數與電商滲透率變化'},
+     {icon:'🏭',label:'雲端與電商',badge:'偏強',cls:'green',
+      why:'AI 工作負載正在快速成為 AWS 最大成長動力，AI 訓練和推理需求都在爆發。電商業務則因廣告、物流效率改善而利潤率持續提升。',
+      watch:'觀察 AWS AI 相關服務的採用率與廣告業務利潤率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',
+      why:'Amazon 正進入獲利大幅改善的週期，電商業務持續降本增效，AWS 高毛利收入佔比提升，自由現金流創歷史新高。',
+      watch:'觀察電商業務營業利益率是否持續改善'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',
+      why:'物流成本仍是電商業務的最大變數，監管方面的反壟斷壓力持續，AWS 市佔率面臨 Azure、GCP 競爭。',
+      watch:'注意 FTC 對 Amazon 電商壟斷調查的最新進展'},
+   ],
    ai:'Amazon 的 AWS 是 AI 基礎設施的核心受益者，加上電商業務回穩，整體成長動能充足。'},
 
   {id:'TSLA',name:'Tesla',market:'USD',industry:'科技',status:'risk',risk:'high',
@@ -527,7 +776,31 @@ const STOCKS = [
    tip:'⚠️ 短線波動大，建議觀察下季財報。',
    spark:[80,70,65,55,60,50,48],thermo:85,
    periods:[['最近 1 週','dn',70,'明顯下跌'],['最近 1 月','dn',60,'持續走弱'],['最近 3 月','dn',55,'震盪偏弱']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏弱','orange'],['🏢 公司','觀察中','yellow'],['⚠️ 風險','偏高','orange']],
+   weather:{
+     short:{icon:'⛈',label:'雷雨',period:'短期（本週）',color:'var(--red)',
+       why:'本週交車量低迷訊息持續擴散，市場情緒悲觀，技術面缺乏明顯支撐，短線下跌風險較高。',
+       watch:'注意是否有法人大幅調降目標價或調降評等。'},
+     mid:{icon:'🌧',label:'降雨',period:'中期（1個月）',color:'var(--orange)',
+       why:'Q2 財報季將揭露交車量數據，目前市場預期偏保守。若數據再度不如預期，可能引發新一波賣壓。',
+       watch:'關注 Q2 交車量預告與毛利率是否持續下滑。'},
+     long:{icon:'⛅',label:'多雲',period:'長期（3個月+）',color:'var(--text)',
+       why:'Robotaxi 計畫和 AI 機器人（Optimus）是 Tesla 的長期成長故事，但這些業務要真正貢獻收入還需 2–3 年，近期需要基本面轉好才能支撐估值。',
+       watch:'長期觀察 FSD（自動駕駛）商業化進度與 Optimus 量產時程。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',
+      why:'高利率讓消費者貸款買車的成本上升，對電動車整體需求有壓力。但政府的電動車補貼政策提供一定支撐。',
+      watch:'觀察美國電動車補貼政策變化與消費者貸款利率走勢'},
+     {icon:'🏭',label:'電動車產業',badge:'偏弱',cls:'orange',
+      why:'中國電動車品牌（比亞迪、小鵬）快速崛起，在價格和技術上對 Tesla 形成強力競爭。Tesla 的市佔率在多個市場都在下滑。',
+      watch:'觀察 Tesla 全球電動車市佔率月度變化'},
+     {icon:'🏢',label:'公司基本面',badge:'觀察中',cls:'yellow',
+      why:'交車量連續兩季不如預期，毛利率從高峰的 30% 降至 18%，顯示降價策略正在侵蝕獲利能力。本業競爭力需要重新驗證。',
+      watch:'觀察汽車毛利率是否觸底回升，這是最關鍵的指標'},
+     {icon:'⚠️',label:'風險',badge:'偏高',cls:'orange',
+      why:'品牌形象受到 CEO 政治行為影響，部分消費者出現抵制情緒。能源業務（Solar、Powerwall）雖然成長，但體量太小難以填補汽車業務的缺口。',
+      watch:'注意品牌調查數據與 CEO 公開行為對銷售的影響'},
+   ],
    ai:'Tesla 面臨競爭加劇與品牌形象的雙重壓力，成長故事需要重新驗證。Robotaxi 和 AI 機器人是長期敘事，但短期基本面承壓。'},
 
   {id:'AMD',name:'AMD',market:'USD',industry:'科技',status:'watch',risk:'hot',
@@ -535,7 +808,31 @@ const STOCKS = [
    tip:'🔍 觀察 MI 系列市場滲透率。',
    spark:[40,45,50,55,60,58,65],thermo:65,
    periods:[['最近 1 週','up',55,'小幅上升'],['最近 1 月','up',68,'明顯走強'],['最近 3 月','up',60,'震盪偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','偏高','orange']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'MI300X GPU 新訂單傳出超預期消息，市場情緒偏正向，短線有上行動力。',
+       watch:'注意是否有大型雲端業者公告採購 AMD GPU 的消息。'},
+     mid:{icon:'⛅',label:'多雲時晴',period:'中期（1個月）',color:'var(--text)',
+       why:'AMD 正在爭搶部分 NVIDIA 的市場份額，但 NVIDIA 的軟體生態（CUDA）是最大護城河，AMD 要大幅突破仍需時間。',
+       watch:'關注財報中 MI300 系列的出貨量與客戶結構。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',
+       why:'AI 算力市場夠大，AMD 不需要贏過 NVIDIA 就能有亮眼成長。只要搶到 10–15% 市佔，對 AMD 而言已是巨大機會。長期成長邏輯正向。',
+       watch:'長期觀察 ROCm 軟體生態的開發者數量成長。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'AI 算力需求爆發直接帶動整個 GPU 市場，市場夠大讓 AMD 和 NVIDIA 都能同步受惠，大環境對 AMD 友善。',
+      watch:'觀察全球 AI 資本支出規模的季度變化'},
+     {icon:'🏭',label:'AI 晶片產業',badge:'偏強',cls:'green',
+      why:'雲端業者積極尋求 NVIDIA 的替代方案以分散供應鏈風險，AMD 成為最直接受惠者。Microsoft Azure、Meta 都已公告採購 AMD MI300X。',
+      watch:'觀察 AMD GPU 在主要雲端平台的採購佔比'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',
+      why:'AMD 資料中心業務季增率超過 80%，但整體規模仍只有 NVIDIA 的 1/5。軟體生態（ROCm vs CUDA）的差距是最大競爭劣勢。',
+      watch:'觀察資料中心業務佔總收入比例是否持續提升'},
+     {icon:'⚠️',label:'風險',badge:'偏高',cls:'orange',
+      why:'NVIDIA 軟體護城河（CUDA 開發者生態）難以短期超越，若 NVIDIA 在下一代產品維持明顯技術領先，AMD 市佔擴張可能不如預期。',
+      watch:'注意 NVIDIA Blackwell 量產後對 AMD 訂單的排擠效應'},
+   ],
    ai:'AMD 是 NVIDIA 最直接的挑戰者，MI GPU 系列逐漸被大型雲端採用，估值比 NVIDIA 相對合理，但仍需驗證市佔擴張的持續性。'},
 
   {id:'AVGO',name:'Broadcom',market:'USD',industry:'科技',status:'stable',risk:'hot',
@@ -543,7 +840,31 @@ const STOCKS = [
    tip:'✅ AI ASIC + 企業軟體雙引擎。',
    spark:[50,55,60,65,70,68,75],thermo:70,
    periods:[['最近 1 週','up',62,'穩步上升'],['最近 1 月','up',75,'明顯走強'],['最近 3 月','up',70,'持續偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等偏高','yellow']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'ASIC 客製晶片訂單能見度高，VMware 整合帶來的成本協同效益逐步顯現，短線情緒正向。',
+       watch:'注意 VMware 整合進度與客戶留存率數據。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',
+       why:'Google TPU 和 Meta 自研 AI 晶片的訂單持續增加，Broadcom 的 ASIC 設計能力是稀缺資源，中期訂單能見度強。',
+       watch:'關注季報中 AI 相關收入佔比與 VMware 訂閱收入成長率。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'大型科技公司自研 AI 晶片的趨勢只會加速，Broadcom 的 ASIC 設計能力讓它成為不可或缺的合作夥伴，長期成長確定性高。',
+       watch:'長期觀察 Google、Meta 自研晶片的市場擴展情況。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'科技業資本支出持續高速增長，直接拉動 Broadcom 的網路晶片和 ASIC 需求。企業軟體採購需求也維持穩健。',
+      watch:'觀察全球資料中心建設支出的季度數據'},
+     {icon:'🏭',label:'AI 晶片與企業軟體',badge:'偏強',cls:'green',
+      why:'Broadcom 是少數能同時提供 AI 客製晶片（ASIC）和高速網路晶片（乙太網交換機）的公司，AI 資料中心每增加一個機架，都需要大量 Broadcom 的元件。',
+      watch:'觀察 AI 乙太網路交換機市場份額的季度變化'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',
+      why:'VMware 收購讓 Broadcom 年收入從 350 億增加至 510 億美元，但整合風險仍在。ASIC 業務毛利率達 65%，獲利品質高。',
+      watch:'觀察 VMware 客戶流失率與 ASIC 業務成長率'},
+     {icon:'⚠️',label:'風險',badge:'中等偏高',cls:'yellow',
+      why:'VMware 整合複雜度高，客戶投訴和流失風險不可忽視。同時，股價已反映大量期待，任何執行不如預期都可能引發修正。',
+      watch:'注意 VMware 大客戶年度合約續約狀況'},
+   ],
    ai:'Broadcom 是 AI 定製晶片的隱形冠軍，Google、Meta 等大廠的自研 AI 晶片都靠它製造，加上 VMware 提供軟體護城河。'},
 
   // ── 台灣科技 ──
@@ -552,7 +873,31 @@ const STOCKS = [
    tip:'⚡ 基本面仍強，觀察毛利率與海外設廠。',
    spark:[60,65,62,70,75,72,78],thermo:65,
    periods:[['最近 1 週','up',35,'小幅上升'],['最近 1 月','up',68,'明顯轉強'],['最近 3 月','mid',52,'震盪偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','偏高','orange']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',
+       why:'CoWoS 先進封裝產能持續緊俏，AI 晶片客戶（NVIDIA、Apple、AMD）訂單穩定，短線基本面支撐良好。',
+       watch:'注意台積電法說會的毛利率指引與 2nm 量產進度更新。'},
+     mid:{icon:'⛅',label:'多雲時晴',period:'中期（1個月）',color:'var(--text)',
+       why:'美國鳳凰城廠良率爬坡和成本高於預期是短期隱憂，若毛利率指引下修，可能引發短期修正。',
+       watch:'觀察海外設廠（美國、日本、德國）的成本進展與補貼落實狀況。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',
+       why:'台積電是全球先進製程唯一的超大規模代工廠，AI 晶片、高效能運算需求未來 5 年都需要台積電。長期護城河無可取代。',
+       watch:'長期觀察 2nm、1.4nm 製程進度與英特爾代工業務是否對台積電構成威脅。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',
+      why:'全球科技業 AI 投資熱潮帶動晶片需求，台積電作為最先進製程的唯一代工廠，直接受惠。降息預期也對高本益比的台積電估值有正面效果。',
+      watch:'觀察聯準會利率走向與外資對台股的買賣超'},
+     {icon:'🏭',label:'AI 半導體產業',badge:'偏強',cls:'green',
+      why:'NVIDIA、Apple、AMD、高通等客戶的 AI 晶片需求都需要台積電最先進製程（3nm、2nm）生產，台積電的先進製程訂單已排到 2025 年底以後。',
+      watch:'觀察台積電月營收年增率與先進製程佔收入比例'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',
+      why:'台積電毛利率目前約 53%，長期目標是 53% 以上。海外設廠成本偏高是短期壓力，但政府補貼和良率提升有助於改善。',
+      watch:'最關鍵指標：毛利率是否維持 53% 以上'},
+     {icon:'⚠️',label:'風險',badge:'偏高',cls:'orange',
+      why:'地緣政治風險是台積電最大的系統性風險。此外，美國和歐洲設廠成本高、良率初期偏低，可能在未來幾年持續壓縮毛利率。',
+      watch:'注意台海地緣政治動態與美國《晶片法》補貼落地進度'},
+   ],
    ai:'台積電目前故事仍強，但市場期待也高。對一般投資人來說，重點是觀察 AI 需求、毛利率和海外設廠成本是否持續支持基本面。'},
 
   {id:'2454',name:'聯發科',market:'TWD',industry:'科技',status:'watch',risk:'warm',
@@ -560,7 +905,17 @@ const STOCKS = [
    tip:'🔍 觀察旗艦機 AI 晶片滲透率。',
    spark:[55,58,60,62,60,65,68],thermo:55,
    periods:[['最近 1 週','up',45,'小幅上升'],['最近 1 月','up',58,'穩步成長'],['最近 3 月','mid',50,'震盪']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏正向','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'手機出貨回溫，但幅度有限，短線缺乏強力催化劑。',watch:'注意中國智慧型手機出貨量月度數據。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'AI 手機旗艦晶片天璣系列下季出貨量有機會超預期。',watch:'關注旗艦機搭載率與 ASP 提升幅度。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'AI Edge 晶片是聯發科下一個成長週期的核心，潛力大但驗證需時。',watch:'長期觀察 AI 手機功能普及速度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'全球手機市場復甦步伐溫和，需求回溫但未見爆發，大環境對聯發科屬中性。',watch:'觀察全球智慧型手機出貨量季度數據'},
+     {icon:'🏭',label:'手機晶片產業',badge:'偏正向',cls:'green',why:'AI 手機功能成為新賣點，帶動旗艦晶片需求，聯發科的天璣系列在中高階市場份額持續提升。',watch:'觀察聯發科 vs 高通在旗艦機市佔率的消長'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'毛利率約 50%，相對穩定，但高通競爭激烈，旗艦市場份額的提升幅度是獲利改善的關鍵。',watch:'觀察旗艦晶片佔出貨量比例與 ASP 走勢'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'高通在旗艦市場主導地位強，聯發科主要在中低階市場獲利，往上攻高端有技術與品牌的雙重挑戰。',watch:'注意高通新旗艦晶片發布時程與規格'},
+   ],
    ai:'聯發科在手機 AI 晶片市場具競爭力，中低階市場份額穩固。AI Edge 是下一個成長引擎，執行進度是關鍵觀察點。'},
 
   {id:'2317',name:'鴻海',market:'TWD',industry:'科技',status:'stable',risk:'warm',
@@ -568,7 +923,17 @@ const STOCKS = [
    tip:'✅ AI 伺服器供應鏈直接受益。',
    spark:[45,47,50,52,55,53,58],thermo:50,
    periods:[['最近 1 週','up',48,'小幅上升'],['最近 1 月','up',60,'穩步走強'],['最近 3 月','up',55,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'GB200 AI 伺服器機架組裝訂單持續增加，短線業績能見度高。',watch:'注意 NVIDIA 伺服器交付進度更新。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'AI 伺服器需求爆發持續，鴻海身為最大 EMS 廠之一，受惠直接。',watch:'關注 AI 伺服器佔總收入比例的季度變化。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'AI 基礎設施建設週期長，鴻海的組裝能力難以被快速替代，長期訂單能見度高。',watch:'長期觀察電動車業務（鴻華先進）的進展，這是下一個成長引擎。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'AI 資本支出爆發是鴻海最大的成長驅動力，全球科技巨頭的伺服器採購需求直接拉動鴻海訂單。',watch:'觀察全球資料中心資本支出的季度成長率'},
+     {icon:'🏭',label:'AI 伺服器產業',badge:'偏強',cls:'green',why:'GB200 NVL72 機架伺服器每台造價超過 300 萬美元，鴻海是 NVIDIA 最重要的組裝合作夥伴，AI 伺服器需求爆發讓鴻海受惠程度超過市場預期。',watch:'觀察 AI 伺服器佔鴻海收入的比例'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'鴻海毛利率約 6%，屬代工業正常水準，但規模龐大讓絕對獲利可觀。AI 伺服器毛利率略高於傳統 iPhone 組裝，有助於整體毛利率提升。',watch:'觀察整體毛利率是否因 AI 伺服器比重提升而改善'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'鴻海高度依賴單一客戶和單一產品線，若 NVIDIA AI 伺服器需求放緩，或 NVIDIA 分散供應鏈，都可能影響訂單。',watch:'注意 NVIDIA 是否增加廣達、緯創的訂單佔比'},
+   ],
    ai:'鴻海是 AI 伺服器最重要的 EMS 廠商之一，與 NVIDIA 合作深化，GB200 機架伺服器是短期最大亮點。'},
 
   {id:'3008',name:'大立光',market:'TWD',industry:'科技',status:'stable',risk:'warm',
@@ -576,7 +941,17 @@ const STOCKS = [
    tip:'📸 觀察 iPhone 鏡頭規格升級進度。',
    spark:[50,52,51,55,54,57,60],thermo:45,
    periods:[['最近 1 週','up',40,'小幅上升'],['最近 1 月','mid',45,'橫盤整理'],['最近 3 月','up',52,'偏強']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'iPhone 換機週期仍偏緩，缺乏短線催化劑。',watch:'注意 Apple 供應鏈出貨量消息。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'iPhone 17 系列鏡頭規格升級預期，下半年出貨有望回溫。',watch:'關注 iPhone 17 鏡頭規格確認消息。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'大立光技術護城河深厚，高端光學鏡頭難以被取代，長期地位穩固。',watch:'長期觀察潛望式鏡頭和 AI 相機功能對鏡頭規格的帶動效果。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'全球手機需求回溫步伐溫和，大環境對大立光屬中性，主要看 Apple 的換機需求。',watch:'觀察全球智慧型手機出貨量季度數據'},
+     {icon:'🏭',label:'光學鏡頭產業',badge:'中性',cls:'neutral',why:'高端手機持續往多鏡頭和高規格鏡頭發展，有助大立光的 ASP 提升，但整體出貨量成長有限。',watch:'觀察旗艦手機鏡頭模組規格升級趨勢'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'大立光毛利率維持在 60% 以上，是台灣製造業中少見的高毛利公司，技術護城河帶來的定價能力強。',watch:'觀察毛利率是否維持 60% 以上'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'客戶集中度高（Apple 佔大部分收入），iPhone 銷量的任何疲軟都直接影響大立光業績。',watch:'注意 Apple 占收入比例與其他客戶的開拓進度'},
+   ],
    ai:'大立光是蘋果光學鏡頭最重要供應商，技術護城河深，但成長空間受限於 iPhone 銷量與規格升級幅度。'},
 
   {id:'2382',name:'廣達',market:'TWD',industry:'科技',status:'stable',risk:'warm',
@@ -584,8 +959,346 @@ const STOCKS = [
    tip:'✅ AI 伺服器 ODM 直接受益。',
    spark:[40,45,50,55,58,62,68],thermo:55,
    periods:[['最近 1 週','up',60,'明顯上升'],['最近 1 月','up',75,'大幅走強'],['最近 3 月','up',80,'強勢上漲']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等偏高','yellow']],
+   weather:{
+     short:{icon:'☀️',label:'晴朗',period:'短期（本週）',color:'var(--green)',why:'GB200 AI 伺服器訂單滿載，短線業績確定性高，市場情緒積極。',watch:'注意是否有大型雲端業者新增 AI 伺服器採購的消息。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'AI 伺服器出貨量持續爬升，下季財報預期有顯著業績成長，市場能見度高。',watch:'關注 AI 伺服器出貨量季增率。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'AI 伺服器長期需求確定，但廣達需要持續維持技術能力和組裝效率，才能保住主要供應商地位。',watch:'長期觀察是否有新競爭者搶食 AI 伺服器 ODM 市場。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'全球 AI 資本支出爆發是廣達最直接的成長驅動力，需求能見度高且確定性強。',watch:'觀察全球主要雲端業者 AI 資本支出的季度變化'},
+     {icon:'🏭',label:'AI 伺服器 ODM',badge:'偏強',cls:'green',why:'廣達是全球最大的筆電和伺服器 ODM 廠之一，在 AI 伺服器組裝上與 NVIDIA、Google 都有深度合作，市場地位強固。',watch:'觀察 AI 伺服器佔廣達總收入的比例'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'廣達毛利率約 7%，AI 伺服器毛利率高於傳統伺服器，整體毛利有望持續改善。',watch:'觀察毛利率改善趨勢與 AI 伺服器訂單組合'},
+     {icon:'⚠️',label:'風險',badge:'中等偏高',cls:'yellow',why:'AI 伺服器需求若因景氣轉折或科技業資本支出縮減而下滑，廣達業績的反轉幅度可能也很大。',watch:'注意 NVIDIA 下一代 AI 晶片（Rubin）對現有 GB200 訂單的影響'},
+   ],
    ai:'廣達是 AI 伺服器 ODM 最大受益者之一，GB200 機架伺服器組裝能力領先，成長能見度高。'},
+
+  // ── 金融（新增）──
+  {id:'GS',name:'Goldman Sachs',market:'USD',industry:'金融',status:'watch',risk:'warm',
+   reason:'投資銀行業務隨 IPO 和 M&A 市場回溫而改善，但市場波動大時交易收入承壓。',
+   tip:'🏦 投資銀行龍頭，景氣敏感度高。',
+   spark:[58,62,60,65,63,68,70],thermo:55,
+   periods:[['最近 1 週','up',44,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','mid',50,'震盪偏強']],
+   weather:{
+     short:{icon:'⛅',label:'多雲時晴',period:'短期（本週）',color:'var(--text)',why:'IPO 市場回溫，企業融資需求增加，短線業績有望改善，但市場波動大時交易部門收入不穩定。',watch:'注意本週股市波動率（VIX）走勢，這直接影響 GS 交易部門收入。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'M&A 交易量持續回升，GS 的顧問費收入將在未來幾季改善，中期展望偏正向。',watch:'關注全球 M&A 交易量月度數據。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'全球資本市場長期成長，GS 的品牌護城河深厚，是資本市場週期復甦的核心受益者。',watch:'長期觀察美國 IPO 市場活躍度和全球 M&A 交易規模。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'市場環境影響 GS 的交易和投資銀行業務，景氣好時業績強，景氣差時衝擊明顯。',watch:'觀察美股波動率和全球資本市場活躍度'},
+     {icon:'🏭',label:'投資銀行業',badge:'偏正向',cls:'green',why:'IPO 市場從 2022-2023 年的低迷中回溫，M&A 交易量逐步恢復，為 GS 帶來更多顧問費和承銷收入。',watch:'觀察全球 IPO 募資金額和 M&A 交易數量'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'GS 業績波動性大，好年份 ROE 可達 15% 以上，壞年份可能個位數。近年成本控制和業務聚焦改善了獲利穩定性。',watch:'觀察淨利潤率和股東權益報酬率（ROE）'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'監管要求持續提高資本充足率，壓縮槓桿空間。若市場出現系統性風險，GS 的自營交易部門可能承受巨大損失。',watch:'注意美聯儲對大型銀行的壓力測試結果'},
+   ],
+   ai:'Goldman Sachs 是全球投資銀行的頂尖品牌，業績高度依賴市場環境。IPO 和 M&A 市場回溫是最大的正向催化劑，適合對金融市場有信心的投資人。'},
+
+  {id:'BAC',name:'Bank of America',market:'USD',industry:'金融',status:'stable',risk:'warm',
+   reason:'淨利息收入維持高位，零售銀行業務穩健，數位轉型提升效率。',
+   tip:'🏦 美國第二大銀行，利率受惠股。',
+   spark:[55,57,58,60,62,61,65],thermo:45,
+   periods:[['最近 1 週','up',40,'小幅上升'],['最近 1 月','up',52,'穩步走強'],['最近 3 月','up',58,'偏強']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'高利率環境持續，BAC 的淨利息收入維持高水位，短線業績支撐穩定。',watch:'注意本週 CPI 數據，影響降息預期和銀行股走勢。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'消費者信用卡消費維持韌性，貸款業務穩健，中期無明顯利空。',watch:'關注消費者信用卡違約率是否有上升跡象。'},
+     long:{icon:'⛅',label:'多雲時晴',period:'長期（3個月+）',color:'var(--text)',why:'降息週期開始後，BAC 的淨利息收入將受壓，但業務多元化能緩解衝擊。長期數位轉型成效是關鍵。',watch:'長期觀察降息時程與 BAC 利率敏感性分析。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'高利率環境讓 BAC 的淨利息收入達到歷史高位，每加息 25 個基點約增加 10 億美元年收入。',watch:'觀察聯邦基金利率和 10 年期公債殖利率走勢'},
+     {icon:'🏭',label:'零售銀行業',badge:'穩定',cls:'green',why:'美國消費者就業和收入整體穩健，零售貸款（房貸、車貸、信用卡）品質維持良好，違約率可控。',watch:'觀察消費者信貸違約率（Charge-off Rate）'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'BAC 數位化進展顯著，線上和手機銀行用戶超過 5700 萬，降低實體分行成本，效率持續提升。',watch:'觀察效率比率（Efficiency Ratio）是否持續下降'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'未實現損失（因高利率造成的債券跌價）仍是潛在風險，若需要出售債券，將轉為實現損失。商業房地產也是監控重點。',watch:'注意 BAC 投資組合的未實現損益變化'},
+   ],
+   ai:'BAC 是利率受益的代表性股票，高利率環境讓它的淨利息收入大幅改善。降息前是持有的好時機，降息後需要評估業務轉型的速度。'},
+
+  {id:'AXP',name:'American Express',market:'USD',industry:'金融',status:'stable',risk:'warm',
+   reason:'高端消費者信用卡消費穩健，會員費收入持續成長，品牌溢價能力強。',
+   tip:'💳 高端消費卡龍頭，抗通膨能力強。',
+   spark:[62,64,66,68,70,72,75],thermo:48,
+   periods:[['最近 1 週','up',48,'穩步上升'],['最近 1 月','up',62,'明顯走強'],['最近 3 月','up',66,'持續偏強']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'高端旅遊和餐飲消費持續強勁，Amex 持卡人客單價維持高位。',watch:'注意奢侈品消費和航空旅遊數據。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'會員費調漲計畫按時推進，新增高端卡用戶數持續成長，中期業績能見度高。',watch:'關注季報中新增白金卡/黑卡用戶數量。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'Amex 不同於 Visa/Mastercard，它同時承擔信用風險且收取高年費，高端定位讓它在消費降級時更具防禦性。',watch:'長期觀察年費調漲策略和 Gen Z 高端卡市場滲透率。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'高端消費者（年收入 10 萬美元以上）受高利率衝擊遠低於一般消費者，Amex 的持卡人結構讓它更具抗景氣衰退能力。',watch:'觀察美國高收入族群消費支出趨勢'},
+     {icon:'🏭',label:'高端支付業',badge:'穩定',cls:'green',why:'Amex 在旅遊和娛樂消費類別的市佔率高，這些類別的消費復甦最強勁，直接受惠。',watch:'觀察旅遊相關信用卡消費金額的季度成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'Amex 毛利率高且每年調漲年費，年費收入已超過 60 億美元。巴菲特持有 Amex 超過 30 年，是對商業模式長期價值的最佳背書。',watch:'觀察年費收入和會員增長數字'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'Amex 承擔信用風險，若高端消費者失業或收入大幅下滑，貸款違約率上升的風險比 Visa/Mastercard 更高。',watch:'注意信用損失準備金的變化'},
+   ],
+   ai:'American Express 是高端信用卡市場的護城河型公司，年費模式和高端定位讓它在市場震盪時更具韌性。巴菲特長期重倉的選擇。'},
+
+  {id:'2882',name:'國泰金控',market:'TWD',industry:'金融',status:'stable',risk:'warm',
+   reason:'壽險業務受益於台股上漲，銀行業務淨利差受新台幣走勢影響。',
+   tip:'🏦 台灣最大金控，壽險+銀行雙引擎。',
+   spark:[50,52,54,56,55,58,60],thermo:45,
+   periods:[['最近 1 週','up',38,'小幅上升'],['最近 1 月','up',50,'穩步走強'],['最近 3 月','up',55,'偏強']],
+   weather:{
+     short:{icon:'⛅',label:'多雲時晴',period:'短期（本週）',color:'var(--text)',why:'台股走勢影響壽險準備金評價，股市上漲對國泰金短線有利。',watch:'注意台股加權指數走勢和新台幣匯率。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'利率維持高位有助於新台幣利差擴大，銀行業務獲利改善。',watch:'關注央行利率決策和壽險公司 RBC（資本適足率）。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'台灣人口老齡化推動保險需求，國泰的品牌和通路優勢帶來長期穩定成長。',watch:'長期觀察台灣保險滲透率和老齡化相關保單的成長趨勢。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'國際利率走向影響國泰金的海外投資收益，台股表現影響壽險準備金評價，兩者都是關鍵宏觀變數。',watch:'觀察美國公債殖利率和台股加權指數'},
+     {icon:'🏭',label:'台灣金融業',badge:'穩定',cls:'green',why:'台灣金融市場監管嚴格，系統性風險低。壽險業受益於人口老齡化的長期趨勢。',watch:'觀察台灣壽險業整體保費收入成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'國泰金是台灣最大金控，壽險業市佔率超過 30%，具有規模優勢。歷年配息穩定，具一定防禦性。',watch:'觀察 EPS 和股息殖利率'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'匯率風險是最大隱憂，新台幣升值會侵蝕海外投資的台幣報酬。利率下降也會壓縮利差。',watch:'注意新台幣匯率走勢和海外投資避險比率'},
+   ],
+   ai:'國泰金是台灣壽險和銀行業的龍頭，業績與台股和利率走向高度連動。適合長期持有、追求穩定配息的保守型投資人。'},
+
+  {id:'2891',name:'中信金控',market:'TWD',industry:'金融',status:'stable',risk:'warm',
+   reason:'銀行業務受益高利率，信用卡消費維持成長，海外業務貢獻提升。',
+   tip:'💳 台灣信用卡市場龍頭，海外布局積極。',
+   spark:[48,50,52,54,56,55,58],thermo:42,
+   periods:[['最近 1 週','up',36,'小幅上升'],['最近 1 月','up',48,'穩步走強'],['最近 3 月','up',52,'偏強']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'信用卡消費維持成長，利差擴大帶動獲利，短線業績穩健。',watch:'注意台灣零售消費數據和信用卡違約率。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'東南亞海外業務持續擴張，貢獻收入比例提升，有望成為中期成長亮點。',watch:'關注中信金海外業務（泰國、越南）的季度貢獻。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'海外布局是長期成長引擎，東南亞市場的金融滲透率低，成長空間大。',watch:'長期觀察海外子行的盈利能力改善進度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'高利率環境擴大淨利差，台灣消費者信用市場穩健，宏觀環境對中信金屬正向。',watch:'觀察台灣基準利率和消費者信用卡使用趨勢'},
+     {icon:'🏭',label:'台灣銀行業',badge:'穩定',cls:'green',why:'台灣銀行業監管嚴格，整體資產品質良好，爛帳問題遠低於亞洲其他新興市場。',watch:'觀察台灣銀行業整體放款成長率和逾放比'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'中信金是台灣信用卡市場龍頭，持卡人數和消費金額穩居第一，費用收入穩定。海外布局加速是長期成長動力。',watch:'觀察信用卡消費金額成長率和海外業務獲利貢獻'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'若台灣或東南亞景氣下滑，信用卡違約率上升和放款呆帳增加是主要風險。匯率波動也影響海外業務。',watch:'注意信用卡逾期率和東南亞子行資產品質'},
+   ],
+   ai:'中信金在台灣信用卡市場具主導地位，積極向東南亞擴張是長期成長故事。適合看好台灣消費趨勢和東南亞金融發展的投資人。'},
+
+  // ── 能源（新增）──
+  {id:'CVX',name:'Chevron',market:'USD',industry:'能源',status:'watch',risk:'warm',
+   reason:'石油和天然氣雙線布局，成本控制優於同業，股息殖利率具吸引力。',
+   tip:'🛢 石油天然氣雙引擎，殖利率約 4%。',
+   spark:[60,58,62,65,63,67,65],thermo:50,
+   periods:[['最近 1 週','mid',42,'橫盤震盪'],['最近 1 月','up',50,'小幅走強'],['最近 3 月','mid',45,'震盪整理']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'油價受地緣政治情緒主導，短線走向不明確，CVX 跟隨油價波動。',watch:'注意 OPEC+ 聲明和中東局勢進展。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'天然氣需求旺季帶動收入，CVX 天然氣資產佔比高，季節性有利。',watch:'關注天然氣期貨價格和液化天然氣（LNG）出口數據。'},
+     long:{icon:'⛅',label:'多雲',period:'長期（3個月+）',color:'var(--text)',why:'能源轉型長期趨勢不可逆，CVX 在低碳能源投資上的力度仍不足，長期估值受壓。',watch:'長期觀察 CVX 的低碳轉型投資計畫和碳排放目標進度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'油價是最大宏觀變數，地緣政治支撐和全球需求放緩形成拉鋸，短期難有明確方向。',watch:'觀察布蘭特原油現貨價格和全球石油需求預測'},
+     {icon:'🏭',label:'油氣能源業',badge:'中性',cls:'neutral',why:'OPEC+ 減產支撐油價，但美國頁岩油持續增產，制衡效果讓油價難有大幅上漲。CVX 自己就是頁岩油大廠。',watch:'觀察美國原油鑽探平台數（Baker Hughes）'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'CVX 是能源業中現金流最充裕的公司之一，連續 30 年以上提高股息，財務紀律優於競爭對手。Hess 收購案完成後規模再擴大。',watch:'觀察配息成長率和自由現金流產生能力'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'若油價跌破 70 美元，CVX 的資本支出計畫可能被迫削減。能源轉型導致的長期需求下降是結構性風險。',watch:'注意油價盈虧平衡點（Breakeven）和環保法規的收緊速度'},
+   ],
+   ai:'Chevron 是傳統能源股中財務最穩健的選手，高殖利率提供下檔保護。適合在能源板塊中想要兼顧股息收入和資本增值的投資人。'},
+
+  {id:'FSLR',name:'First Solar',market:'USD',industry:'能源',status:'watch',risk:'hot',
+   reason:'美國最大太陽能廠商，IRA 補貼直接受益者，產能持續擴張。',
+   tip:'☀️ 美國製太陽能政策最直接受益股。',
+   spark:[45,50,55,60,65,62,70],thermo:68,
+   periods:[['最近 1 週','up',58,'明顯上升'],['最近 1 月','up',72,'大幅走強'],['最近 3 月','up',68,'持續偏強']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'IRA 補貼政策確定性高，訂單能見度強，短線情緒偏正向。',watch:'注意是否有大型電力公司新簽購電協議消息。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'新廠房持續量產爬坡，出貨量季增，財報有望超預期。',watch:'關注季報中新增訂單量和產能利用率。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'AI 資料中心電力需求爆發和美國再生能源政策長期支持，First Solar 的薄膜技術在特定環境（沙漠）具競爭優勢。',watch:'長期觀察美國太陽能發電佔比提升進度和 IRA 政策延續性。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'《通膨削減法案》（IRA）提供美國製造太陽能板豐厚補貼，First Solar 是最直接的受益者，幾乎所有產品都在美國製造。',watch:'觀察 IRA 補貼政策的執行情況和政治環境變化'},
+     {icon:'🏭',label:'太陽能產業',badge:'偏強',cls:'green',why:'AI 資料中心的電力需求讓大型科技公司積極購買再生能源，直接帶動 First Solar 的訂單。',watch:'觀察大型科技公司與電力公司簽訂的再生能源購電協議（PPA）'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'First Solar 薄膜技術的轉換效率略低於競爭對手，但在高溫環境中表現更穩定。新廠量產良率是關鍵觀察點。',watch:'觀察薄膜模組的轉換效率進步和新廠良率爬坡'},
+     {icon:'⚠️',label:'風險',badge:'偏高',cls:'orange',why:'中國太陽能廠商的低價傾銷是最大威脅（雖然 IRA 補貼緩解了這個問題）。政策風險也存在，若新政府削減補貼，影響很大。',watch:'注意美國太陽能關稅政策和 IRA 的政治風險'},
+   ],
+   ai:'First Solar 是美國製造太陽能板的龍頭，IRA 補貼是其最重要的護城河。看好美國能源轉型和 AI 用電需求的投資人值得關注。'},
+
+  {id:'ENPH',name:'Enphase Energy',market:'USD',industry:'能源',status:'risk',risk:'high',
+   reason:'住宅太陽能需求因高利率放緩，庫存過高問題尚未完全解決。',
+   tip:'⚠️ 住宅太陽能短期承壓，等待庫存修正。',
+   spark:[80,70,60,50,45,48,44],thermo:80,
+   periods:[['最近 1 週','mid',55,'橫盤震盪'],['最近 1 月','dn',62,'偏弱走勢'],['最近 3 月','dn',68,'持續走弱']],
+   weather:{
+     short:{icon:'🌧',label:'降雨',period:'短期（本週）',color:'var(--orange)',why:'住宅太陽能需求在高利率環境下大幅萎縮，消費者購買新能源系統的貸款成本高，短線利空持續。',watch:'注意美國住宅太陽能安裝量月度數據。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'庫存去化進度是中期最大變數，若庫存持續高位，代理商不補貨，業績壓力維持。',watch:'關注代理商庫存週轉週數（Weeks of Inventory）是否下降。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'降息週期開始後，住宅太陽能需求有望反彈。Enphase 的微型逆變器技術優勢長期不變。',watch:'長期觀察美國住宅屋頂太陽能滲透率和降息後需求復甦速度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏負向',cls:'orange',why:'高利率是住宅太陽能最大殺手，消費者通常需要貸款安裝，高利率讓月付款大幅增加，購買意願大降。',watch:'觀察美國住宅抵押貸款利率走勢'},
+     {icon:'🏭',label:'住宅太陽能業',badge:'偏弱',cls:'orange',why:'整個住宅太陽能產業都在縮水，SunPower 已申請破產，Sunnova 也面臨財務壓力，Enphase 雖然更健康但業績同樣下滑。',watch:'觀察美國住宅太陽能安裝量的季度數據'},
+     {icon:'🏢',label:'公司基本面',badge:'觀察中',cls:'yellow',why:'Enphase 財務健康，沒有債務問題，現金充足，這讓它能熬過行業低迷期。技術上的微型逆變器優勢讓它在市場復甦時能快速回彈。',watch:'觀察毛利率是否維持在 45% 以上'},
+     {icon:'⚠️',label:'風險',badge:'高溫',cls:'orange',why:'若利率維持高位時間超預期，或住宅太陽能市場復甦更慢，Enphase 的業績壓力可能比市場預期更長。估值也仍不便宜。',watch:'注意美國聯邦基金利率走向，這是最關鍵的外部變數'},
+   ],
+   ai:'Enphase 是高品質的太陽能技術公司，但目前身處行業低迷期。降息是最大的救星，若利率下降，業績和股價都有可觀的反彈空間。'},
+
+  {id:'2002',name:'中國鋼鐵',market:'TWD',industry:'能源',status:'watch',risk:'warm',
+   reason:'鋼鐵需求受中國產能過剩衝擊，但電動車和風電用鋼需求提供新成長點。',
+   tip:'🔩 觀察鋼價和再生能源用鋼需求。',
+   spark:[45,44,46,48,47,50,49],thermo:48,
+   periods:[['最近 1 週','mid',36,'橫盤整理'],['最近 1 月','mid',40,'小幅震盪'],['最近 3 月','mid',42,'震盪']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'中國鋼鐵供給過剩問題持續，壓低鋼價，短線業績缺乏催化劑。',watch:'注意中國粗鋼產量和台灣鋼板出口數據。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'電動車和離岸風電用鋼需求有限度改善，但幅度不足以抵銷中國競爭壓力。',watch:'關注台灣離岸風電安裝進度和電動車產業用鋼訂單。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'綠色轉型和基礎設施建設是鋼鐵的長期需求，中鋼在高強度鋼材（電動車用）的技術升級是長期機會。',watch:'長期觀察台灣政府基建投資和電動車產業鏈用鋼規格升級。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'全球鋼鐵需求與工業景氣高度連動，中國房地產市場持續低迷是鋼鐵需求最大的拖累力量。',watch:'觀察中國房地產新屋開工數和全球製造業 PMI'},
+     {icon:'🏭',label:'鋼鐵產業',badge:'中性',cls:'neutral',why:'中國鋼鐵產能嚴重過剩，大量低價鋼材出口到全球市場，壓低鋼價，對中鋼形成競爭壓力。',watch:'觀察中國粗鋼出口量和全球鋼材現貨價格'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'中鋼毛利率因鋼價低迷而壓縮，但配息能力維持，殖利率約 5–6%。高強度特殊鋼材是毛利率改善的關鍵。',watch:'觀察毛利率走向和高附加價值產品的銷售佔比'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'中國傾銷和鋼價下行是最大風險。若台灣或全球基建投資縮減，用鋼需求也會承壓。',watch:'注意台灣政府公共建設預算執行率和全球建築開工數'},
+   ],
+   ai:'中鋼是台灣基礎工業的代表，業績與全球鋼價高度連動。適合以殖利率為主要目的的保守投資人，但需關注中國供給側壓力。'},
+
+  // ── 醫療（新增）──
+  {id:'NVO',name:'Novo Nordisk',market:'USD',industry:'醫療',status:'stable',risk:'hot',
+   reason:'Wegovy 和 Ozempic 需求爆發，GLP-1 市場雙龍頭之一，基本面強勁。',
+   tip:'💊 GLP-1 市場與 Eli Lilly 的雙雄對決。',
+   spark:[55,65,72,80,85,88,92],thermo:72,
+   periods:[['最近 1 週','up',68,'大幅上升'],['最近 1 月','up',82,'持續強勢'],['最近 3 月','up',88,'強勁上漲']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'GLP-1 需求持續旺盛，Wegovy 在全球多個市場相繼獲批，短線無明顯利空。',watch:'注意美國 Wegovy 處方量週度數據。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'新適應症審批（心臟病、腎臟病）將擴大市場規模，中期業績能見度高。',watch:'關注 FDA 對 Wegovy 心臟適應症的審批進度。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'NVO 在 GLP-1 市場先發優勢明顯，全球肥胖問題規模龐大，市場遠未飽和，長期成長確定性高。',watch:'長期觀察全球肥胖症藥物市場份額和下一代 GLP-1 藥物（口服）的進展。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'各國醫療系統逐步認可 GLP-1 對整體公衛的好處，保險覆蓋擴大直接拉動需求。',watch:'觀察各國 GLP-1 保險覆蓋政策'},
+     {icon:'🏭',label:'生技製藥業',badge:'偏強',cls:'green',why:'GLP-1 雙寡頭市場格局穩固，外部競爭者進入需要 5 年以上的臨床驗證，短期護城河深。',watch:'觀察其他公司 GLP-1 臨床試驗進度'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'NVO 生產效率高，能夠比 Eli Lilly 更快速地擴大產能，在市場供不應求的環境下是優勢。',watch:'觀察 Ozempic 和 Wegovy 的季度銷售成長率'},
+     {icon:'⚠️',label:'風險',badge:'估值偏高',cls:'orange',why:'本益比超過 40 倍，市場期待極高。若下一代口服 GLP-1 藥物的臨床數據不如預期，股價修正空間大。',watch:'注意 NVO 下一代藥物（semaglutide 口服）的臨床結果'},
+   ],
+   ai:'Novo Nordisk 是 GLP-1 市場的先行者，Ozempic 已成為近年最暢銷的藥物之一。與 Eli Lilly 形成雙雄格局，長期成長邏輯強，但估值高需要謹慎。'},
+
+  {id:'PFE',name:'Pfizer',market:'USD',industry:'醫療',status:'risk',risk:'high',
+   reason:'COVID 疫苗和藥物收入大幅滑落，新藥管線需要加速填補收入缺口。',
+   tip:'⚠️ 後 COVID 轉型期，等待新藥管線驗證。',
+   spark:[70,60,52,45,42,40,38],thermo:75,
+   periods:[['最近 1 週','mid',52,'橫盤震盪'],['最近 1 月','dn',58,'偏弱整理'],['最近 3 月','dn',65,'持續走弱']],
+   weather:{
+     short:{icon:'🌧',label:'降雨',period:'短期（本週）',color:'var(--orange)',why:'COVID 收入持續下滑，新產品收入尚無法填補缺口，短線業績壓力持續。',watch:'注意是否有新藥審批結果或管線更新。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'幾款腫瘤和病毒學新藥正在接近上市階段，中期有機會出現正面催化劑。',watch:'關注 FDA 審批日程表和 Paxlovid 非 COVID 適應症進展。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'Pfizer 的藥物管線豐富，若成功商業化幾個大型新藥，長期業績有回升潛力。殖利率約 6% 也提供一定下檔保護。',watch:'長期觀察腫瘤藥物（Elrexfio 等）的市場銷售表現。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'醫療需求穩定，但 Pfizer 面臨的是公司特定的結構性挑戰，而非宏觀問題。',watch:'觀察全球醫療支出趨勢'},
+     {icon:'🏭',label:'製藥業',badge:'中性',cls:'neutral',why:'製藥業整體穩健，但 Pfizer 的問題是自身藥物管線失速和 COVID 產品退潮，不代表整個行業趨勢。',watch:'觀察大型製藥公司新藥審批數量'},
+     {icon:'🏢',label:'公司基本面',badge:'觀察中',cls:'yellow',why:'COVID 疫苗和 Paxlovid 高峰期年收入超過 1000 億美元，現在回落至約 550 億美元。公司正在削減成本並積極收購新資產填補缺口。',watch:'觀察非 COVID 業務的成長率和新藥商業化進度'},
+     {icon:'⚠️',label:'風險',badge:'偏高',cls:'orange',why:'若新藥管線失敗或商業化不及預期，收入缺口可能超過市場預估。高負債（收購 Seagen 帶來）也增加財務壓力。',watch:'注意重要藥物的臨床試驗結果和 FDA 審批動態'},
+   ],
+   ai:'Pfizer 處於後 COVID 轉型的陣痛期，股價和業績都在尋底。高殖利率是等待期的補償，但需要新藥管線成功才能真正反轉。屬於困境反轉型投資。'},
+
+  {id:'ABBV',name:'AbbVie',market:'USD',industry:'醫療',status:'stable',risk:'warm',
+   reason:'Humira 專利到期後轉型成功，Skyrizi 和 Rinvoq 接棒，成長加速中。',
+   tip:'💊 專利懸崖後成功轉型，下一個成長週期。',
+   spark:[55,58,60,62,65,68,72],thermo:52,
+   periods:[['最近 1 週','up',50,'穩步上升'],['最近 1 月','up',64,'明顯走強'],['最近 3 月','up',68,'持續偏強']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'Skyrizi 和 Rinvoq 銷售加速，成功填補 Humira 缺口，短線業績展望正面。',watch:'注意 Skyrizi 在克隆氏症新適應症的市場滲透率。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'轉型完成後的第一個完整成長年，市場重新給予成長股估值，中期有上行空間。',watch:'關注季報中 Skyrizi 和 Rinvoq 合計銷售是否超越 Humira 高峰。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'AbbVie 已成功度過製藥業最困難的「專利懸崖」，Botox（醫美）業務和精神科藥物提供多元化成長來源。',watch:'長期觀察精神科藥物（Vraylar、CAPLYTA）的市場滲透率擴張。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'醫療需求剛性，AbbVie 的免疫學和皮膚科藥物需求不受景氣影響，宏觀環境對 AbbVie 屬中性。',watch:'觀察美國醫療保險覆蓋政策'},
+     {icon:'🏭',label:'生技製藥業',badge:'偏強',cls:'green',why:'免疫學（自體免疫疾病）是近年成長最快的製藥細分領域，Skyrizi 和 Rinvoq 都在這個高成長市場，長期受惠。',watch:'觀察免疫學藥物整體市場成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'Humira 學名藥競爭已被 Skyrizi/Rinvoq 成功抵銷，且後者增長速度遠快於 Humira 的流失速度，業績重新加速成長。',watch:'觀察 Skyrizi+Rinvoq 合計季度銷售成長率'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'Rinvoq 面臨 FDA 對 JAK 抑製劑類藥物的黑框警告，市場滲透可能受限。此外，AbbVie 仍有高額債務。',watch:'注意 JAK 抑制劑類藥物的安全性報告更新'},
+   ],
+   ai:'AbbVie 是最成功的「從專利懸崖存活」的範例，Skyrizi 和 Rinvoq 的成長速度超出市場預期。適合看好免疫學領域長期成長的投資人。'},
+
+  {id:'UNH',name:'UnitedHealth',market:'USD',industry:'醫療',status:'watch',risk:'warm',
+   reason:'美國最大醫療保險公司，但醫療成本上升壓縮利潤率，政策不確定性高。',
+   tip:'🏥 醫療生態系龍頭，但醫療通膨是隱憂。',
+   spark:[68,65,62,60,58,62,65],thermo:58,
+   periods:[['最近 1 週','up',44,'小幅反彈'],['最近 1 月','mid',38,'橫盤震盪'],['最近 3 Month','dn',52,'整體偏弱']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'醫療成本上升問題尚未解決，市場對利潤率的擔憂持續，短線情緒偏謹慎。',watch:'注意醫療成本趨勢和政府醫療補貼調整消息。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'若醫療費用增速放緩，利潤率有機會回升，中期等待業績拐點確認。',watch:'關注醫療損失率（Medical Loss Ratio）的走向。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'美國人口老齡化帶動醫療保險需求長期成長，UNH 的 Optum 醫療服務平台提供強大的成長引擎。',watch:'長期觀察 Medicare Advantage 市場份額和 Optum 業務收入成長。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'醫療支出受政策影響大，Medicare 和 Medicaid 的給付費率調整是 UNH 最重要的政策變數。',watch:'觀察 CMS（醫療保險和補助中心）的年度費率調整公告'},
+     {icon:'🏭',label:'醫療保險業',badge:'穩定',cls:'green',why:'美國醫療保險市場高度集中，UNH 市佔率第一，規模優勢帶來談判能力和成本控制能力。',watch:'觀察 UNH 的 Medicare Advantage 會員成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'醫療成本（尤其是手術和專科醫療）上升速度超出預期，壓縮了保險利潤率。UNH 正在調整保費來抵消，但需要時間。',watch:'觀察醫療損失率（MLR）是否持續改善'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'政治風險高，若政府實施「全民健保」或大幅削減 Medicare Advantage，UNH 的商業模式受到根本性衝擊。',watch:'注意美國醫療改革的政治討論和大選後政策走向'},
+   ],
+   ai:'UnitedHealth 是美國醫療生態系的核心企業，長期受益於人口老齡化，但短期面臨醫療成本通膨的壓力。長期投資邏輯清晰，但需要耐心等待利潤率回穩。'},
+
+  // ── 消費（新增）──
+  {id:'PG',name:'Procter & Gamble',market:'USD',industry:'消費',status:'stable',risk:'low',
+   reason:'日常消費品龍頭，品牌定價能力強，抗景氣衰退特性顯著。',
+   tip:'🛒 日常消費防禦股，任何景氣下都需要洗髮精。',
+   spark:[60,61,62,63,62,64,65],thermo:32,
+   periods:[['最近 1 週','mid',30,'橫盤小漲'],['最近 1 月','up',42,'穩步走強'],['最近 3 月','up',48,'偏強']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'缺乏短線催化劑，股價可能橫盤，但防禦性讓下跌空間極有限。',watch:'注意通膨數據，影響 PG 提價能力評估。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'提價策略逐步被消費者接受，銷售量開始回穩，中期業績逐漸改善。',watch:'關注有機成長率（Organic Sales Growth）是否由量轉為量價雙升。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'P&G 持有 Tide、Gillette、Pampers 等全球頂級消費品牌，定價能力強，長期是穿越景氣循環的核心持股。',watch:'長期觀察新興市場（印度、非洲）的消費品市場滲透率。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'P&G 的日常用品需求極為剛性，通膨時期甚至能藉由提價轉嫁成本，是天然的通膨對沖工具。',watch:'觀察全球通膨率和消費者物價走勢'},
+     {icon:'🏭',label:'日常消費品業',badge:'穩定',cls:'green',why:'日常消費品（衛生紙、洗衣劑、嬰兒紙尿褲）需求無論景氣好壞都穩定，是最典型的防禦性行業。',watch:'觀察全球日常消費品市場成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'P&G 連續 67 年提高股息，是全球股息貴族中最具代表性的公司。品牌組合全球第一，定價能力無可匹敵。',watch:'觀察毛利率回升進度和新興市場有機成長率'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'估值長期偏高（本益比約 25 倍），市場為防禦特性支付溢價。若成長停滯，估值可能修正。私有品牌競爭也在侵蝕部分市場份額。',watch:'注意私有品牌（自有品牌）在各品類的市佔率變化'},
+   ],
+   ai:'P&G 是全球最穩健的消費品公司，67 年連續提高股息代表長期盈利能力。不是最性感的股票，但卻是投資組合穩定的基石。'},
+
+  {id:'KO',name:'Coca-Cola',market:'USD',industry:'消費',status:'stable',risk:'low',
+   reason:'全球飲料市場龍頭，提價策略成功轉嫁通膨，巴菲特長期重倉持有。',
+   tip:'🥤 巴菲特最愛的股票，穿越百年的品牌護城河。',
+   spark:[58,59,60,61,60,62,63],thermo:30,
+   periods:[['最近 1 週','mid',28,'橫盤小漲'],['最近 1 月','up',40,'穩步走強'],['最近 3 月','up',46,'偏強']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'短線缺乏催化劑，股價可能橫盤，但防禦特性讓下跌空間極小。',watch:'注意美元指數，強勢美元不利 KO 海外收入換算。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'提價帶來的銷售額成長開始見到銷售量回穩，中期業績溫和改善。',watch:'關注季報中有機成長率的量與價分拆分析。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'全球飲料消費量隨新興市場中產階級成長而增加，KO 的品牌認知度和通路是無法複製的資產。',watch:'長期觀察新興市場（印度、非洲、東南亞）的人均飲料消費成長。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'KO 的全球業務分散在 200 多個國家，美元走向影響海外收入換算，但多元化降低了單一市場的風險。',watch:'觀察美元指數（DXY）走勢'},
+     {icon:'🏭',label:'飲料消費業',badge:'穩定',cls:'green',why:'含糖飲料面臨健康意識挑戰，但 KO 已透過收購 Topo Chico（氣泡水）、Body Armor（運動飲料）積極多元化。',watch:'觀察 KO 非碳酸飲料業務的成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'KO 採取輕資產模式（主要從事品牌和原料漿銷售，而非直接灌裝），毛利率超過 60%。連續 62 年提高股息。',watch:'觀察有機成長率和自由現金流轉換率'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'健康意識抬頭讓含糖飲料長期面臨需求放緩。糖、包裝材料等原物料成本波動也影響短期毛利率。',watch:'注意全球含糖飲料稅收政策推進和替代品市場份額'},
+   ],
+   ai:'可口可樂是最典型的護城河投資，品牌認知度全球第一，提價能力讓它能抵抗通膨。巴菲特持有超過 35 年是最好的長期背書。'},
+
+  {id:'WMT',name:'Walmart',market:'USD',industry:'消費',status:'stable',risk:'warm',
+   reason:'通膨環境下消費者下沉趨勢讓沃爾瑪受惠，電商業務加速縮小與亞馬遜差距。',
+   tip:'🛒 美國零售龍頭，通膨受惠者。',
+   spark:[60,62,65,68,70,72,75],thermo:48,
+   periods:[['最近 1 週','up',50,'穩步上升'],['最近 1 月','up',62,'明顯走強'],['最近 3 月','up',68,'持續偏強']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'通膨讓消費者持續轉向 Walmart 尋求物美價廉，同店銷售數據短線正向。',watch:'注意本週零售業同店銷售數據。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'電商業務持續成長，廣告收入（Walmart Connect）快速擴大，中期獲利改善幅度大。',watch:'關注季報中電商業務成長率和廣告收入數字。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'Walmart 的實體+數位一體化策略逐漸奏效，廣告業務是高毛利新引擎，長期成長確定性提升。',watch:'長期觀察 Walmart+ 會員數成長和廣告業務佔收入比例。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'通膨讓中等收入消費者更傾向到 Walmart 購物，連高收入消費者也開始光顧，客群擴大。',watch:'觀察美國 CPI 通膨率和消費者節儉意願調查'},
+     {icon:'🏭',label:'大型零售業',badge:'穩定',cls:'green',why:'Walmart 的規模讓它在供應商談判中具有極強的議價能力，能提供比競爭對手更低的價格，吸引顧客。',watch:'觀察 Walmart 同店銷售成長率和市佔率'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'Walmart 廣告業務（Walmart Connect）年收入超過 30 億美元，毛利率遠高於零售業務，正在改變公司的利潤結構。',watch:'觀察廣告收入和 Walmart+ 訂閱收入的季度成長率'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'電商物流成本高，需要持續投資。若通膨消退，消費者購物行為可能回流到高端零售，削弱 Walmart 的通膨受惠效應。',watch:'注意通膨走勢對消費者零售行為的影響'},
+   ],
+   ai:'Walmart 是通膨時代的受益者，電商和廣告業務的崛起讓它的商業模式更上一層樓。長期持有邏輯清晰，是消費板塊的核心配置選擇。'},
+
+  {id:'TGT',name:'Target',market:'USD',industry:'消費',status:'watch',risk:'warm',
+   reason:'可自由支配消費品銷售疲軟，庫存問題影響利潤率，競爭壓力來自 Walmart。',
+   tip:'🎯 等待可選消費回溫的反轉機會。',
+   spark:[65,60,58,55,52,55,58],thermo:58,
+   periods:[['最近 1 週','up',40,'小幅反彈'],['最近 1 月','mid',35,'橫盤整理'],['最近 3 月','dn',52,'整體偏弱']],
+   weather:{
+     short:{icon:'🌥',label:'偏陰',period:'短期（本週）',color:'var(--sub)',why:'可選消費品（服裝、電子產品）銷售持續疲軟，短線業績難以改善。',watch:'注意美國消費者信用卡消費結構，可選 vs 必需品的比例。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'若降息預期加強，消費者購買力改善，可選消費有機會回溫，Target 是最直接受益者。',watch:'關注美國零售業可選消費品類的月度銷售數據。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'Target 的品牌定位（有設計感的大眾消費）具有差異化，降息後消費信心回升將帶動業績反彈。',watch:'長期觀察 Target 自有品牌（All in Motion 等）的市場滲透率。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏負向',cls:'orange',why:'高利率讓消費者對非必要購物更謹慎，Target 的可選消費品比例高，受衝擊比 Walmart 更大。',watch:'觀察消費者信心指數和可選消費品零售銷售數據'},
+     {icon:'🏭',label:'零售業',badge:'中性',cls:'neutral',why:'Target 面臨 Walmart 下沉競爭和 Amazon 線上競爭的雙重壓力，市場定位受到擠壓。',watch:'觀察 Target 市佔率變化和電商業務成長'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'庫存修正問題基本解決，毛利率有所回升，但可選消費品疲軟讓銷售額成長停滯，整體業績乏善可陳。',watch:'觀察可選消費品類的同店銷售是否轉正'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'若消費者降級趨勢持續，Target 的中高端定位可能流失客群。電商競爭也持續侵蝕線下流量。',watch:'注意 Target 客流量趨勢和電商訂單佔比'},
+   ],
+   ai:'Target 正在等待消費環境改善，降息是最大的正向催化劑。若消費信心回升，Target 的反彈力道可能超過市場預期，是景氣反轉受益股。'},
+
+  {id:'HD',name:'Home Depot',market:'USD',industry:'消費',status:'watch',risk:'warm',
+   reason:'房地產市場低迷讓家居改造需求下滑，但專業承包商業務維持穩定。',
+   tip:'🔨 等待房市回暖的最直接受益股。',
+   spark:[68,65,62,60,58,62,65],thermo:55,
+   periods:[['最近 1 週','up',42,'小幅反彈'],['最近 1 月','mid',38,'橫盤震盪'],['最近 3 Month','dn',50,'整體偏弱']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'房市凍結（Lock-in Effect）讓屋主不願賣房，減少了搬家帶來的裝修需求，短線業績承壓。',watch:'注意美國成屋銷售數據和抵押貸款申請量。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'房市需要利率明顯下降才能解凍，短期內看不到明顯改善，業績繼續承壓。',watch:'關注 30 年期固定房貸利率走勢。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'降息後房市必然回溫，HD 是最直接的受益者。加上 SRS Distributors 的收購，專業承包商業務大幅擴大。',watch:'長期觀察降息後美國成屋銷售量的回升速度和裝修需求。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏負向',cls:'orange',why:'高利率是 HD 最大的利空，讓房屋交易量大幅萎縮（屋主不願賣掉低利率房貸的房子），減少了裝修需求。',watch:'觀察美國房屋銷售量和 30 年期房貸利率'},
+     {icon:'🏭',label:'家居建材業',badge:'中性',cls:'neutral',why:'大型翻修（High Ticket 商品）業務受影響大，但小型維修和專業承包商業務維持穩定，提供一定的緩衝。',watch:'觀察大型商品（1000 美元以上）銷售趨勢'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'HD 的業績重與房市高度連動，目前處於低谷期，但財務健全，配息穩定。SRS 收購擴大了專業市場通路。',watch:'觀察同店銷售成長率（目前為負）是否觸底回升'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'若利率維持高位時間超市場預期，房市回溫可能推遲，HD 的業績復甦也相應延後。',watch:'注意 Fed 降息路徑的變化'},
+   ],
+   ai:'Home Depot 是房市復甦最直接的受益股，一旦降息讓房市解凍，業績反彈空間可觀。現在是佈局等待降息週期的時機，但需要有耐心。'},
 
   // ── ETF ──
   {id:'0050',name:'元大台灣50',market:'TWD',industry:'ETF',status:'stable',risk:'warm',
@@ -593,7 +1306,17 @@ const STOCKS = [
    tip:'✅ 分散風險的好選擇，適合長期持有。',
    spark:[60,62,61,65,64,67,70],thermo:42,
    periods:[['最近 1 週','up',38,'小幅上升'],['最近 1 月','up',55,'穩步走強'],['最近 3 月','up',60,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'台積電等權值股支撐大盤，短線氣氛偏正向，0050 跟漲可期。',watch:'注意外資對台股的買賣超方向。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'AI 半導體產業持續強勁，台灣科技股估值有支撐，0050 中期走勢偏穩。',watch:'關注台積電月營收與外資動向。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'台灣科技產業在 AI 時代地位重要，0050 長期持有反映台股整體競爭力提升。',watch:'長期觀察台灣在全球半導體供應鏈的地位變化。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'全球 AI 投資熱潮帶動台灣科技股，台積電在 0050 佔比超過 30%，直接受惠。',watch:'觀察外資持台股比例與 MSCI 台灣指數走勢'},
+     {icon:'🏭',label:'台股產業結構',badge:'偏強',cls:'green',why:'0050 成分股以半導體、科技為主，與全球 AI 趨勢高度契合，整體產業受惠程度高。',watch:'觀察台積電、聯發科等主要成分股的季度業績'},
+     {icon:'🏢',label:'分散持有',badge:'穩定',cls:'neutral',why:'一次持有 50 家公司，分散個股風險，但也稀釋了個別強勢股的報酬。',watch:'留意成分股定期調整（每季）是否有重大變動'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'0050 集中在科技股，與全球科技股同步波動。若 AI 泡沫修正，0050 也會跟著大幅下跌。',watch:'注意 0050 與台積電的相關性，台積電大跌時 0050 也難獨善其身'},
+   ],
    ai:'0050 持有台股最具代表性的 50 家公司，台積電佔比最高。適合不想選股但想參與台股成長的投資人，長期報酬穩健。'},
 
   {id:'0056',name:'元大高股息',market:'TWD',industry:'ETF',status:'stable',risk:'low',
@@ -601,7 +1324,17 @@ const STOCKS = [
    tip:'💰 適合注重現金流的長期投資人。',
    spark:[55,56,57,56,58,57,59],thermo:30,
    periods:[['最近 1 週','mid',35,'橫盤小漲'],['最近 1 月','up',42,'穩步走強'],['最近 3 月','up',48,'偏強']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','偏低','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'缺乏短線催化劑，股價可能橫向整理，但配息支撐估值下有限。',watch:'注意接近除息日時的股價波動。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'殖利率仍具吸引力，穩健投資人持續定期定額，資金流入穩定。',watch:'關注下次配息金額公告。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'高股息策略適合長期複利，每月或每季配息再投入效果顯著。',watch:'長期觀察配息可持續性，避免填息失敗的個股比例過高。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'利率走向影響高股息股的相對吸引力，若降息，殖利率比較效果減弱；若維持高利率，高股息依然有競爭力。',watch:'觀察定存利率走勢，與 0056 殖利率的差距'},
+     {icon:'🏭',label:'傳統產業',badge:'中性',cls:'neutral',why:'0056 成分股以傳統產業、金融股為主，科技股比例較低，缺乏 AI 成長動能，但獲利穩定性高。',watch:'觀察成分股的整體 EPS 成長率'},
+     {icon:'🏢',label:'分散持有',badge:'穩定',cls:'neutral',why:'成分股定期依照殖利率高低調整，有助選到具配息能力的公司，但頻繁換股有一定摩擦成本。',watch:'留意每年成分股調整時的換股幅度'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'最大風險是成分公司配息能力下滑，導致實際殖利率不如預期。填息失敗也是潛在損失來源。',watch:'注意是否有成分股減資或削減股利的消息'},
+   ],
    ai:'0056 聚焦高股息企業，波動比 0050 小，適合追求穩定現金流的投資人。但需注意成分股以傳統產業為主，可能錯過科技高成長。'},
 
   {id:'00878',name:'國泰永續高股息',market:'TWD',industry:'ETF',status:'stable',risk:'low',
@@ -609,7 +1342,17 @@ const STOCKS = [
    tip:'🌱 ESG + 高股息的入門好選擇。',
    spark:[50,51,52,53,52,54,56],thermo:28,
    periods:[['最近 1 週','up',30,'小幅上升'],['最近 1 月','up',40,'穩步走強'],['最近 3 月','mid',45,'偏強整理']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','偏低','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'短線走勢平穩，缺乏明顯催化劑，適合定期定額持續累積。',watch:'注意除息日期與配息金額。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'ESG 投資趨勢持續，機構投資人對永續標準的採用加速，有助資金流入。',watch:'關注全球 ESG 基金流入數據。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'永續投資是長期趨勢，00878 的 ESG 篩選標準有助選到長期體質良好的公司。',watch:'長期觀察 ESG 法規要求是否持續強化。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'ESG 政策在歐美持續推動，台灣企業的永續報告要求也在升級，有助 ESG ETF 的資金持續流入。',watch:'觀察台灣 ESG 法規進展與機構投資人採購要求'},
+     {icon:'🏭',label:'永續產業',badge:'中性',cls:'neutral',why:'ESG 篩選後的成分股以金融、傳產、科技均衡配置，整體穩健但缺乏單一強力成長引擎。',watch:'觀察 ESG 成分股的季度財報表現'},
+     {icon:'🏢',label:'分散持有',badge:'穩定',cls:'neutral',why:'00878 成分股超過 30 檔，分散效果良好，適合作為投資組合的穩定核心。',watch:'留意成分股定期調整'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'ESG 標準的主觀性可能導致某些高成長股被排除在外，相對於純科技 ETF 可能犧牲部分報酬。',watch:'注意是否有成分公司因 ESG 評分下調而被剔除'},
+   ],
    ai:'00878 以 ESG 為選股條件，成分股多元分散，適合長期定期定額的入門投資人。'},
 
   {id:'QQQ',name:'Nasdaq 100 ETF',market:'USD',industry:'ETF',status:'watch',risk:'warm',
@@ -617,7 +1360,17 @@ const STOCKS = [
    tip:'📈 參與美國科技龍頭成長的便捷方式。',
    spark:[65,68,70,72,75,73,78],thermo:55,
    periods:[['最近 1 週','up',52,'穩步上升'],['最近 1 月','up',65,'偏強走升'],['最近 3 月','up',68,'持續偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','中等偏高','yellow']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'AI 相關大型科技股持續強勢，短線 QQQ 跟漲動能強。',watch:'注意 NVIDIA、Apple、Microsoft 短線走勢。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'財報季接近，市場等待科技龍頭業績驗證，若財測維持強勁，QQQ 中期有上行空間。',watch:'關注 FAANG 各家財報的業績指引。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'美國科技龍頭在 AI 時代的競爭優勢持續擴大，長期持有 QQQ 是參與美國科技成長的有效方式。',watch:'長期觀察科技股整體本益比是否出現明顯泡沫化跡象。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'降息預期支撐科技股估值，AI 投資熱潮維持，整體大環境對 QQQ 成分股有利。',watch:'觀察美國利率走向與市場風險偏好'},
+     {icon:'🏭',label:'美國科技產業',badge:'偏強',cls:'green',why:'QQQ 前十大成分股（NVIDIA、Apple、Microsoft 等）都是 AI 趨勢的直接受益者，產業動能強。',watch:'觀察 QQQ 前十大成分股的整體業績成長率'},
+     {icon:'🏢',label:'分散持有',badge:'穩定',cls:'neutral',why:'持有 100 家納斯達克大型股，但科技集中度高，前十大成分股佔比超過 50%。',watch:'注意集中度風險，與 SPY 相比波動較大'},
+     {icon:'⚠️',label:'風險',badge:'中等偏高',cls:'yellow',why:'科技股集中度高，若 AI 估值泡沫破裂或科技業整體回落，QQQ 跌幅可能超過大盤。',watch:'注意 QQQ 的本益比水位與歷史均值比較'},
+   ],
    ai:'QQQ 讓你一次持有 NVIDIA、Apple、Microsoft 等美國科技龍頭，是參與 AI 趨勢的方便工具。但科技股佔比高，波動比 SPY 更大。'},
 
   {id:'SPY',name:'S&P 500 ETF',market:'USD',industry:'ETF',status:'stable',risk:'warm',
@@ -625,7 +1378,17 @@ const STOCKS = [
    tip:'✅ 長期投資美國市場的經典選擇。',
    spark:[60,62,63,65,64,67,70],thermo:45,
    periods:[['最近 1 週','up',45,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','up',62,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'美股整體情緒偏正向，大型股財報季期待支撐短線走勢。',watch:'注意本週重要財報公告與Fed官員講話。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'美國企業獲利整體優於預期，財報季有望繼續帶動指數走高。',watch:'關注 S&P 500 整體 EPS 成長率預測。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'長期持有 SPY 是最接近「買入美國」的方式，歷史上長期報酬穩健，是多數投資人組合的核心。',watch:'長期觀察美國 GDP 成長趨勢與企業獲利週期。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'美國經濟韌性強，就業市場穩健，企業獲利整體優於預期，大環境支撐 SPY 走勢。',watch:'觀察美國 GDP 成長率、失業率與 CPI 數據'},
+     {icon:'🏭',label:'美國各產業',badge:'偏強',cls:'green',why:'SPY 持有 500 家跨產業公司，科技、金融、醫療均衡分散，受益於美國整體經濟成長。',watch:'觀察各產業 EPS 成長預測與修正幅度'},
+     {icon:'🏢',label:'分散持有',badge:'穩定',cls:'neutral',why:'500 家公司高度分散，個股風險極低，是最適合不想管理股票的投資人的長期工具。',watch:'留意是否有重大成分股調整'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'SPY 無法迴避系統性風險，若美國整體經濟衰退或股市泡沫化，所有成分股都會同步下跌。',watch:'注意美國殖利率曲線倒掛等衰退訊號'},
+   ],
    ai:'SPY 追蹤美國最大 500 家公司，是長期複利的基石工具。如果你只想持有一支美股，SPY 通常是最理性的選擇。'},
 
   // ── 金融 ──
@@ -634,7 +1397,17 @@ const STOCKS = [
    tip:'🏦 金融類股中的防禦性首選。',
    spark:[60,62,65,63,67,65,70],thermo:45,
    periods:[['最近 1 週','up',42,'小幅上升'],['最近 1 月','up',55,'穩步走強'],['最近 3 月','up',60,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'高利率環境持續，JPM 淨利息收入維持高水位，短線業績支撐強。',watch:'注意本週是否有 Fed 官員對利率路徑的最新表態。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'投資銀行業務逐步回溫，IPO 和 M&A 活動增加，有望成為中期正面催化劑。',watch:'關注 JPM 下季財報中 IB 手續費收入的回升程度。'},
+     long:{icon:'⛅',label:'多雲時晴',period:'長期（3個月+）',color:'var(--text)',why:'長期而言，降息週期開始後 JPM 的淨利息收入將受壓，但業務多元化能部分緩解影響。',watch:'長期觀察美國利率走向與 JPM 的非利息收入成長。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'高利率環境讓銀行的淨利息收益率（NIM）維持高位，JPM 直接受惠於 Fed 的緊縮政策。',watch:'觀察聯邦基金利率走向，這是銀行股最重要的宏觀變數'},
+     {icon:'🏭',label:'金融銀行產業',badge:'穩定',cls:'green',why:'美國大型銀行在資本充足率、流動性管理上都達到監管要求，系統性風險低。投資銀行業務隨市場活動回溫而改善。',watch:'觀察美國 IPO 市場活躍程度與 M&A 交易量'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'JPM 是全球資產規模最大的銀行，業務涵蓋消費金融、投資銀行、資產管理，多元化降低單一業務風險。',watch:'觀察貸款違約率（NPL）是否有上升跡象'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'商業房地產貸款違約風險仍是銀行業的潛在隱憂，若美國房地產市場進一步惡化，可能增加呆帳。',watch:'注意商業房地產（CRE）貸款的違約率與減值幅度'},
+   ],
    ai:'JPMorgan 是美國最大銀行，高利率環境讓淨利息收入維持高水位，企業獲利能力強健。是想參與金融股但求穩健的好選擇。'},
 
   {id:'V',name:'Visa',market:'USD',industry:'金融',status:'stable',risk:'warm',
@@ -642,7 +1415,17 @@ const STOCKS = [
    tip:'💳 收費公路商業模式，長期邏輯穩固。',
    spark:[62,64,66,65,68,70,72],thermo:42,
    periods:[['最近 1 週','up',44,'小幅上升'],['最近 1 月','up',57,'穩步走強'],['最近 3 月','up',62,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'全球旅遊和跨境消費復甦，跨境支付手續費收入短線穩健。',watch:'注意全球跨境旅遊數據和消費支出指標。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'消費支出維持韌性，電商交易量持續成長，Visa 中期收入能見度高。',watch:'關注美國零售銷售數據與信用卡消費支出月度數據。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'全球支付數位化是不可逆趨勢，Visa 的全球支付網路是難以複製的資產，長期成長確定性高。',watch:'長期觀察加密支付和 CBDC 是否對 Visa 的市場地位造成實質衝擊。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'全球消費支出維持韌性，跨境旅遊持續復甦，直接帶動 Visa 的交易量和手續費收入。',watch:'觀察全球 GDP 成長率和消費支出趨勢'},
+     {icon:'🏭',label:'全球支付產業',badge:'穩定',cls:'green',why:'支付業務是高度集中的寡頭市場，Visa 和 Mastercard 合計佔全球約 70% 的信用卡市場，進入障礙極高。',watch:'觀察新興支付方式（Apple Pay、PayPal）對 Visa 交易量的影響'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'Visa 毛利率超過 80%，不承擔信用風險，是全球獲利能力最強的商業模式之一。自由現金流充沛，持續回購股票。',watch:'觀察每季交易量成長率和跨境支付收入佔比'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'監管風險是最大隱憂，美國和歐盟的反壟斷機構持續關注支付市場的競爭性。加密支付和 CBDC 長期也是潛在的結構性挑戰。',watch:'注意美國和歐盟對信用卡手續費的監管討論進展'},
+   ],
    ai:'Visa 的商業模式不需要承擔信用風險，收益來自每筆交易手續費，是全球消費成長的間接受益者。長期邏輯非常清晰。'},
 
   {id:'MA',name:'Mastercard',market:'USD',industry:'金融',status:'stable',risk:'warm',
@@ -650,7 +1433,17 @@ const STOCKS = [
    tip:'💳 與 Visa 互補，共同主導全球支付。',
    spark:[60,63,65,64,68,70,73],thermo:42,
    periods:[['最近 1 週','up',46,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','up',63,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'跨境支付和旅遊相關交易量持續增加，短線收入穩健。',watch:'注意全球旅遊恢復數據。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'與 Visa 走勢高度相關，消費支出維持，中期無明顯利空。',watch:'關注財報中跨境交易量成長率。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'數位支付趨勢長期不可逆，Mastercard 在新興市場的擴張也提供額外成長空間。',watch:'長期觀察非洲、東南亞等新興市場的滲透率提升進度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'與 Visa 相同，全球消費擴張直接帶動 Mastercard 交易量成長。',watch:'觀察全球消費支出和跨境旅遊數據'},
+     {icon:'🏭',label:'全球支付產業',badge:'穩定',cls:'green',why:'Mastercard 在歐洲和新興市場的市佔率比 Visa 更高，業務地理多元化優於 Visa。',watch:'觀察新興市場交易量成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'Mastercard 毛利率接近 77%，業務模式與 Visa 高度相似，獲利品質同樣優異。',watch:'觀察每季自由現金流和股票回購金額'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'監管風險與 Visa 相同，同時 Mastercard 在美國信用卡市場佔比低於 Visa，若美國消費走弱影響相對更大。',watch:'注意美歐反壟斷監管的最新動態'},
+   ],
    ai:'Mastercard 與 Visa 業務高度相似，是全球支付雙寡頭之一。兩者一起持有可分散單一公司風險。'},
 
   {id:'BRK.B',name:'Berkshire Hathaway',market:'USD',industry:'金融',status:'stable',risk:'low',
@@ -658,7 +1451,17 @@ const STOCKS = [
    tip:'🛡 市場下跌時的天然避風港。',
    spark:[58,59,60,61,60,62,63],thermo:32,
    periods:[['最近 1 週','mid',30,'橫盤小漲'],['最近 1 月','up',40,'穩步走強'],['最近 3 月','up',45,'偏強']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','偏低','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'沒有明顯短線催化劑，股價可能橫向整理，但持續穩健，跌幅也有限。',watch:'注意巴菲特是否有新投資布局的消息。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'大量現金部位讓巴菲特在市場波動時能逢低加碼，中期抗跌性強。',watch:'關注是否有大型收購或投資部位調整公告。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'巴菲特的長期投資哲學和多元業務組合是最佳的長期風險管理工具，長期持有報酬優異。',watch:'長期觀察 Berkshire 的現金部位運用方向。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'Berkshire 的多元業務（保險、鐵路、能源）受總經波動影響，但多元化讓整體影響相對有限。',watch:'觀察美國 GDP 成長與保險業景氣循環'},
+     {icon:'🏭',label:'多元化業務',badge:'穩定',cls:'green',why:'Berkshire 涵蓋保險（GEICO）、鐵路（BNSF）、能源、零售等多元業務，不依賴單一產業，抗景氣衰退能力強。',watch:'觀察 GEICO 保費調整和 BNSF 運量趨勢'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'Berkshire 持有超過 1500 億美元現金，是市場下跌時最有能力抄底的投資機器。Apple 持倉是最大的股票資產。',watch:'觀察 Berkshire 的股票投資組合調整（每季 13F 申報）'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'最大風險是接班人問題，巴菲特持續淡出後，未來的投資決策是否能維持同等水準是市場的長期疑慮。',watch:'注意 Greg Abel 的投資決策風格與市場評價'},
+   ],
    ai:'Berkshire 是市場下跌時的避風港，大量現金儲備讓巴菲特能在低點抄底。長期持有通常能跑贏大盤，波動遠低於科技股。'},
 
   // ── 能源 ──
@@ -666,8 +1469,18 @@ const STOCKS = [
    reason:'油價短線有支撐，但長期能源轉型壓力持續，地緣政治影響大。',
    tip:'🛢 配置能源股的波動性對沖工具。',
    spark:[65,63,60,62,65,68,66],thermo:55,
-   periods:[['最近 1 週','mid',45,'橫盤震盪'],['最近 1 月','up',48,'小幅走強'],['最近 3 月','mid',42,'震盪整理']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   periods:[['最近 1 週','mid',45,'橫盤震盪'],['最近 1 月','up',48,'小幅走強'],['最近 3 Month','mid',42,'震盪整理']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'油價受地緣政治情緒影響，短線波動大，缺乏明確方向。',watch:'注意中東局勢進展與 OPEC+ 減產執行率。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'OPEC+ 維持減產，布蘭特油價維持高位，ExxonMobil 季度獲利有支撐。',watch:'關注布蘭特原油期貨走勢與鑽探活動數據。'},
+     long:{icon:'⛅',label:'多雲',period:'長期（3個月+）',color:'var(--text)',why:'長期能源轉型是不可逆趨勢，傳統石油業面臨需求見頂的長期壓力，但轉型需要 10–20 年。',watch:'長期觀察電動車滲透率對石油需求的影響速度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'地緣政治緊張（中東衝突、俄烏戰爭）支撐油價，但全球經濟成長放緩也壓制需求，兩力相抵屬中性。',watch:'觀察布蘭特原油期貨價格和全球石油庫存數據'},
+     {icon:'🏭',label:'石油能源產業',badge:'中性',cls:'neutral',why:'OPEC+ 減產維護油價，但非 OPEC 產油國（美國頁岩油）產量持續增加，長期供需平衡維持困難。',watch:'觀察美國原油產量月度數據'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'ExxonMobil 是傳統能源股中財務最穩健的公司之一，低成本油井讓它在低油價環境下仍能維持獲利。',watch:'觀察 ExxonMobil 的生產成本（Breakeven）和配息可持續性'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'油價每下跌 10 美元，ExxonMobil 年獲利約減少 30 億美元。長期淨零轉型壓力也讓投資人對石油股的持有意願下降。',watch:'注意全球碳排放政策收緊的速度'},
+   ],
    ai:'ExxonMobil 是傳統能源龍頭，油價波動是最大變數。地緣政治緊張時有防禦價值，長期面臨淨零轉型壓力。'},
 
   {id:'NEE',name:'NextEra Energy',market:'USD',industry:'能源',status:'stable',risk:'warm',
@@ -675,7 +1488,17 @@ const STOCKS = [
    tip:'⚡ AI 用電需求爆發的最大受益者。',
    spark:[40,42,45,50,55,58,65],thermo:52,
    periods:[['最近 1 週','up',58,'明顯上升'],['最近 1 月','up',70,'大幅走強'],['最近 3 月','up',65,'持續偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'☀️',label:'晴朗',period:'短期（本週）',color:'var(--green)',why:'AI 資料中心用電需求短線強勁，電力供應商需求激增，NEE 短線情緒正向。',watch:'注意資料中心業者與電力公司的購電協議（PPA）消息。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'再生能源政策支持強勁，聯邦補貼持續，NEE 的太陽能和風電建設計畫推進順利。',watch:'關注 IRA（通膨削減法案）再生能源補貼的執行進度。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'電網現代化和 AI 數位基礎設施建設是 10 年以上的長期趨勢，NEE 的再生能源資產價值長期上升。',watch:'長期觀察美國電力需求增長預測和再生能源政策連續性。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'AI 資料中心的爆炸性用電需求讓電力股意外成為 AI 概念股，政策面的清潔能源推動也持續正向。',watch:'觀察美國電力需求季度增長數據'},
+     {icon:'🏭',label:'再生能源產業',badge:'偏強',cls:'green',why:'太陽能和風電成本已低於傳統化石燃料，長期競爭力確立。AI 資料中心傾向採購再生能源，直接受惠 NEE。',watch:'觀察太陽能發電成本曲線和美國再生能源裝機量'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'NEE 是美國最大的再生能源公司，規模效應帶來成本優勢，長期購電合約提供穩定的現金流能見度。',watch:'觀察新簽購電協議（PPA）的電量和期限'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'REIT 類公司對利率敏感，若高利率維持更長時間，融資成本上升可能壓縮利潤。政策風險也存在（換屆可能削減補貼）。',watch:'注意聯邦能源政策走向與利率對 REIT 的影響'},
+   ],
    ai:'NextEra 是全球最大再生能源公司，AI 資料中心的爆炸性用電需求讓它意外成為 AI 概念股。長期政策支持強勁。'},
 
   {id:'6505',name:'台塑石化',market:'TWD',industry:'能源',status:'watch',risk:'warm',
@@ -683,7 +1506,17 @@ const STOCKS = [
    tip:'🔍 觀察油價走勢與煉油毛利。',
    spark:[50,48,50,52,51,53,52],thermo:48,
    periods:[['最近 1 週','mid',38,'橫盤整理'],['最近 1 月','mid',40,'小幅震盪'],['最近 3 月','mid',42,'震盪整理']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'煉油利差窄，短線獲利能力偏弱，油價波動帶來不確定性。',watch:'注意國際油價走勢與煉油利差（Crack Spread）變化。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'若油價維持高位，台塑石化的原油採購成本也高，煉油利差不一定擴大。',watch:'觀察下季煉油利差與殖利率公告。'},
+     long:{icon:'🌥',label:'偏陰',period:'長期（3個月+）',color:'var(--sub)',why:'長期能源轉型趨勢對傳統石化業不利，台塑轉型進度緩慢是長期的風險。',watch:'長期觀察台塑石化的低碳轉型投資計畫。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'國際油價受地緣政治影響大，台塑石化作為下游煉油廠，油價高不一定代表獲利好，關鍵在煉油利差。',watch:'觀察布蘭特原油價格和亞洲煉油利差月度數據'},
+     {icon:'🏭',label:'石化能源產業',badge:'中性',cls:'neutral',why:'亞洲煉油產能過剩問題持續，煉油利差長期受壓。中國需求疲軟也影響台灣石化產品出口。',watch:'觀察亞洲煉油利差（Cracking Margin）走勢'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'台塑石化近期煉油利差收窄，毛利率承壓，但殖利率相對穩定（約 4–5%），是持有的主要理由。',watch:'觀察毛利率是否觸底回升'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'長期電動車普及降低汽油需求，台塑石化業務轉型進度慢，是長期的結構性風險。',watch:'注意電動車在台灣和亞洲市場的滲透率加速'},
+   ],
    ai:'台塑石化受油價影響大，近期煉油利差收窄，獲利能力承壓。如果持有以殖利率為主要考量，需確認配息政策持續。'},
 
   // ── 醫療 ──
@@ -692,7 +1525,17 @@ const STOCKS = [
    tip:'🏥 防禦性醫療股，景氣循環影響小。',
    spark:[60,61,62,61,63,62,64],thermo:35,
    periods:[['最近 1 週','mid',32,'橫盤小漲'],['最近 1 月','up',42,'穩步走強'],['最近 3 月','up',48,'偏強']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','偏低','neutral']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'短線缺乏重大催化劑，股價可能橫向整理，但下跌空間有限。',watch:'注意是否有新藥臨床數據或仿單訴訟更新。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'醫療設備業務恢復性成長持續，手術量回升支撐業績，中期展望穩健。',watch:'關注下季財報中醫療設備業務的成長率。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'JNJ 分拆消費品後聚焦醫療和製藥，業務清晰度提升，長期競爭力改善。',watch:'長期觀察新藥管線（Pipeline）的商業潛力。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'醫療需求與景氣循環關聯性低，高利率環境對 JNJ 影響有限，是典型的防禦性資產。',watch:'觀察美國醫療支出趨勢'},
+     {icon:'🏭',label:'醫療製藥產業',badge:'穩定',cls:'green',why:'人口老齡化帶動醫療需求長期成長，JNJ 在腫瘤科、免疫科等高毛利領域佔有重要地位。',watch:'觀察 JNJ 主力藥物（TREMFYA、DARZALEX）的市佔率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'JNJ 連續多年提高股息，是典型的股息成長型股票。分拆 Kenvue（消費品部門）後業務更聚焦，毛利率有望提升。',watch:'觀察 JNJ 的股息成長率和新藥審批進展'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'石棉訴訟的法律成本是潛在風險，但 JNJ 已為此提撥大量準備金。專利懸崖也是需要關注的長期風險。',watch:'注意石棉訴訟和解進展，以及主力藥物專利到期時程'},
+   ],
    ai:'JNJ 是醫療股中的藍籌股，業務涵蓋醫療設備與製藥，需求穩定不受景氣影響。適合追求穩定的長期投資人。'},
 
   {id:'LLY',name:'Eli Lilly',market:'USD',industry:'醫療',status:'stable',risk:'hot',
@@ -700,7 +1543,17 @@ const STOCKS = [
    tip:'💊 GLP-1 減重藥革命最直接受益者。',
    spark:[50,60,70,80,85,90,95],thermo:75,
    periods:[['最近 1 週','up',70,'大幅上升'],['最近 1 月','up',85,'持續強勢'],['最近 3 月','up',90,'強勁上漲']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','估值偏高','orange']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'GLP-1 藥物供不應求，短線需求面無慮，但高估值讓每一個利空消息都有更大的震盪空間。',watch:'注意是否有競爭者（Novo Nordisk）降價或新藥上市的消息。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'產能持續擴建，供應瓶頸預計逐步緩解，更多病患能取得藥物，收入成長加速。',watch:'關注新建產能的量產時程和 FDA 審批進展。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'GLP-1 的應用從減重擴展到心血管、腎臟病等，潛在市場超過 1500 億美元。Lilly 的藥物管線廣，長期成長確定性高。',watch:'長期觀察 Tirzepatide 在非肥胖症適應症的臨床試驗結果。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'美國醫療保險覆蓋範圍持續擴大，政府醫療計畫（Medicare、Medicaid）的 GLP-1 藥物保險覆蓋是關鍵驅動力。',watch:'觀察 Medicare GLP-1 藥物保險覆蓋政策的最新進展'},
+     {icon:'🏭',label:'生技製藥產業',badge:'偏強',cls:'green',why:'GLP-1 市場目前只有兩家主要玩家（Lilly 和 Novo Nordisk），護城河深，外部競爭者進入市場至少需要 5 年以上。',watch:'觀察 GLP-1 競爭格局，包括 Amgen 等公司的臨床進展'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'Mounjaro 和 Zepbound 的年收入合計正在快速逼近 200 億美元，毛利率高達 82%。Lilly 的研發管線豐富，風險分散。',watch:'觀察 GLP-1 兩款藥物的季度銷售額成長率'},
+     {icon:'⚠️',label:'風險',badge:'估值偏高',cls:'orange',why:'本益比超過 60 倍，反映了市場對未來多年超高速成長的期待。若 FDA 在某個適應症上退件、或有安全性問題出現，股價修正空間可達 20–30%。',watch:'注意 FDA 審批動態和任何藥物不良反應報告'},
+   ],
    ai:'Eli Lilly 的 GLP-1 藥物開啟了全球對抗肥胖症的新時代，潛在市場規模龐大。但目前估值已充分反映期待，任何研發挫折都可能造成大幅震盪。'},
 
   {id:'MRNA',name:'Moderna',market:'USD',industry:'醫療',status:'risk',risk:'high',
@@ -708,7 +1561,17 @@ const STOCKS = [
    tip:'⚠️ 觀察 mRNA 技術在癌症疫苗的突破。',
    spark:[80,65,55,45,50,42,40],thermo:78,
    periods:[['最近 1 週','mid',55,'橫盤震盪'],['最近 1 月','dn',60,'偏弱'],['最近 3 月','dn',65,'持續走弱']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏弱','orange'],['🏢 公司','觀察中','yellow'],['⚠️ 風險','偏高','orange']],
+   weather:{
+     short:{icon:'⛈',label:'雷雨',period:'短期（本週）',color:'var(--red)',why:'沒有新的收入來源，現金消耗加速，短線缺乏正面催化劑。',watch:'注意是否有臨床試驗數據公布。'},
+     mid:{icon:'🌧',label:'降雨',period:'中期（1個月）',color:'var(--orange)',why:'RSV 疫苗市場競爭激烈，流感 mRNA 疫苗市場驗證仍需時間，中期財務壓力持續。',watch:'關注季報中現金消耗速度（Burn Rate）是否在可控範圍。'},
+     long:{icon:'⛅',label:'多雲時晴',period:'長期（3個月+）',color:'var(--text)',why:'個人化癌症疫苗是 mRNA 技術最大的長期機會。若臨床數據持續正向，Moderna 的長期潛力巨大，但現在還需要 3–5 年驗證。',watch:'長期觀察個人化癌症疫苗（mRNA-4157）的第三期臨床試驗進度。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'後 COVID 時代，政府對疫苗的採購意願大幅下降，這是 Moderna 面臨的最大宏觀逆風。',watch:'觀察各國政府 COVID 和 RSV 疫苗採購預算'},
+     {icon:'🏭',label:'生技疫苗產業',badge:'偏弱',cls:'orange',why:'COVID 疫苗市場萎縮，RSV 和流感疫苗市場競爭激烈，mRNA 技術的下一個「殺手應用」尚未商業化。',watch:'觀察 mRNA 癌症疫苗臨床進展和競爭格局'},
+     {icon:'🏢',label:'公司基本面',badge:'觀察中',cls:'yellow',why:'Moderna 現金儲備仍有約 130 億美元，可支撐 3–4 年的研發支出，但若主力產品持續失利，財務壓力將急劇上升。',watch:'觀察每季現金消耗速度和新藥商業化進展'},
+     {icon:'⚠️',label:'風險',badge:'偏高',cls:'orange',why:'Moderna 是高風險高報酬的投機型標的。如果癌症疫苗臨床失敗，股價可能再跌 50%；如果成功，上漲空間也很大。屬於賭注型投資。',watch:'注意臨床試驗數據讀出時間點，這是最大的股價催化劑'},
+   ],
    ai:'Moderna 面臨後 COVID 時代的收入斷崖，需要 mRNA 技術在其他領域的突破。個人化癌症疫苗是長期期待，但短期財務壓力仍大。'},
 
   // ── 消費 ──
@@ -716,8 +1579,18 @@ const STOCKS = [
    reason:'全球展店持續，數位點餐提升效率，高通膨環境下客單價維持穩定。',
    tip:'🍔 穩定的消費品牌，抗景氣衰退。',
    spark:[58,59,60,61,60,62,63],thermo:35,
-   periods:[['最近 1 週','mid',34,'橫盤小漲'],['最近 1 月','up',45,'穩步走強'],['最近 3 月','up',50,'偏強']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','偏低','neutral']],
+   periods:[['最近 1 週','mid',34,'橫盤小漲'],['最近 1 Month','up',45,'穩步走強'],['最近 3 月','up',50,'偏強']],
+   weather:{
+     short:{icon:'⛅',label:'多雲',period:'短期（本週）',color:'var(--text)',why:'短線缺乏催化劑，股價可能橫盤，但基本面穩健讓跌幅有限。',watch:'注意本週是否有同店銷售數據或消費者調查報告。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'數位點餐比例持續提升，有助降低成本和提升客單價，中期業績展望穩健。',watch:'關注季報中數位訂單佔比和全球同店銷售成長率。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'麥當勞是全球消費品牌中最能抗衰退的公司之一，景氣好壞消費者都去，長期持有邏輯清晰。',watch:'長期觀察全球展店計畫和新興市場（印度、東南亞）的滲透率。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'高通膨讓部分消費者從高價餐廳轉向麥當勞，反而有助同店銷售。但若經濟衰退嚴重，連基本消費也會收縮。',watch:'觀察美國消費者信心指數和快餐業同店銷售趨勢'},
+     {icon:'🏭',label:'快餐消費產業',badge:'穩定',cls:'green',why:'快餐業受景氣循環影響遠低於一般餐飲，品牌護城河和特許加盟模式提供穩定的現金流。',watch:'觀察全球快餐業同店銷售成長率'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'麥當勞 95% 採特許加盟模式，直接降低資本風險，毛利率穩定在 55% 以上。持續提高股息，是穩定的股息成長股。',watch:'觀察全球加盟店翻桌率和行動 App 數位訂單成長'},
+     {icon:'⚠️',label:'風險',badge:'偏低',cls:'neutral',why:'中國市場復甦低於預期是短期隱憂，另外食品成本通膨也可能壓縮加盟商利潤率，影響展店意願。',watch:'注意食品原物料（牛肉、小麥）價格走勢'},
+   ],
    ai:'麥當勞是全球最著名的消費品牌之一，景氣好壞消費者都吃得起，抗衰退特性強。數位化與自動化投資持續降低成本。'},
 
   {id:'COST',name:'Costco',market:'USD',industry:'消費',status:'stable',risk:'warm',
@@ -725,7 +1598,17 @@ const STOCKS = [
    tip:'🛒 通膨受惠者，會員忠誠度極高。',
    spark:[62,64,66,68,70,72,75],thermo:48,
    periods:[['最近 1 週','up',50,'穩步上升'],['最近 1 月','up',62,'明顯走強'],['最近 3 月','up',68,'持續偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'會員費收入穩定，批量商品需求不減，短線業績無明顯利空。',watch:'注意月度零售銷售數據和同店銷售成長。'},
+     mid:{icon:'☀️',label:'晴朗',period:'中期（1個月）',color:'var(--green)',why:'剛宣布調漲年費，對長期收入有正向貢獻，市場反應正面。',watch:'關注年費調漲後的會員續費率。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'會員制護城河極深，全球展店計畫提供長期成長空間，是消費股中最具確定性的長期持有標的。',watch:'長期觀察全球新市場（歐洲、亞洲）的展店進度和會員成長。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'通膨環境讓消費者更傾向到 Costco 購買大包裝商品來節省開支，Costco 反而是通膨的受益者。',watch:'觀察美國通膨率（CPI）和消費者節儉行為指標'},
+     {icon:'🏭',label:'大型零售產業',badge:'穩定',cls:'green',why:'Costco 的商業模式難以複製，大量採購談判力強，商品定價明顯低於一般超市，會員忠誠度極高（續費率超過 90%）。',watch:'觀察 Costco 全球門店數成長和會員總數變化'},
+     {icon:'🏢',label:'公司基本面',badge:'偏強',cls:'green',why:'Costco 毛利率刻意維持低位（12%），但靠著會員費形成獨特的低成本商業模式。每年定期調漲會員費是可預期的收入增長。',watch:'觀察會員費收入佔利潤的比例'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'估值長期偏高（本益比 45–50 倍），是消費股中的「貴族溢價」。若宏觀環境惡化導致消費者預算削減，高估值可能修正。',watch:'注意 Costco 本益比是否偏離歷史均值過大'},
+   ],
    ai:'Costco 的會員費是護城河，高忠誠度會員帶來可預測的現金流。通膨時代消費者更願意付費加入以享受批量折扣。'},
 
   {id:'NKE',name:'Nike',market:'USD',industry:'消費',status:'watch',risk:'warm',
@@ -733,7 +1616,17 @@ const STOCKS = [
    tip:'👟 品牌力強，等待庫存修正後的反轉機會。',
    spark:[70,65,62,58,55,58,60],thermo:55,
    periods:[['最近 1 週','up',40,'小幅反彈'],['最近 1 月','mid',38,'橫盤震盪'],['最近 3 月','dn',50,'整體偏弱']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌥',label:'偏陰',period:'短期（本週）',color:'var(--sub)',why:'庫存消化仍在進行，折扣壓力持續，短線毛利率難以快速回升。',watch:'注意是否有分析師下修目標價的消息。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'轉型計畫需要時間驗證，中期仍在陣痛期，但估值已充分反映悲觀預期，下跌空間有限。',watch:'關注庫存水位是否持續下降，這是回升的先行指標。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'Nike 是全球運動品牌龍頭，品牌力強，長期邏輯未改變。若中國市場回溫和庫存問題解決，有機會出現較大的反彈行情。',watch:'長期觀察 Nike 直銷（DTC）比例提升和中國市場同店銷售回溫。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'全球消費支出在高利率環境下偏謹慎，非必要消費品承壓，對 Nike 中高價運動鞋的需求有一定影響。',watch:'觀察全球非必要消費支出趨勢'},
+     {icon:'🏭',label:'運動消費產業',badge:'中性',cls:'neutral',why:'運動休閒趨勢長期不變，但 Nike 在中國市場的份額正被安踏、李寧等本土品牌侵蝕，競爭格局變差。',watch:'觀察中國運動鞋服市場份額變化'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'Nike 毛利率因大量促銷清庫存而下降，目前約 44%，低於歷史水準。新執行長的策略調整需要時間看到成效。',watch:'觀察毛利率是否觸底並開始回升'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'中國市場（佔收入 15%）持續疲弱，加上庫存問題和品牌形象挑戰，短期基本面壓力仍大。',watch:'注意中國市場同店銷售數據和庫存週轉率'},
+   ],
    ai:'Nike 品牌力仍強，但面臨庫存過高與中國市場疲弱的雙重壓力，正在進行策略轉型。若庫存修正完成，可能是不錯的逢低布局機會。'},
 
   {id:'SBUX',name:'Starbucks',market:'USD',industry:'消費',status:'watch',risk:'warm',
@@ -741,7 +1634,17 @@ const STOCKS = [
    tip:'☕ 等待轉型成效的驗證期。',
    spark:[65,60,58,55,52,55,58],thermo:58,
    periods:[['最近 1 週','up',42,'小幅反彈'],['最近 1 月','mid',35,'橫盤整理'],['最近 3 月','dn',55,'持續偏弱']],
-   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','觀察中','yellow'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌥',label:'偏陰',period:'短期（本週）',color:'var(--sub)',why:'中國同店銷售數據持續低迷，美國門店也出現客流下降，短線利空壓力仍存。',watch:'注意本週是否有管理層對轉型進度的最新表態。'},
+     mid:{icon:'⛅',label:'多雲',period:'中期（1個月）',color:'var(--text)',why:'新 CEO（Brian Niccol）轉型計畫逐步推進，中期需要等待同店銷售數據企穩才能確認轉型有效。',watch:'關注季報中美國和中國同店銷售成長率。'},
+     long:{icon:'🌤',label:'微晴',period:'長期（3個月+）',color:'var(--yellow)',why:'Starbucks 品牌護城河仍在，全球咖啡消費趨勢長期正向。若轉型成功，股價有較大的反彈空間。',watch:'長期觀察 Starbucks 在中國的策略調整（是否引入合作夥伴）。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'中性',cls:'neutral',why:'消費者在高通膨環境下對非必要消費更謹慎，一杯 7 美元的咖啡首當其衝，美國同店銷售承壓。',watch:'觀察美國餐飲消費和咖啡連鎖業整體同店銷售趨勢'},
+     {icon:'🏭',label:'咖啡消費產業',badge:'中性',cls:'neutral',why:'中國本土咖啡品牌（瑞幸咖啡）以極低價格搶市，對 Starbucks 中高端定位形成強力挑戰。中國市場競爭格局惡化。',watch:'觀察瑞幸咖啡的中國市佔率和 Starbucks 的相對定價策略'},
+     {icon:'🏢',label:'公司基本面',badge:'觀察中',cls:'yellow',why:'同店銷售連續多季下滑，新 CEO 的「回歸咖啡本質」策略雖有邏輯，但扭轉需要至少 4–6 季的時間。',watch:'觀察每季美國和中國的同店銷售成長率是否企穩'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'轉型失敗的風險存在，若新 CEO 策略無法改善同店銷售，市場信心可能進一步瓦解，股價下跌空間仍有。',watch:'注意下季財報是否有同店銷售回正的訊號'},
+   ],
    ai:'Starbucks 面臨中國市場疲軟與美國同店銷售下滑，新 CEO 的轉型效果需時間驗證。短期仍有不確定性，但品牌護城河依然存在。'},
 
   // ── 房地產 ──
@@ -750,7 +1653,17 @@ const STOCKS = [
    tip:'📡 5G + AI 邊緣運算基礎設施受益者。',
    spark:[50,52,55,54,57,58,62],thermo:50,
    periods:[['最近 1 週','up',48,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','up',55,'偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'電信商對 5G 站台的需求穩定，租約長期，短線業績能見度高。',watch:'注意主要電信客戶（AT&T、Verizon）的資本支出規劃。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'AI 邊緣計算需求為電信塔帶來新的成長點，MEC（多接入邊緣計算）部署加速。',watch:'關注 AMT 新簽電信租約數量和平均租期。'},
+     long:{icon:'☀️',label:'晴朗',period:'長期（3個月+）',color:'var(--green)',why:'5G 全球普及和 AI 邊緣計算是未來 10 年的長期趨勢，電信塔需求長期有保障，AMT 是優質的長期防禦性成長標的。',watch:'長期觀察降息週期開始後 REIT 估值的重估機會。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'降息預期讓高殖利率的 REIT 更具吸引力，若利率下降，AMT 的融資成本降低且估值倍數擴張。',watch:'觀察美國 10 年期公債殖利率走勢'},
+     {icon:'🏭',label:'電信基礎設施',badge:'偏強',cls:'green',why:'5G 普及帶動電信商持續升級基站，AI 邊緣計算讓電信塔成為新的計算節點，需求長期增加。',watch:'觀察全球 5G 基站建設進度和 MEC 部署數量'},
+     {icon:'🏢',label:'公司基本面',badge:'穩定',cls:'green',why:'AMT 持有全球 22 萬座電信塔，租約平均 10 年以上，每年有 3% 的租金自動調漲條款，現金流穩定且可預測。',watch:'觀察租金自動調漲（Escalator）執行率和出租率'},
+     {icon:'⚠️',label:'風險',badge:'中等',cls:'neutral',why:'REIT 對利率高度敏感，若高利率維持更長時間，融資成本上升會壓縮利潤率。美國電信商整併可能減少客戶數量。',watch:'注意 T-Mobile、AT&T 是否有站台租賃合約提前終止的風險'},
+   ],
    ai:'AMT 持有全球電信塔資產，租約長達 10 年以上，現金流穩定。AI 時代對邊緣計算基礎設施需求上升，是不錯的防禦性成長股。'},
 
   // ── 原物料 ──
@@ -759,7 +1672,17 @@ const STOCKS = [
    tip:'🥇 黃金替代品，通膨與地緣避險工具。',
    spark:[40,45,50,55,52,58,62],thermo:55,
    periods:[['最近 1 週','up',50,'小幅上升'],['最近 1 月','up',65,'明顯走強'],['最近 3 月','up',68,'持續偏強']],
-   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等偏高','yellow']],
+   weather:{
+     short:{icon:'🌤',label:'微晴',period:'短期（本週）',color:'var(--yellow)',why:'地緣政治不確定性支撐避險需求，黃金短線走勢偏正向，金礦股跟漲。',watch:'注意中東局勢和美元指數短線變化。'},
+     mid:{icon:'🌤',label:'微晴',period:'中期（1個月）',color:'var(--yellow)',why:'降息預期讓持有黃金的機會成本下降，中期金價有支撐。金礦商獲利對金價有槓桿放大效果。',watch:'關注 Fed 下次利率決策和市場降息預期的修正。'},
+     long:{icon:'⛅',label:'多雲時晴',period:'長期（3個月+）',color:'var(--text)',why:'黃金長期報酬難以預測，通膨和地緣政治是最大支撐，但金礦商的生產成本也在上升，淨利潤空間受壓。',watch:'長期觀察全球央行黃金儲備增持趨勢（這是近年金價的關鍵支撐）。'},
+   },
+   impacts:[
+     {icon:'🌍',label:'大環境',badge:'偏正向',cls:'green',why:'地緣政治風險上升和降息預期讓黃金需求增加。全球央行持續增持黃金儲備，是近年金價最重要的支撐力量。',watch:'觀察全球央行黃金採購數量（世界黃金協會月度數據）'},
+     {icon:'🏭',label:'貴金屬採礦',badge:'偏強',cls:'green',why:'金價上漲對金礦商的獲利有槓桿放大效果。Barrick 是全球第二大金礦商，成本控制能力強，金價高位時獲利大幅提升。',watch:'觀察金礦商的全維持成本（AISC）和金價的差距'},
+     {icon:'🏢',label:'公司基本面',badge:'持續觀察',cls:'yellow',why:'Barrick 的生產量近年持平，需要透過新礦山開發或收購來維持成長，執行風險較高。',watch:'觀察 Barrick 主要礦山的產量指引和成本控制'},
+     {icon:'⚠️',label:'風險',badge:'中等偏高',cls:'yellow',why:'金礦商的獲利高度依賴金價，若地緣政治緩和或美元走強，金價可能快速下跌，金礦股跌幅可能是金價的 2–3 倍。',watch:'注意美元指數走勢和地緣政治局勢的緩和跡象'},
+   ],
    ai:'黃金礦商的槓桿效果讓它在金價上漲時表現更好，但也因為生產成本固定，金價下跌時虧損更大。適合對黃金看多又想放大報酬的投資人。'},
 ];
 
@@ -771,104 +1694,152 @@ const INDUSTRIES = [
     id:'科技', icon:'💻', color:'#FACC15',
     desc:'AI、半導體、雲端運算等科技類股為本波市場主角，但估值普遍偏高。',
     trend:'+18.4%', ytd:'今年來', momentum:'偏強',
+    risk:{score:72,label:'偏高風險',color:'orange'},
     bars:[{l:'一月',v:60,c:'up'},{l:'二月',v:55,c:'dn'},{l:'三月',v:75,c:'up'},{l:'四月',v:80,c:'up'},{l:'五月',v:90,c:'up'}],
     stats:[{val:'+18.4%',lbl:'今年報酬',c:'green'},{val:'偏熱',lbl:'市場溫度',c:'orange'},{val:'偏強',lbl:'動能',c:'green'}],
+    weather:{
+      short:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'短期 AI 訂單能見度高，市場情緒正向，但漲多後短線可能有獲利了結賣壓，建議留意個股高低點。',watch:'注意 NVIDIA 法說會、台積電月營收、各雲端業者資本支出公告'},
+      mid:{icon:'⛅',label:'多雲時晴',color:'var(--text)',detail:'Q2 財報季來臨，市場等待業績驗證高估值是否合理。若財測普遍達標，科技股有再漲空間；若出現財測不如預期，修正幅度可能較大。',watch:'關注 NVIDIA、MSFT、META、GOOGL 財報中的業績指引'},
+      long:{icon:'☀️',label:'晴朗',color:'var(--green)',detail:'AI 基礎設施建設是未來 5 年不可逆的趨勢，科技業的長期成長確定性在各產業中最高。但估值泡沫化是長期最大風險，需要業績不斷驗證。',watch:'長期觀察 AI 商業化進展和科技股整體本益比走勢'},
+    },
     news:[
-      {tag:'AI 算力',title:'NVIDIA H200 訂單持續爆滿，台積電先進製程滿載',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'雲端運算',title:'AWS、Azure、GCP 三大雲端 Q1 成長均超預期',meta:'產業消息 · 偏正向',tagc:'green'},
-      {tag:'風險',title:'AI 估值泡沫討論升溫，部分法人開始減碼科技股',meta:'注意事項 · 中性',tagc:'yellow'},
-      {tag:'半導體',title:'CoWoS 封裝產能緊張，台積電持續擴廠',meta:'供應鏈 · 偏正向',tagc:'green'},
+      {tag:'AI 算力',tagc:'green',title:'NVIDIA H200/B200 訂單爆滿，台積電 CoWoS 封裝產能全面滿載',detail:'大型雲端業者（Microsoft、Google、Meta、Amazon）今年合計 AI 資本支出超過 2000 億美元，帶動 NVIDIA GPU 和台積電先進製程訂單全面爆滿，CoWoS 先進封裝產能緊張問題延伸至 2025 年底。',impact:'偏正向'},
+      {tag:'雲端運算',tagc:'green',title:'AWS、Azure、GCP 三大雲端業者 Q1 AI 業務加速成長',detail:'Azure（+31%）、AWS（+17%）、GCP（+28%）三大雲端平台的 AI 工作負載需求超出市場預期，業者紛紛上調全年 AI 資本支出指引，確認 AI 算力需求的真實性。',impact:'偏正向'},
+      {tag:'估值警訊',tagc:'yellow',title:'AI 估值泡沫討論升溫，部分法人調降科技股評等',detail:'多家知名基金（包括橡樹資本）警告 AI 相關股票的估值已達到泡沫化邊緣，NVIDIA 本益比超過 35 倍、部分 AI 概念股超過 50 倍。歷史上類似情況（2000 年網路泡沫）最終都以大幅修正告終。',impact:'需注意'},
+      {tag:'半導體',tagc:'green',title:'台積電 2nm 製程量產進度超前，蘋果率先採用',detail:'台積電 2nm 製程量產時程提前至 2025 年底，Apple A20 系列晶片率先採用，下一步 1.4nm（A16）計畫也已啟動。台灣半導體在先進製程的領先地位再度確認。',impact:'偏正向'},
     ]
   },
   {
     id:'金融', icon:'🏦', color:'#60A5FA',
     desc:'高利率維持時間較長，支撐銀行淨利差，但商業房地產風險仍受關注。',
     trend:'+8.2%', ytd:'今年來', momentum:'穩定',
+    risk:{score:45,label:'中等風險',color:'yellow'},
     bars:[{l:'一月',v:50,c:'up'},{l:'二月',v:55,c:'up'},{l:'三月',v:52,c:'dn'},{l:'四月',v:58,c:'up'},{l:'五月',v:62,c:'up'}],
     stats:[{val:'+8.2%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'穩定',lbl:'動能',c:'neutral'}],
+    weather:{
+      short:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'短期高利率繼續支撐銀行淨利差，信用卡和消費貸款表現穩健。支付股（Visa、Mastercard）受惠全球消費持續。',watch:'注意本週 CPI 數據和 Fed 官員發言，影響降息預期'},
+      mid:{icon:'⛅',label:'多雲時晴',color:'var(--text)',detail:'IPO 和 M&A 市場逐步回溫對投資銀行（GS、MS）有利，但商業房地產的潛在呆帳壓力讓市場保持警惕。降息預期若升溫，銀行股估值可能承壓。',watch:'關注商業房地產貸款違約率和 IPO 市場活躍度'},
+      long:{icon:'⛅',label:'多雲時晴',color:'var(--text)',detail:'降息週期開始後，銀行股的淨利息收入將承壓，但業務多元化（財富管理、投資銀行）能部分緩解。支付股（Visa、Mastercard）的長期成長邏輯不受影響。',watch:'長期觀察數位支付滲透率和銀行業數位轉型成效'},
+    },
     news:[
-      {tag:'銀行業',title:'Fed 維持利率不變，銀行淨利差持續受惠高利率',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'支付',title:'Visa、Mastercard 跨境交易量持續成長',meta:'產業消息 · 偏正向',tagc:'green'},
-      {tag:'風險',title:'商業房地產貸款違約率微升，銀行業備受關注',meta:'注意事項 · 中性',tagc:'yellow'},
-      {tag:'保險',title:'自然災害理賠增加，保險公司準備金上調',meta:'產業消息 · 中性',tagc:'neutral'},
+      {tag:'利率',tagc:'green',title:'Fed 維持高利率，銀行業淨利差維持歷史高位',detail:'美國聯準會維持聯邦基金利率在 5.25–5.5%，JPMorgan、Bank of America 等大型銀行的淨利息收入（NII）維持在歷史高水位。每次降息 25 基點，JPM 年 NII 約減少 10 億美元，因此降息前是銀行股的甜蜜期。',impact:'偏正向'},
+      {tag:'支付',tagc:'green',title:'Visa、Mastercard 跨境消費量創歷史新高',detail:'全球旅遊完全復甦後，跨境支付金額年增超過 15%，帶動 Visa 和 Mastercard 的跨境手續費收入大幅成長。這個類別的毛利率最高（約 50%），是兩家公司獲利成長的最大引擎。',impact:'偏正向'},
+      {tag:'風險',tagc:'orange',title:'商業房地產貸款違約率微幅上升，銀行業備受審視',detail:'美國辦公室空置率達 20% 歷史新高，部分商業房地產業主無法再融資而選擇違約。JPM、BAC 等大型銀行的商業房地產貸款佔總放款約 5–8%，規模可控；但中小型地區銀行曝險比例更高，可能出現個別破產風險。',impact:'需注意'},
+      {tag:'AI 金融',tagc:'green',title:'大型銀行積極導入 AI，效率提升降低人力成本',detail:'JPMorgan 已將 AI 應用在貸款審核、反詐欺和投資建議等領域，預計 AI 每年為其節省超過 15 億美元的運營成本。Goldman Sachs 也宣布 AI 代碼生成工具讓開發效率提升 40%。',impact:'偏正向'},
     ]
   },
   {
     id:'能源', icon:'⚡', color:'#FB923C',
-    desc:'地緣政治支撐油價，AI 用電需求推升電力股，再生能源長期趨勢明確。',
+    desc:'地緣政治支撐傳統油價，AI 用電需求帶動電力股，再生能源長期趨勢不可逆。',
     trend:'+5.6%', ytd:'今年來', momentum:'中性',
+    risk:{score:55,label:'中等偏高',color:'orange'},
     bars:[{l:'一月',v:60,c:'up'},{l:'二月',v:65,c:'up'},{l:'三月',v:58,c:'dn'},{l:'四月',v:55,c:'dn'},{l:'五月',v:62,c:'up'}],
     stats:[{val:'+5.6%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'中性',lbl:'動能',c:'neutral'}],
+    weather:{
+      short:{icon:'⛅',label:'多雲',color:'var(--text)',detail:'油價受地緣政治情緒支撐，但方向不明確。電力股（NEE、FSLR）在 AI 用電需求帶動下持續走強，形成能源板塊內部的分化行情。',watch:'注意 OPEC+ 會議、中東局勢和美國原油庫存週報'},
+      mid:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'夏季用電旺季帶動電力需求，再生能源業者有望出現正面業績驚喜。傳統油氣股視油價走向而定，難有確定方向。',watch:'關注夏季電力需求峰值數據和天然氣庫存'},
+      long:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'能源板塊長期分化：再生能源（電力、太陽能）受惠 AI 用電需求和政策支持，長期看好；傳統石油業面臨需求見頂壓力，長期估值承壓。',watch:'長期觀察全球電動車滲透率和 AI 資料中心電力需求成長'},
+    },
     news:[
-      {tag:'電力',title:'AI 資料中心用電需求年增 40%，電力股強勢補漲',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'石油',title:'OPEC+ 維持減產，布蘭特原油維持 80 美元以上',meta:'產業消息 · 偏正向',tagc:'green'},
-      {tag:'再生能源',title:'太陽能板成本持續下降，裝機量創新高',meta:'長期趨勢 · 偏正向',tagc:'green'},
-      {tag:'風險',title:'能源轉型加速，傳統石化業長期面臨需求萎縮壓力',meta:'注意事項 · 中性',tagc:'yellow'},
+      {tag:'AI 用電',tagc:'green',title:'AI 資料中心電力需求年增 40%，電力股成最大意外受益者',detail:'全球 AI 資料中心的電力消耗預計從 2024 年的 200TWh 增長到 2030 年的 1000TWh，相當於新增日本全國用電量。NextEra、Vistra 等電力公司股價大幅上漲，成為 AI 概念股的意外受惠者。',impact:'偏正向'},
+      {tag:'石油',tagc:'green',title:'OPEC+ 維持減產協議，布蘭特油價守住 80 美元',detail:'OPEC+ 在最新會議中決定延續減產協議至 2025 年底，支撐布蘭特原油維持在 80–85 美元區間。沙烏地阿拉伯明確表示願意捍衛 80 美元底線，對 ExxonMobil、Chevron 等傳統油氣公司短期業績有支撐。',impact:'偏正向'},
+      {tag:'太陽能',tagc:'green',title:'美國製造太陽能板受 IRA 補貼帶動，裝機量創新高',detail:'《通膨削減法案》（IRA）對美國製造太陽能設備提供每瓦 0.03 美元的生產稅收抵免，讓 First Solar 的生產成本優勢擴大。2024 年美國太陽能裝機量創歷史新高，First Solar 訂單已排至 2027 年。',impact:'偏正向'},
+      {tag:'風險',tagc:'orange',title:'能源轉型加速，傳統石化業長期需求見頂論升溫',detail:'國際能源署（IEA）最新報告指出，全球石油需求可能在 2030 年前後觸頂，主要驅動因素是電動車普及和能源效率提升。長期持有傳統石油股的投資人需要評估這個「需求見頂」的結構性風險。',impact:'需注意'},
     ]
   },
   {
     id:'醫療', icon:'🏥', color:'#34D399',
-    desc:'GLP-1 減重藥引領產業革命，AI 加速藥物研發，防禦性特質受景氣衰退型投資人青睞。',
+    desc:'GLP-1 減重藥引領產業革命，AI 加速藥物研發，防禦性特質吸引保守型投資人。',
     trend:'+11.3%', ytd:'今年來', momentum:'偏強',
+    risk:{score:42,label:'中等偏低',color:'yellow'},
     bars:[{l:'一月',v:55,c:'up'},{l:'二月',v:60,c:'up'},{l:'三月',v:68,c:'up'},{l:'四月',v:72,c:'up'},{l:'五月',v:78,c:'up'}],
     stats:[{val:'+11.3%',lbl:'今年報酬',c:'green'},{val:'偏熱',lbl:'市場溫度',c:'orange'},{val:'偏強',lbl:'動能',c:'green'}],
+    weather:{
+      short:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'GLP-1 概念股（LLY、NVO）持續強勢，防禦型醫療股（JNJ、ABBV）在市場波動時提供避風港。短線 FDA 審批動態是最大催化劑。',watch:'注意本週 FDA 藥物審批日程和重要醫學期刊的臨床試驗數據'},
+      mid:{icon:'☀️',label:'晴朗',color:'var(--green)',detail:'GLP-1 新適應症（心臟病、腎病）陸續獲批，擴大潛在市場。AI 輔助藥物研發成果開始落地，多個新藥進入臨床試驗。ABBV 轉型成果逐步兌現。',watch:'關注 LLY 和 NVO 的季度銷售數據和新適應症審批進度'},
+      long:{icon:'☀️',label:'晴朗',color:'var(--green)',detail:'全球人口老齡化是醫療業長期最確定的成長驅動力，GLP-1 市場規模預計 2030 年達 1500 億美元。AI 藥物研發可能大幅縮短新藥上市週期，整個行業效率提升。',watch:'長期觀察 AI 藥物研發成果和全球人均醫療支出成長趨勢'},
+    },
     news:[
-      {tag:'GLP-1',title:'Eli Lilly GLP-1 藥物全球需求供不應求，產能持續擴建',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'AI 醫療',title:'AI 輔助診斷與新藥研發效率提升，縮短臨床試驗時程',meta:'長期趨勢 · 偏正向',tagc:'green'},
-      {tag:'法規',title:'FDA 審藥時程縮短，有利新藥加速上市',meta:'產業消息 · 偏正向',tagc:'green'},
-      {tag:'專利',title:'多款暢銷藥物即將面臨專利懸崖，學名藥競爭壓力升',meta:'注意事項 · 中性',tagc:'yellow'},
+      {tag:'GLP-1',tagc:'green',title:'GLP-1 減重藥適應症擴大：心臟病、腎臟病療效獲確認',detail:'Eli Lilly 的 Tirzepatide（Mounjaro/Zepbound）最新研究顯示，除減重外，對第二型糖尿病、心血管疾病、慢性腎臟病均有顯著改善效果。此一「萬能藥」特性讓市場預估 GLP-1 潛在市場從原來的 700 億美元上調至 1500 億美元。',impact:'偏正向'},
+      {tag:'AI 研發',tagc:'green',title:'AI 輔助藥物研發縮短臨床試驗時程，多個新藥提前上市',detail:'Recursion Pharmaceuticals、Insilico Medicine 等 AI 藥物研發公司的技術正被大型製藥公司採用，預計 AI 能將新藥研發週期從平均 12 年縮短至 7–8 年，大幅降低研發成本。輝瑞、諾華、羅氏均已與 AI 公司簽訂合作協議。',impact:'偏正向'},
+      {tag:'轉型',tagc:'green',title:'AbbVie 轉型成功：Skyrizi+Rinvoq 銷售超越 Humira 高峰',detail:'AbbVie 的 Skyrizi 和 Rinvoq 合計季度銷售已達 55 億美元，超越 Humira 巔峰時期的 52 億美元。這是製藥業少見的「成功跨越專利懸崖」案例，投資人信心大幅提升，股價創歷史新高。',impact:'偏正向'},
+      {tag:'風險',tagc:'yellow',title:'多款大型藥物面臨專利到期，仿製藥競爭壓力浮現',detail:'未來 3 年有超過 2000 億美元市場規模的專利藥物將面臨學名藥競爭，包括 AstraZeneca 的 Farxiga、默克的 Keytruda（2028 年）等。這對相關公司的收入結構是重大挑戰，需要密切追蹤各公司的新產品填補計畫。',impact:'需注意'},
     ]
   },
   {
     id:'消費', icon:'🛍', color:'#A78BFA',
-    desc:'高通膨壓縮消費能力，但科技業就業市場強韌支撐中高端消費。',
+    desc:'消費市場出現分化：必需消費（食品、日用品）穩健，可選消費（服裝、家居）受高利率壓抑。',
     trend:'+4.1%', ytd:'今年來', momentum:'中性',
+    risk:{score:50,label:'中等風險',color:'yellow'},
     bars:[{l:'一月',v:55,c:'up'},{l:'二月',v:52,c:'dn'},{l:'三月',v:50,c:'dn'},{l:'四月',v:55,c:'up'},{l:'五月',v:58,c:'up'}],
     stats:[{val:'+4.1%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'中性',lbl:'動能',c:'neutral'}],
+    weather:{
+      short:{icon:'⛅',label:'多雲',color:'var(--text)',detail:'必需消費（WMT、PG、KO）短線穩健，可選消費（NKE、HD、SBUX）持續承壓。整體板塊短線無明顯方向，個股分化是主要特徵。',watch:'注意本週零售銷售數據和消費者信心調查結果'},
+      mid:{icon:'⛅',label:'多雲時晴',color:'var(--text)',detail:'若降息預期升溫，可選消費股有望出現反彈，因為消費者貸款成本下降、購買力改善。必需消費股則提供穩定的基本盤。',watch:'關注 Fed 降息時間表，這是可選消費反彈的最大催化劑'},
+      long:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'降息後消費環境將明顯改善，可選消費板塊的反彈力道可能超過必需消費。長期看，全球新興市場中產階級成長是消費板塊最確定的長期機會。',watch:'長期觀察全球中產階級人口成長（尤其是印度、東南亞）和品牌在新興市場的滲透率'},
+    },
     news:[
-      {tag:'零售',title:'Costco 等折扣零售商受惠通膨，市占率持續提升',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'品牌',title:'Nike 庫存修正接近尾聲，轉型進度受市場關注',meta:'產業消息 · 中性',tagc:'neutral'},
-      {tag:'餐飲',title:'Starbucks 新 CEO 轉型計畫獲市場初步認可',meta:'公司消息 · 中性',tagc:'neutral'},
-      {tag:'風險',title:'消費信貸違約率上升，低收入族群消費力承壓',meta:'注意事項 · 偏負向',tagc:'orange'},
+      {tag:'消費降級',tagc:'yellow',title:'美國消費者明顯分化：高收入族群持續消費，低收入承壓',detail:'最新數據顯示，美國年收入 10 萬美元以上族群的消費支出維持強勁，但年收入 4 萬美元以下族群的消費力明顯下滑，快餐和折扣零售受惠，精品和可選消費承壓。這個趨勢對 Walmart、Costco 有利，對 Target、Nike 不利。',impact:'分化'},
+      {tag:'零售轉型',tagc:'green',title:'Walmart 廣告業務爆發式成長，改變零售獲利模式',detail:'Walmart Connect（廣告業務）季度收入超過 8 億美元，年增 30%，毛利率超過 70%，遠高於核心零售業務的 25%。Walmart 正在複製 Amazon 的廣告模式，未來廣告收入有望成為最重要的利潤來源。',impact:'偏正向'},
+      {tag:'品牌壓力',tagc:'orange',title:'Nike 和 Starbucks 面臨中國市場持續疲弱和品牌策略困境',detail:'Nike 中國同店銷售連續三季下滑，面臨安踏、李寧本土品牌強力競爭；Starbucks 中國同店銷售跌幅擴大，面臨瑞幸咖啡低價衝擊。兩者都在進行管理層改組和品牌策略調整，但轉型效果需要時間驗證。',impact:'需注意'},
+      {tag:'房市連動',tagc:'orange',title:'高利率壓制房市，Home Depot 同店銷售連續負成長',detail:'美國成屋銷售量跌至 30 年新低，「利率鎖定效應」讓屋主不願放棄低利率房貸賣房，導致家居改造需求大幅下滑。Home Depot 同店銷售已連續四季負成長，降息是最關鍵的反轉催化劑。',impact:'需注意'},
     ]
   },
   {
     id:'ETF', icon:'📦', color:'#34D399',
-    desc:'被動投資持續吸引資金，各類主題 ETF 快速成長。',
+    desc:'被動投資持續吸引資金，各類主題 ETF 快速成長，費用率持續下降。',
     trend:'+9.8%', ytd:'今年來', momentum:'穩定',
+    risk:{score:35,label:'中等偏低',color:'yellow'},
     bars:[{l:'一月',v:55,c:'up'},{l:'二月',v:58,c:'up'},{l:'三月',v:62,c:'up'},{l:'四月',v:65,c:'up'},{l:'五月',v:70,c:'up'}],
     stats:[{val:'+9.8%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'穩定',lbl:'動能',c:'green'}],
+    weather:{
+      short:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'資金持續流入被動型 ETF，整體市場氣氛支撐 ETF 走勢。短線跟隨指數，無獨立行情。',watch:'注意指數成分股（台積電、Apple 等）的短線走勢'},
+      mid:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'定期定額的資金流入讓 ETF 具備穩健基盤，財報季若指數成分股業績普遍達標，ETF 中期走勢正面。',watch:'關注指數成分股整體業績表現'},
+      long:{icon:'☀️',label:'晴朗',color:'var(--green)',detail:'被動投資是長期最具成本效益的投資方式，長期持有各類指數型 ETF 是多數研究推薦的核心策略。',watch:'長期觀察全球股票市場長期回報率和 ETF 費用率走勢'},
+    },
     news:[
-      {tag:'台灣 ETF',title:'台灣 ETF 資產規模突破 4 兆，散戶投資主流工具',meta:'市場消息 · 中性',tagc:'neutral'},
-      {tag:'主動 ETF',title:'主動型 ETF 崛起，挑戰傳統指數型產品',meta:'產業趨勢 · 中性',tagc:'neutral'},
-      {tag:'AI ETF',title:'AI 主題 ETF 吸金力強，多檔今年報酬逾 20%',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'費用率',title:'各大 ETF 業者持續降費，投資人成本持續下降',meta:'長期趨勢 · 偏正向',tagc:'green'},
+      {tag:'台灣 ETF',tagc:'neutral',title:'台灣 ETF 資產規模突破 4 兆新台幣，成散戶主流工具',detail:'台灣 ETF 總資產規模突破 4 兆元，其中 0050、0056、00878 三檔合計佔近一半。平均每月定期定額投資人超過 200 萬人，ETF 已取代個股成為台灣散戶的主要投資工具。',impact:'中性'},
+      {tag:'AI ETF',tagc:'green',title:'AI 主題 ETF 今年報酬超過 20%，吸引大量資金流入',detail:'追蹤 AI 相關股票的主題型 ETF（如 BOTZ、ROBO）今年平均報酬超過 20%，遠超大盤。但主題型 ETF 通常費用率較高（0.5–0.7%），且集中度高，投資人需注意輪動風險。',impact:'偏正向'},
+      {tag:'費用戰',tagc:'green',title:'Vanguard、BlackRock 持續降費，ETF 費用率創歷史新低',detail:'全球最大 ETF 業者 Vanguard 再度調降多檔旗艦 ETF 費用率，SPY 的費用率已降至 0.0945%，VTI 更低至 0.03%。費用率持續下降讓長期複利效果顯著改善，投資人受益。',impact:'偏正向'},
+      {tag:'主動 ETF',tagc:'neutral',title:'主動管理 ETF 崛起，挑戰傳統被動指數產品',detail:'Ark Invest、JP Morgan 等推出的主動管理 ETF 近年快速成長，結合 ETF 的稅務效率和主動選股的超額報酬潛力。但主動 ETF 費用率通常是被動 ETF 的 5–10 倍，且長期打敗指數的比例仍不到 20%。',impact:'中性'},
     ]
   },
   {
     id:'原物料', icon:'🪨', color:'#FCD34D',
-    desc:'黃金受地緣政治與降息預期雙重支撐，銅受惠電動車與電網建設需求。',
+    desc:'黃金受地緣政治與央行買盤雙重支撐，銅受惠能源轉型和 AI 電網需求。',
     trend:'+12.7%', ytd:'今年來', momentum:'偏強',
+    risk:{score:62,label:'中高風險',color:'orange'},
     bars:[{l:'一月',v:50,c:'up'},{l:'二月',v:55,c:'up'},{l:'三月',v:62,c:'up'},{l:'四月',v:70,c:'up'},{l:'五月',v:75,c:'up'}],
     stats:[{val:'+12.7%',lbl:'今年報酬',c:'green'},{val:'偏熱',lbl:'市場溫度',c:'orange'},{val:'偏強',lbl:'動能',c:'green'}],
+    weather:{
+      short:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'地緣政治不確定性維持，黃金短線有支撐。銅受 AI 用電和電動車需求帶動，短線偏強。整體原物料板塊因大宗商品需求不確定而略有分化。',watch:'注意中東局勢、美元指數和中國製造業 PMI'},
+      mid:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'若降息預期升溫，黃金的持有機會成本下降，金價有機會進一步上漲。銅的中期走勢取決於中國工業景氣和電動車產業需求。',watch:'關注 Fed 降息時程和中國工業生產數據'},
+      long:{icon:'⛅',label:'多雲時晴',color:'var(--text)',detail:'長期而言，能源轉型（電動車、太陽能、電網）對銅、鋰、稀土的需求是確定性最高的原物料機會。黃金的長期表現則取決於通膨走向和法幣信用。',watch:'長期觀察電動車滲透率和可再生能源裝機量對各類金屬的需求影響'},
+    },
     news:[
-      {tag:'黃金',title:'黃金突破 2400 美元創歷史新高，避險需求旺盛',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'銅',title:'電動車與電網建設帶動銅需求，供給端受限',meta:'產業消息 · 偏正向',tagc:'green'},
-      {tag:'稀土',title:'中國稀土出口管制升級，科技供應鏈面臨新風險',meta:'注意事項 · 偏負向',tagc:'orange'},
-      {tag:'鋼鐵',title:'中國鋼鐵產能過剩問題持續，鋼價承壓',meta:'市場消息 · 中性',tagc:'neutral'},
+      {tag:'黃金',tagc:'green',title:'黃金突破 2400 美元歷史新高，央行買盤是最大推手',detail:'黃金突破 2400 美元，創歷史新高。傳統的黃金驅動因素（降息預期、美元走弱）之外，全球央行的持續買金是這波上漲最大的新動力——2023 年全球央行淨購金超過 1000 噸，中國、土耳其、印度等新興市場央行大幅增持黃金儲備，以分散美元風險。',impact:'偏正向'},
+      {tag:'銅',tagc:'green',title:'銅價漲至 10 年高點，AI 電網建設需求意外成新驅動力',detail:'除了傳統的電動車需求外，AI 資料中心建設需要大量銅纜和電網升級，成為銅需求的新亮點。同時，全球礦山供給成長有限（主要礦山老化、新礦開發週期長達 10 年），供需缺口可能擴大。',impact:'偏正向'},
+      {tag:'稀土',tagc:'orange',title:'中國擴大稀土和半導體設備出口管制，科技供應鏈受衝擊',detail:'中國宣布進一步限制鍺、鎵、石墨等關鍵礦產的出口，這些材料是製造半導體、電動車電池和武器系統的必要原料。中國控制全球約 60% 的稀土供應，短期內找不到替代來源，科技業面臨成本上升壓力。',impact:'需注意'},
+      {tag:'鋼鐵',tagc:'neutral',title:'中國鋼鐵產能過剩出口增加，全球鋼價承壓',detail:'中國鋼鐵行業面臨國內房地產需求萎縮，大量低價鋼材出口到全球市場，壓低了國際鋼材價格。歐盟和美國已對中國鋼材加徵反傾銷關稅，但效果有限。對台灣的中鋼和日韓鋼廠形成競爭壓力。',impact:'需注意'},
     ]
   },
   {
     id:'房地產', icon:'🏢', color:'#60A5FA',
     desc:'高利率壓力使傳統 REIT 承壓，但資料中心 REIT 受 AI 需求帶動表現突出。',
     trend:'-2.3%', ytd:'今年來', momentum:'偏弱',
+    risk:{score:58,label:'中等偏高',color:'orange'},
     bars:[{l:'一月',v:55,c:'dn'},{l:'二月',v:50,c:'dn'},{l:'三月',v:48,c:'dn'},{l:'四月',v:52,c:'up'},{l:'五月',v:55,c:'up'}],
     stats:[{val:'-2.3%',lbl:'今年報酬',c:'red'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'偏弱',lbl:'動能',c:'orange'}],
+    weather:{
+      short:{icon:'🌥',label:'偏陰',color:'var(--sub)',detail:'高利率持續壓制 REIT 估值，辦公室和傳統零售 REIT 最弱；資料中心 REIT（AMT 等）表現相對突出。整體板塊短線動能偏弱。',watch:'注意 10 年期美債殖利率，這是 REIT 估值最重要的參考基準'},
+      mid:{icon:'⛅',label:'多雲',color:'var(--text)',detail:'若降息預期明確升溫，REIT 有機會提前反彈（市場往往提前反映降息）。辦公室 REIT 問題結構性，不會因降息而自動解決。資料中心 REIT 中期最強。',watch:'關注 Fed 下次利率決策聲明中的降息暗示'},
+      long:{icon:'🌤',label:'微晴',color:'var(--yellow)',detail:'降息後 REIT 整體將受惠，但分化趨勢持續：資料中心、醫療保健 REIT 長期最看好；辦公室 REIT 長期結構惡化，遠端工作趨勢不可逆。',watch:'長期觀察遠端工作趨勢、AI 資料中心建設進度和降息週期的起始時間'},
+    },
     news:[
-      {tag:'資料中心',title:'資料中心 REIT 受 AI 帶動，與傳統 REIT 走勢分化',meta:'市場影響 · 偏正向',tagc:'green'},
-      {tag:'辦公室',title:'混合辦公模式持續，辦公室 REIT 空置率維持高位',meta:'產業消息 · 偏負向',tagc:'orange'},
-      {tag:'利率',title:'利率維持高位，REIT 融資成本持續承壓',meta:'注意事項 · 偏負向',tagc:'orange'},
-      {tag:'住宅',title:'美國住宅供給不足，住宅 REIT 基本面相對穩健',meta:'市場消息 · 中性',tagc:'neutral'},
+      {tag:'資料中心',tagc:'green',title:'AI 帶動資料中心 REIT 創歷史新高，與傳統 REIT 走勢嚴重分化',detail:'Equinix（EQIX）、Digital Realty（DLR）等資料中心 REIT 今年漲幅超過 20%，與傳統辦公室 REIT 的 -15% 形成鮮明對比。AI 訓練和推理所需的算力直接推動資料中心租賃需求暴增，租金年增超過 30%。',impact:'偏正向'},
+      {tag:'辦公室',tagc:'orange',title:'美國辦公室空置率創 30 年新高，多個城市核心區塊面臨違約潮',detail:'美國辦公室空置率達 19.8%，逼近 30 年最高水位。舊金山、紐約等主要城市的 B 級辦公室空置率超過 25%，部分業主已無法支付貸款而宣告違約。Brookfield、PIMCO 等機構已對部分辦公室資產「斷頭還債」。',impact:'需注意'},
+      {tag:'利率',tagc:'orange',title:'REIT 融資成本攀升，多家業者削減股息或暫停擴張計畫',detail:'高利率讓 REIT 的借款成本從 2021 年的 3% 上升至目前的 6–7%，嚴重壓縮利潤率。部分負債率高的 REIT 已宣布削減股息，市場對 REIT 的定期配息能力產生疑慮。降息才能根本解決這個問題。',impact:'需注意'},
+      {tag:'住宅',tagc:'neutral',title:'美國住宅供給嚴重不足，住宅 REIT 逆勢受惠',detail:'由於高利率讓新建案開工量大減，加上現有屋主不願賣房（鎖定在低利率），美國住宅供給維持歷史低位，租金持續上漲。這對住宅 REIT（如 Invitation Homes、Essex Property）有利，提供相對穩定的租金收入。',impact:'偏正向'},
     ]
   },
 ];
@@ -877,9 +1848,10 @@ const INDUSTRIES = [
 //  STATE
 // ══════════════════════════════════════════════
 let currentTab = 'market';
-let prevTab = 'watchlist';
+let prevTab = 'search';
 let watchlist = ['2330','0050','TSLA','NVDA']; // default
 let currentInd = '科技';
+let browsing = '科技'; // default browse industry on search page
 
 // ══════════════════════════════════════════════
 //  TAB NAVIGATION
@@ -895,7 +1867,19 @@ function switchTab(tab) {
   document.getElementById('tab-' + tab).classList.add('active');
   window.scrollTo(0,0);
   if (tab === 'watchlist') renderWatchlist();
+  if (tab === 'search') renderBrowse(browsing);
   if (tab === 'industries') renderIndustries();
+}
+
+// ══════════════════════════════════════════════
+//  VIX MODAL
+// ══════════════════════════════════════════════
+function showVixModal() {
+  const m = document.getElementById('vix-modal');
+  m.style.display = 'flex';
+}
+function hideVixModal() {
+  document.getElementById('vix-modal').style.display = 'none';
 }
 
 function showDetail(stockId) {
@@ -929,11 +1913,33 @@ function showDetail(stockId) {
     </div>`).join('');
 
   const badgeMap = {green:'bg-green',yellow:'bg-yellow',orange:'bg-orange',red:'bg-red',neutral:'bg-neutral'};
-  const impactsHtml = s.impacts.map(([label,val,c])=>`
-    <div class="impact-row">
-      <div class="impact-left"><span class="impact-icon">${label.split(' ')[0]}</span>${label.split(' ').slice(1).join(' ')}</div>
-      <span class="badge ${badgeMap[c]||'bg-neutral'}">${val}</span>
-    </div>`).join('');
+
+  // Weather forecast cards
+  const wxHtml = s.weather ? `
+    <div class="card">
+      <div class="st">天氣預報</div>
+      <div class="wx-forecast">
+        ${['short','mid','long'].map(p=>{
+          const w = s.weather[p];
+          return `<div class="wx-card" onclick="showWeatherDetail('${s.id}','${p}')">
+            <div class="wx-period">${w.period}</div>
+            <div class="wx-big">${w.icon}</div>
+            <div class="wx-lbl" style="color:${w.color}">${w.label}</div>
+            <div class="wx-arrow">點擊了解 ›</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  // Clickable impact rows
+  const impactsHtml = s.impacts ? s.impacts.map((imp,i)=>`
+    <div class="impact-row" style="cursor:pointer" onclick="showImpactDetail('${s.id}',${i})">
+      <div class="impact-left"><span class="impact-icon">${imp.icon}</span>${imp.label}</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="badge ${badgeMap[imp.cls]||'bg-neutral'}">${imp.badge}</span>
+        <span style="color:var(--sub);font-size:14px">›</span>
+      </div>
+    </div>`).join('') : '';
 
   const watchBtn = watchlist.includes(s.id)
     ? `<button onclick="removeFromWatchlist('${s.id}')" style="background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;width:100%">－ 移除追蹤</button>`
@@ -952,8 +1958,9 @@ function showDetail(stockId) {
       </div>
       <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px"><span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span></div>
     </div>
+    ${wxHtml}
     <div class="card"><div class="st">走勢故事線</div>${periodsHtml}</div>
-    <div class="card"><div class="st">影響來源拆解</div>${impactsHtml}</div>
+    <div class="card"><div class="st">影響來源拆解 <span style="font-size:10px;color:var(--sub);font-weight:400;margin-left:4px">點擊查看詳細說明</span></div>${impactsHtml}</div>
     <div class="card-gold">
       <div class="st">AI 白話結論</div>
       <div style="font-size:14px;line-height:1.7">${s.ai}</div>
@@ -976,6 +1983,7 @@ function hideDetail() {
 function addToWatchlist(id) {
   if (!watchlist.includes(id)) watchlist.push(id);
   renderWatchlist();
+  if (currentTab === 'portfolio') renderPortfolio();
   const btn = document.querySelector('#d-content button');
   if (btn) {
     btn.textContent = '－ 移除追蹤';
@@ -989,6 +1997,7 @@ function addToWatchlist(id) {
 function removeFromWatchlist(id) {
   watchlist = watchlist.filter(x=>x!==id);
   renderWatchlist();
+  if (currentTab === 'portfolio') renderPortfolio();
   const btn = document.querySelector('#d-content button');
   if (btn) {
     btn.textContent = '＋ 加入追蹤';
@@ -1004,7 +2013,7 @@ function renderWatchlist() {
   document.getElementById('wl-count').textContent = `追蹤 ${watchlist.length} 支股票`;
 
   if (watchlist.length === 0) {
-    c.innerHTML = `<div class="sc-empty"><div style="font-size:32px;margin-bottom:10px">📋</div><div style="font-weight:600;margin-bottom:6px">還沒有追蹤股票</div><div style="font-size:12px">搜尋股票並點擊 ＋ 加入追蹤</div></div>`;
+    c.innerHTML = `<div class="sc-empty"><div style="font-size:36px;margin-bottom:12px">🔖</div><div style="font-weight:600;margin-bottom:6px">還沒有追蹤股票</div><div style="font-size:12px;line-height:1.6">到「搜尋」頁找到股票，<br>點擊 ＋ 就能加入這裡</div></div>`;
     return;
   }
 
@@ -1038,14 +2047,67 @@ function renderWatchlist() {
 }
 
 // ══════════════════════════════════════════════
-//  SEARCH
+//  SEARCH PAGE
 // ══════════════════════════════════════════════
+function stockRowHtml(s) {
+  const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
+  const [sl,sc] = statusMap[s.status];
+  const inWl = watchlist.includes(s.id);
+  return `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px">
+      <div style="flex:1;cursor:pointer;min-width:0" onclick="showDetail('${s.id}')">
+        <div style="font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px">${s.id} · ${s.market}</div>
+        <div style="font-size:15px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <span class="badge ${sc}" style="font-size:10px">${sl}</span>
+          <span style="font-size:10px;color:var(--sub)">${s.industry}</span>
+        </div>
+      </div>
+      <button id="wbtn-${s.id}" onclick="toggleWatchlistBtn('${s.id}', this)"
+        style="background:${inWl?'var(--red-dim)':'var(--gold-dim)'};border:1px solid ${inWl?'var(--red)':'var(--gold-border)'};color:${inWl?'var(--red)':'var(--gold)'};border-radius:8px;padding:8px 14px;font-size:15px;font-weight:700;font-family:var(--font);cursor:pointer;flex-shrink:0">
+        ${inWl?'－':'＋'}
+      </button>
+    </div>`;
+}
+
+function toggleWatchlistBtn(id, btn) {
+  if (watchlist.includes(id)) {
+    removeFromWatchlist(id);
+    btn.textContent = '＋';
+    btn.style.background = 'var(--gold-dim)';
+    btn.style.borderColor = 'var(--gold-border)';
+    btn.style.color = 'var(--gold)';
+  } else {
+    addToWatchlist(id);
+    btn.textContent = '－';
+    btn.style.background = 'var(--red-dim)';
+    btn.style.borderColor = 'var(--red)';
+    btn.style.color = 'var(--red)';
+  }
+}
+
+function renderBrowse(industry) {
+  browsing = industry;
+  const allIndustries = [...new Set(STOCKS.map(s=>s.industry))];
+  document.getElementById('browse-chips').innerHTML = allIndustries.map(i=>
+    `<div class="chip ${i===browsing?'active':''}" onclick="renderBrowse('${i}')">${i}</div>`
+  ).join('');
+  const list = STOCKS.filter(s=>s.industry===browsing);
+  document.getElementById('browse-list').innerHTML = list.map(stockRowHtml).join('');
+}
+
 function onSearch(val) {
   const v = val.trim().toLowerCase();
   document.getElementById('clear-btn').style.display = v ? 'block' : 'none';
+  const browse = document.getElementById('search-browse');
   const resultsWrap = document.getElementById('search-results');
 
-  if (!v) { resultsWrap.style.display='none'; return; }
+  if (!v) {
+    resultsWrap.style.display = 'none';
+    browse.style.display = 'block';
+    return;
+  }
+  browse.style.display = 'none';
 
   const matches = STOCKS.filter(s =>
     s.id.toLowerCase().includes(v) ||
@@ -1053,57 +2115,37 @@ function onSearch(val) {
     s.industry.toLowerCase().includes(v)
   );
 
-  const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
-  const riskMap   = {low:['低溫','dot-g'],warm:['中溫','dot-y'],hot:['偏熱','dot-o'],high:['高溫','dot-r']};
+  document.getElementById('search-results-label').textContent =
+    matches.length ? `搜尋結果 (${matches.length})` : '搜尋結果';
 
-  if (matches.length === 0) {
-    document.getElementById('results-list').innerHTML = `<div style="text-align:center;padding:20px;color:var(--sub);font-size:13px">找不到「${val}」的相關股票</div>`;
-  } else {
-    document.getElementById('results-list').innerHTML = matches.map(s=>{
-      const [sl,sc] = statusMap[s.status];
-      const [rl,dc] = riskMap[s.risk];
-      const inWl = watchlist.includes(s.id);
-      return `
-        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px">
-          <div style="flex:1;cursor:pointer" onclick="showDetail('${s.id}')">
-            <div style="font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px">${s.id} · ${s.market}</div>
-            <div style="font-size:15px;font-weight:700;margin-bottom:3px">${s.name}</div>
-            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-              <span class="badge ${sc}" style="font-size:10px">${sl}</span>
-              <span style="font-size:10px;color:var(--sub)">${s.industry}</span>
-            </div>
-          </div>
-          <button onclick="${inWl?`removeFromWatchlist('${s.id}');this.textContent='＋';this.style.background='var(--gold-dim)';this.style.borderColor='var(--gold-border)';this.style.color='var(--gold)'`:
-          `addToWatchlist('${s.id}');this.textContent='✓';this.style.background='var(--green-dim)';this.style.borderColor='var(--green)';this.style.color='var(--green)'`}"
-            style="background:${inWl?'var(--red-dim)':'var(--gold-dim)'};border:1px solid ${inWl?'var(--red)':'var(--gold-border)'};color:${inWl?'var(--red)':'var(--gold)'};border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;flex-shrink:0">
-            ${inWl?'－':'＋'}
-          </button>
-        </div>`;
-    }).join('');
-  }
-  resultsWrap.style.display='block';
+  document.getElementById('results-list').innerHTML = matches.length
+    ? matches.map(stockRowHtml).join('')
+    : `<div style="text-align:center;padding:30px 20px;color:var(--sub);font-size:13px">找不到「${val}」的相關股票</div>`;
+
+  resultsWrap.style.display = 'block';
 }
 
 function clearSearch() {
-  document.getElementById('stock-search').value='';
-  document.getElementById('clear-btn').style.display='none';
-  document.getElementById('search-results').style.display='none';
+  document.getElementById('stock-search').value = '';
+  document.getElementById('clear-btn').style.display = 'none';
+  document.getElementById('search-results').style.display = 'none';
+  document.getElementById('search-browse').style.display = 'block';
+  renderBrowse(browsing);
 }
 
 // ══════════════════════════════════════════════
 //  INDUSTRIES
 // ══════════════════════════════════════════════
 function renderIndustries() {
-  // Chips
   const chipsEl = document.getElementById('ind-chips');
   chipsEl.innerHTML = INDUSTRIES.map(i=>
     `<div class="chip ${i.id===currentInd?'active':''}" onclick="selectIndustry('${i.id}')">${i.icon} ${i.id}</div>`
   ).join('');
 
-  // Content
   const ind = INDUSTRIES.find(i=>i.id===currentInd);
   if (!ind) return;
 
+  // Bar chart
   const barMaxH = 68;
   const maxV = Math.max(...ind.bars.map(b=>b.v));
   const barsHtml = ind.bars.map(b=>{
@@ -1112,6 +2154,7 @@ function renderIndustries() {
     return `<div class="bar-item"><div class="bar" style="height:${h}px;background:${col}"></div><div class="bar-lbl">${b.l}</div></div>`;
   }).join('');
 
+  // Stats
   const statColor = {green:'var(--green)',yellow:'var(--yellow)',orange:'var(--orange)',red:'var(--red)',neutral:'var(--sub)'};
   const statsHtml = ind.stats.map(s=>`
     <div class="ind-stat">
@@ -1119,20 +2162,62 @@ function renderIndustries() {
       <div class="lbl">${s.lbl}</div>
     </div>`).join('');
 
+  // Risk score gauge
+  const riskCol = {green:'var(--green)',yellow:'var(--yellow)',orange:'var(--orange)',red:'var(--red)'}[ind.risk.color] || 'var(--sub)';
+  const riskHtml = ind.risk ? `
+    <div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="st" style="margin-bottom:0">產業風險分數</div>
+        <div style="font-size:13px;font-weight:700;color:${riskCol}">${ind.risk.label}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="flex:1;height:10px;background:var(--border);border-radius:5px;overflow:hidden">
+          <div style="height:100%;width:${ind.risk.score}%;border-radius:5px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange),var(--red))"></div>
+        </div>
+        <div style="font-size:22px;font-weight:800;color:${riskCol};min-width:36px;text-align:right">${ind.risk.score}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:6px">
+        <span>低風險</span><span>中等</span><span>偏高</span><span>高風險</span>
+      </div>
+    </div>` : '';
+
+  // Industry weather
+  const wxHtml = ind.weather ? `
+    <div class="card">
+      <div class="st">產業天氣預報 <span style="font-size:10px;color:var(--sub);font-weight:400;margin-left:4px">點擊查看詳細說明</span></div>
+      <div class="wx-forecast">
+        ${[['short','短期（本週）'],['mid','中期（1個月）'],['long','長期（3個月+）']].map(([k,lbl])=>{
+          const w = ind.weather[k];
+          return `<div class="wx-card" onclick="showIndWeather('${ind.id}','${k}')">
+            <div class="wx-period">${lbl}</div>
+            <div class="wx-big">${w.icon}</div>
+            <div class="wx-lbl" style="color:${w.color}">${w.label}</div>
+            <div class="wx-arrow">點擊了解 ›</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+
+  // Clickable news
   const tagColors = {green:'var(--green)',yellow:'var(--yellow)',orange:'var(--orange)',neutral:'var(--sub)'};
-  const newsHtml = ind.news.map(n=>`
-    <div class="news-item">
-      <div class="news-tag" style="color:${tagColors[n.tagc]||'var(--sub)'}">${n.tag}</div>
+  const impactColors = {'偏正向':'var(--green)','分化':'var(--yellow)','需注意':'var(--orange)','中性':'var(--sub)'};
+  const newsHtml = ind.news.map((n,i)=>`
+    <div class="news-item" onclick="showIndNews('${ind.id}',${i})" style="cursor:pointer">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <div class="news-tag" style="color:${tagColors[n.tagc]||'var(--sub)'}">${n.tag}</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:10px;color:${impactColors[n.impact]||'var(--sub)'};font-weight:600">${n.impact||''}</span>
+          <span style="color:var(--sub);font-size:14px">›</span>
+        </div>
+      </div>
       <div class="news-title">${n.title}</div>
-      <div class="news-meta">${n.meta}</div>
     </div>`).join('');
 
-  // Stocks in this industry
+  // Stocks
   const indStocks = STOCKS.filter(s=>s.industry===ind.id);
   const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
   const riskMap   = {low:['低溫','dot-g'],warm:['中溫','dot-y'],hot:['偏熱','dot-o'],high:['高溫','dot-r']};
-
-  const stocksHtml = indStocks.length ? indStocks.map(s=>{
+  const stocksHtml = indStocks.map(s=>{
     const [sl,sc] = statusMap[s.status];
     const [rl,dc] = riskMap[s.risk];
     return `
@@ -1149,24 +2234,66 @@ function renderIndustries() {
         </div>
         <div class="sc-reason">${s.reason}</div>
       </div>`;
-  }).join('') : '';
+  }).join('');
 
   document.getElementById('ind-content').innerHTML = `
     <div class="card-gold">
       <div style="font-size:13px;color:var(--gold);font-weight:600;margin-bottom:6px">${ind.icon} ${ind.id}</div>
       <div style="font-size:14px;color:var(--sub);line-height:1.6">${ind.desc}</div>
     </div>
+    ${riskHtml}
     <div class="card">
       <div class="st">月度表現趨勢</div>
       <div class="bar-chart">${barsHtml}</div>
       <div class="ind-stat-row">${statsHtml}</div>
     </div>
+    ${wxHtml}
     <div class="news-card">
-      <div style="padding:14px 16px 0"><div class="st">最新產業動態</div></div>
+      <div style="padding:14px 16px 6px;display:flex;justify-content:space-between;align-items:center">
+        <div class="st" style="margin-bottom:0">最新產業動態</div>
+        <span style="font-size:10px;color:var(--sub)">點擊看詳情</span>
+      </div>
       ${newsHtml}
     </div>
-    ${indStocks.length ? `<div class="st" style="margin-top:4px">本產業相關股票</div>${stocksHtml}` : ''}
+    ${indStocks.length ? `<div class="st" style="margin-top:4px">本產業相關股票（${indStocks.length} 支）</div>${stocksHtml}` : ''}
   `;
+}
+
+function showIndWeather(indId, period) {
+  const ind = INDUSTRIES.find(i=>i.id===indId);
+  if (!ind || !ind.weather) return;
+  const w = ind.weather[period];
+  const lbl = {short:'短期（本週）',mid:'中期（1個月）',long:'長期（3個月+）'}[period];
+  openBSheet(`
+    <div class="bsheet-tag" style="color:var(--gold)">產業天氣預報 · ${ind.icon} ${ind.id}</div>
+    <div style="font-size:48px;margin-bottom:8px">${w.icon}</div>
+    <div class="bsheet-title" style="color:${w.color}">${lbl}：${w.label}</div>
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">這個時段為什麼是這個天氣？</div>
+      <div class="bsheet-section-body">${w.detail}</div>
+    </div>
+    <div class="bsheet-watch"><span style="font-size:16px;flex-shrink:0">🔭</span><div><strong style="color:var(--text)">關鍵觀察點：</strong><br>${w.watch}</div></div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
+}
+
+function showIndNews(indId, idx) {
+  const ind = INDUSTRIES.find(i=>i.id===indId);
+  if (!ind) return;
+  const n = ind.news[idx];
+  const tagColors = {green:'var(--green)',yellow:'var(--yellow)',orange:'var(--orange)',neutral:'var(--sub)'};
+  const impactColors = {'偏正向':'var(--green)','分化':'var(--yellow)','需注意':'var(--orange)','中性':'var(--sub)'};
+  openBSheet(`
+    <div class="bsheet-tag" style="color:${tagColors[n.tagc]||'var(--sub)'}">${ind.icon} ${ind.id} · ${n.tag}</div>
+    <div class="bsheet-title">${n.title}</div>
+    ${n.impact ? `<div style="margin-bottom:14px"><span style="font-size:12px;font-weight:700;color:${impactColors[n.impact]||'var(--sub)'}">市場影響：${n.impact}</span></div>` : ''}
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">詳細說明</div>
+      <div class="bsheet-section-body">${n.detail||'暫無詳細說明。'}</div>
+    </div>
+    <div style="background:var(--card-soft);border-radius:10px;padding:12px;margin-top:10px;font-size:11px;color:var(--sub);line-height:1.6">⚠️ 以上資訊僅供參考，不構成投資建議。請結合多方資訊自行判斷。</div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
 }
 
 function selectIndustry(id) {
@@ -1193,11 +2320,634 @@ function initMarketChart() {
 }
 
 // ══════════════════════════════════════════════
+//  BOTTOM SHEET
+// ══════════════════════════════════════════════
+function openBSheet(html) {
+  document.getElementById('bsheet-content').innerHTML = html;
+  document.getElementById('bsheet-overlay').classList.add('open');
+}
+function closeBSheet() {
+  document.getElementById('bsheet-overlay').classList.remove('open');
+}
+
+function showImpactDetail(stockId, idx) {
+  const s = STOCKS.find(x=>x.id===stockId);
+  if (!s || !s.impacts) return;
+  const imp = s.impacts[idx];
+  const badgeMap = {green:'bg-green',yellow:'bg-yellow',orange:'bg-orange',red:'bg-red',neutral:'bg-neutral'};
+  openBSheet(`
+    <div class="bsheet-tag" style="color:var(--gold)">影響來源分析 · ${s.name}</div>
+    <div class="bsheet-title">${imp.icon} ${imp.label}</div>
+    <div style="margin-bottom:16px"><span class="badge ${badgeMap[imp.cls]||'bg-neutral'}" style="font-size:12px;padding:4px 12px">${imp.badge}</span></div>
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">為什麼會影響這支股票？</div>
+      <div class="bsheet-section-body">${imp.why}</div>
+    </div>
+    <div class="bsheet-watch">
+      <span style="font-size:16px;flex-shrink:0">🔭</span>
+      <div><strong style="color:var(--text)">投資人要觀察什麼：</strong><br>${imp.watch}</div>
+    </div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
+}
+
+function showWeatherDetail(stockId, period) {
+  const s = STOCKS.find(x=>x.id===stockId);
+  if (!s || !s.weather) return;
+  const w = s.weather[period];
+  const periodLabel = {short:'短期（本週）',mid:'中期（1個月）',long:'長期（3個月+）'}[period];
+  openBSheet(`
+    <div class="bsheet-tag" style="color:var(--gold)">天氣預報 · ${s.name}</div>
+    <div style="font-size:52px;margin-bottom:8px">${w.icon}</div>
+    <div class="bsheet-title" style="color:${w.color}">${periodLabel}：${w.label}</div>
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">為什麼是這個天氣？</div>
+      <div class="bsheet-section-body">${w.why}</div>
+    </div>
+    <div class="bsheet-watch">
+      <span style="font-size:16px;flex-shrink:0">🔭</span>
+      <div><strong style="color:var(--text)">關鍵觀察點：</strong><br>${w.watch}</div>
+    </div>
+    <div style="background:var(--card-soft);border-radius:10px;padding:12px;margin-top:12px;font-size:11px;color:var(--sub);line-height:1.6">
+      ⚠️ 天氣預報是基於目前已知資訊的判斷，實際情況可能因突發事件而改變。這不是投資建議。
+    </div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
+}
+
+const FOCUS_DATA = {
+  ai:{
+    icon:'🤖', tag:'AI 算力', tagColor:'var(--green)',
+    title:'AI 伺服器需求爆發，供應鏈全面受惠',
+    why:'Microsoft、Google、Meta、Amazon 四大科技巨頭今年 AI 資本支出合計超過 2000 億美元，年增幅超過 60%。這些資金大量流向 AI 伺服器採購，帶動整個供應鏈需求。',
+    detail:'NVIDIA 的 H100/H200 GPU 是 AI 訓練的核心，台積電負責生產這些晶片，鴻海和廣達負責將晶片組裝成完整的伺服器機架。這條供應鏈中的每家公司都在受惠。',
+    highlight:'簡單說：大公司花大錢建 AI 工廠，台灣的科技公司是蓋工廠的承包商。',
+    watch:'觀察重點：各大雲端業者的季度資本支出數字，這是整條供應鏈最上游的需求來源。',
+    stocks:['NVDA','2330','2317','2382','AVGO','AMD'],
+  },
+  fed:{
+    icon:'🏦', tag:'利率政策', tagColor:'var(--yellow)',
+    title:'Fed 降息時機持續延後，市場重新定價',
+    why:'美國 4 月 CPI 年增 3.4%，核心通膨仍頑固，聯準會（Fed）主席鮑爾明確表示需要更多證據才考慮降息。市場從年初預期年內降息 6 次，大幅下修至 1–2 次。',
+    detail:'利率高低對不同股票影響不同：銀行股（JPM、V）在高利率下受惠，因為可以收更多利息；科技成長股（NVDA、MSFT）在高利率下估值受壓，因為未來獲利的現值降低；REIT（AMT、NEE）也承壓，因為融資成本上升。',
+    highlight:'簡單說：利率越高，借錢越貴。高成長公司估值受影響，但銀行和保險公司反而賺更多。',
+    watch:'關鍵數據：美國每月 CPI（物價）和 PCE（Fed 最重視的通膨指標），這兩個數字決定降息時機。',
+    stocks:['JPM','V','MA','AMT','NEE'],
+  },
+  geo:{
+    icon:'🌏', tag:'地緣政治', tagColor:'var(--orange)',
+    title:'中東局勢膠著，中國稀土管制升級',
+    why:'中東地區衝突持續，影響全球石油和天然氣的運輸路線，讓油價維持在高位。同時，中國宣布進一步限制稀土和半導體設備的出口，加劇全球科技供應鏈的不確定性。',
+    detail:'稀土是製造電動車電池、電子零件的關鍵原料，中國控制全球約 60% 的稀土供應。出口限制會推高原材料成本，台灣科技廠也需要評估供應鏈多元化的進度。',
+    highlight:'簡單說：全球政治緊張讓原物料變貴、供應鏈更複雜。短期對能源股有利，長期讓科技業加速分散供應鏈。',
+    watch:'關鍵指標：布蘭特原油價格、稀土期貨價格，以及各國政府的對應政策聲明。',
+    stocks:['XOM','GOLD','2330','NEE'],
+  },
+  glp1:{
+    icon:'💊', tag:'醫療革命', tagColor:'var(--purple)',
+    title:'GLP-1 減重藥需求持續超預期，市場規模驚人',
+    why:'GLP-1 是一種腸道荷爾蒙，藥物版本可以讓大腦感到飽足，大幅減少食慾。Eli Lilly 的 Mounjaro（糖尿病）和 Zepbound（減重）以及 Novo Nordisk 的 Wegovy，在市場上供不應求。',
+    detail:'最新研究顯示，GLP-1 藥物不只是減重藥，對心臟病、腎臟病、睡眠呼吸中止等疾病都有顯著改善效果。市場預估 2030 年全球市場規模可達 1500 億美元，相當於現在全球最暢銷藥物的三倍。',
+    highlight:'簡單說：這不只是減肥藥，可能是近 20 年最重要的醫療突破。Eli Lilly 是目前最直接的受益者。',
+    watch:'關鍵觀察：各國醫療保險是否將 GLP-1 納入給付範圍，這將決定實際可及人口和市場規模。',
+    stocks:['LLY','JNJ'],
+  },
+};
+
+function showFocusDetail(key) {
+  const d = FOCUS_DATA[key];
+  if (!d) return;
+  const stockTags = d.stocks.map(id=>`<span style="background:var(--card-soft);border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:var(--gold);font-weight:600;font-size:11px;cursor:pointer" onclick="closeBSheet();showDetail('${id}')">${id}</span>`).join('');
+  openBSheet(`
+    <div class="bsheet-tag" style="color:${d.tagColor}">${d.tag}</div>
+    <div class="bsheet-title">${d.icon} ${d.title}</div>
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">發生了什麼事？</div>
+      <div class="bsheet-section-body">${d.why}</div>
+    </div>
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">對投資市場的影響</div>
+      <div class="bsheet-section-body">${d.detail}</div>
+    </div>
+    <div class="bsheet-highlight">${d.highlight}</div>
+    <div class="bsheet-watch" style="margin-top:12px">
+      <span style="font-size:16px;flex-shrink:0">🔭</span>
+      <div>${d.watch}</div>
+    </div>
+    <div style="margin-top:16px">
+      <div style="font-size:10px;color:var(--sub);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">相關股票（點擊查看詳情）</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${stockTags}</div>
+    </div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
+}
+
+// ══════════════════════════════════════════════
+//  PORTFOLIO (dynamic from watchlist)
+// ══════════════════════════════════════════════
+const IND_META = {
+  '科技':  {icon:'💻', color:'#FACC15'},
+  '金融':  {icon:'🏦', color:'#60A5FA'},
+  '能源':  {icon:'⚡', color:'#FB923C'},
+  '醫療':  {icon:'🏥', color:'#34D399'},
+  '消費':  {icon:'🛍', color:'#A78BFA'},
+  'ETF':   {icon:'📦', color:'#34D399'},
+  '原物料':{icon:'🪨', color:'#FCD34D'},
+  '房地產':{icon:'🏢', color:'#60A5FA'},
+};
+
+function renderPortfolio() {
+  const c = document.getElementById('portfolio-content');
+  const sub = document.getElementById('portfolio-sub');
+  const wlStocks = watchlist.map(id=>STOCKS.find(s=>s.id===id)).filter(Boolean);
+
+  if (wlStocks.length === 0) {
+    if (sub) sub.textContent = '尚未追蹤任何股票';
+    c.innerHTML = `<div class="sc-empty" style="padding-top:60px">
+      <div style="font-size:36px;margin-bottom:12px">📊</div>
+      <div style="font-weight:600;margin-bottom:6px">組合是空的</div>
+      <div style="font-size:12px;line-height:1.6;color:var(--sub)">到「搜尋」頁追蹤股票，<br>組合就會自動幫你分析。</div>
+    </div>`;
+    return;
+  }
+
+  if (sub) sub.textContent = `根據 ${wlStocks.length} 支追蹤股票分析`;
+
+  // ── 1. 產業分布 ──
+  const indMap = {};
+  wlStocks.forEach(s => { indMap[s.industry] = (indMap[s.industry]||0) + 1; });
+  const total = wlStocks.length;
+  let slices = Object.entries(indMap)
+    .map(([ind,cnt]) => ({ ind, cnt, pct: Math.round(cnt/total*100) }))
+    .sort((a,b) => b.pct - a.pct);
+  // Fix rounding so sum = 100
+  const diff = 100 - slices.reduce((s,x)=>s+x.pct,0);
+  if (slices.length) slices[0].pct += diff;
+
+  // ── 2. 風險評分 ──
+  const riskW = {low:20, warm:45, hot:68, high:88};
+  const avgRisk = wlStocks.reduce((s,x)=>s+(riskW[x.risk]||45),0) / wlStocks.length;
+  const riskLabel = avgRisk<35 ? {l:'🌡 低溫',c:'var(--green)'}
+                  : avgRisk<55 ? {l:'🌡 中溫',c:'var(--yellow)'}
+                  : avgRisk<72 ? {l:'🌡 偏熱',c:'var(--orange)'}
+                  : {l:'🔴 高溫',c:'var(--red)'};
+
+  // ── 3. 健康度評估 ──
+  const topPct  = slices[0]?.pct || 0;
+  const riskCnt = wlStocks.filter(s=>s.risk==='high').length;
+  const stabCnt = wlStocks.filter(s=>s.status==='stable').length;
+
+  let healthEmoji, healthLabel, healthDesc;
+  if (avgRisk < 35 && topPct < 60) {
+    healthEmoji='🛡'; healthLabel='穩健保守';
+    healthDesc=`你的組合以低波動資產為主，防禦性強，適合不希望睡前還在擔心市場的投資人。`;
+  } else if (avgRisk < 55 && topPct < 70) {
+    healthEmoji='⚖️'; healthLabel='均衡中性';
+    healthDesc=`你的組合兼顧成長與穩定，分散效果不錯。市場上漲時能參與，市場修正時也有緩衝。`;
+  } else if (avgRisk < 72) {
+    healthEmoji='📊'; healthLabel='中等偏積極';
+    healthDesc=`你的組合偏向成長型資產。上漲時很有感，但市場修正時波動也會比較大，要有心理準備。`;
+  } else {
+    healthEmoji='🔥'; healthLabel='高度積極';
+    healthDesc=`你的組合集中在高波動資產。報酬潛力大，但風險也高。建議確認自己能承受短期大幅波動再繼續持有。`;
+  }
+
+  // ── 4. 集中度提醒 ──
+  let concentrationAlert = '';
+  if (topPct >= 70) {
+    const topInd = slices[0].ind;
+    concentrationAlert = `<div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0">⚠️</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">集中度偏高</div>
+        <div class="alert-text">${topInd}佔 ${topPct}%，單一產業集中度過高。考慮加入其他產業的股票來分散風險。</div>
+      </div>
+    </div>`;
+  } else if (slices.length === 1) {
+    concentrationAlert = `<div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0">🔍</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">建議增加多元性</div>
+        <div class="alert-text">目前全部集中在${slices[0].ind}，建議追蹤其他產業的股票來分散風險。</div>
+      </div>
+    </div>`;
+  } else if (riskCnt >= 2) {
+    concentrationAlert = `<div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0">⚠️</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">高風險股票偏多</div>
+        <div class="alert-text">組合中有 ${riskCnt} 支「風險升高」的股票，整體波動性較大。</div>
+      </div>
+    </div>`;
+  }
+
+  // ── 5. AI 建議 ──
+  const diversityScore = slices.length;
+  let aiText = '';
+  if (diversityScore === 1) {
+    aiText = `你的組合目前只有 ${slices[0].ind} 一個產業。這樣的好處是主題很清晰，壞處是「一旦這個產業不好，整個組合都會受影響」。就像把所有雞蛋放在一個籃子裡。如果你對這個產業很有信心，沒問題；但如果想睡得安穩一點，可以考慮加入 ETF 或其他產業的股票來分散。`;
+  } else if (diversityScore <= 3) {
+    aiText = `你的組合橫跨 ${slices.length} 個產業，分散效果還可以。目前比重最高的是${slices[0].ind}（${slices[0].pct}%）。整體而言是有主軸但不完全集中的配置，算是一個合理的起點。`;
+  } else {
+    aiText = `你追蹤了 ${slices.length} 個不同產業的股票，分散效果相當好。市場有輪動時，不同產業可以互補，減少整體波動。這種配置適合長期持有，不需要每天盯盤。`;
+  }
+  if (riskCnt > 0) aiText += ` 另外，你有 ${riskCnt} 支標記為「風險升高」的股票（${wlStocks.filter(s=>s.risk==='high').map(s=>s.name).join('、')}），建議定期追蹤它們的最新狀況。`;
+
+  // ── 6. Donut Chart (CSS conic-gradient) ──
+  let conicStr = '';
+  let cumPct = 0;
+  slices.forEach(s => {
+    const col = (IND_META[s.ind]||{}).color||'#9CA3AF';
+    conicStr += `${col} ${cumPct}% ${cumPct+s.pct}%, `;
+    cumPct += s.pct;
+  });
+  conicStr = conicStr.replace(/, $/, '');
+
+  const legendHtml = slices.map(s=>{
+    const col = (IND_META[s.ind]||{}).color||'#9CA3AF';
+    return `<div style="display:flex;align-items:center;gap:8px">
+      <div style="width:10px;height:10px;border-radius:3px;background:${col};flex-shrink:0"></div>
+      <span style="font-size:12px">${(IND_META[s.ind]||{}).icon||''} ${s.ind} ${s.pct}%</span>
+    </div>`;
+  }).join('');
+
+  // ── 7. Allocation bars ──
+  const allocHtml = slices.map(s=>{
+    const col = (IND_META[s.ind]||{}).color||'#9CA3AF';
+    const icon = (IND_META[s.ind]||{}).icon||'';
+    return `<div class="alloc-row">
+      <div class="alloc-meta">
+        <span>${icon} ${s.ind}</span>
+        <span style="color:${col};font-weight:700">${s.pct}%</span>
+      </div>
+      <div class="alloc-track">
+        <div class="alloc-bar" style="width:${s.pct}%;background:${col};transition:width .5s"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── 8. Stock list in portfolio ──
+  const statusMap = {stable:['🟢','bg-green'],watch:['🟡','bg-yellow'],risk:['🔴','bg-red']};
+  const stockListHtml = wlStocks.map(s=>{
+    const [dot,sc] = statusMap[s.status]||['⚪','bg-neutral'];
+    return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showDetail('${s.id}')">
+      <span style="font-size:16px">${dot}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600">${s.name}</div>
+        <div style="font-size:10px;color:var(--sub)">${s.id} · ${s.industry}</div>
+      </div>
+      <span class="badge ${sc}" style="font-size:10px">${s.status==='stable'?'穩定':s.status==='watch'?'觀察中':'風險升高'}</span>
+    </div>`;
+  }).join('').replace(/border-bottom[^;]+;([^"]*)"[^>]*>(?=[^<]*<\/div>\s*$)/,'$1">');
+
+  // ── Render ──
+  c.innerHTML = `
+    <div class="card-gold">
+      <div class="st">投資組合健康度</div>
+      <div class="ph-score">
+        <div class="ph-emoji">${healthEmoji}</div>
+        <div>
+          <div class="ph-tag">PORTFOLIO HEALTH</div>
+          <div class="ph-val">${healthLabel}</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--sub);line-height:1.6;margin-top:4px">${healthDesc}</div>
+    </div>
+
+    <div class="card">
+      <div class="st">配置比例圖</div>
+      <div style="display:flex;align-items:center;gap:20px">
+        <div style="width:100px;height:100px;border-radius:50%;background:conic-gradient(${conicStr});-webkit-mask:radial-gradient(transparent 32px,black 32px);mask:radial-gradient(transparent 32px,black 32px);flex-shrink:0"></div>
+        <div style="display:flex;flex-direction:column;gap:9px;flex:1">${legendHtml}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="st">產業分布</div>
+      ${allocHtml}
+    </div>
+
+    ${concentrationAlert}
+
+    <div class="card">
+      <div class="st">風險溫度計</div>
+      <div class="thermo-wrap">
+        <div class="thermo-track"><div class="thermo-fill" style="width:${Math.round(avgRisk)}%"></div></div>
+        <div class="thermo-lbl" style="color:${riskLabel.c}">${riskLabel.l}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px">
+        <span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="st">追蹤中的股票（${wlStocks.length} 支）</div>
+      ${stockListHtml.replace(/<div[^>]*>(?=[^<]*<\/div>\s*$)/,s=>s.replace('border-bottom:1px solid var(--border);',''))}
+    </div>
+
+    <div class="card-soft">
+      <div class="st">AI 白話提醒</div>
+      <div style="font-size:14px;line-height:1.8">${aiText}</div>
+      <div style="font-size:10px;color:var(--sub);margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">⚠️ 追蹤清單不等於實際持倉。這裡的分析基於你追蹤的股票，不構成投資建議。</div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  LIVE TICKER DATA
+// ══════════════════════════════════════════════
+const TICKER_STOCKS = [
+  {id:'台積電',base:920,chg:0},
+  {id:'NVDA',base:132.5,chg:0},
+  {id:'AAPL',base:213.2,chg:0},
+  {id:'MSFT',base:427.8,chg:0},
+  {id:'2330',base:920,chg:0},
+  {id:'0050',base:148.5,chg:0},
+  {id:'META',base:548.3,chg:0},
+  {id:'TSLA',base:172.4,chg:0},
+  {id:'LLY',base:895.2,chg:0},
+  {id:'AMZN',base:198.7,chg:0},
+  {id:'AMD',base:158.4,chg:0},
+  {id:'2454',base:1325,chg:0},
+  {id:'V',base:278.9,chg:0},
+  {id:'JPM',base:218.5,chg:0},
+  {id:'2317',base:215.5,chg:0},
+];
+
+let tickerData = TICKER_STOCKS.map(s=>({...s, price: s.base, pct: 0}));
+
+function buildTickerHtml() {
+  const items = tickerData.map(s=>{
+    const sign = s.pct >= 0 ? '+' : '';
+    const cls = s.pct > 0.05 ? 'ticker-up' : s.pct < -0.05 ? 'ticker-dn' : 'ticker-flat';
+    const arrow = s.pct > 0.05 ? '▲' : s.pct < -0.05 ? '▼' : '━';
+    return `<div class="ticker-item">
+      <span class="ticker-name">${s.id}</span>
+      <span class="ticker-val ${cls}">${arrow} ${sign}${s.pct.toFixed(2)}%</span>
+    </div>`;
+  }).join('');
+  return items + items; // duplicate for seamless loop
+}
+
+function initTicker() {
+  document.getElementById('ticker-inner').innerHTML = buildTickerHtml();
+}
+
+function updateTickerData() {
+  tickerData = tickerData.map(s => {
+    const delta = (Math.random() - 0.498) * 0.18; // slight upward bias
+    const newPct = Math.max(-5, Math.min(8, s.pct + delta));
+    return {...s, pct: newPct};
+  });
+  document.getElementById('ticker-inner').innerHTML = buildTickerHtml();
+}
+
+// ══════════════════════════════════════════════
+//  LIVE MARKET STATS
+// ══════════════════════════════════════════════
+let liveStats = { tw: 0.8, us: 0.4, tension: 'normal' };
+const tensionStates = [
+  {emoji:'😴',label:'平靜',color:'var(--green)'},
+  {emoji:'😴',label:'平靜',color:'var(--green)'},
+  {emoji:'😐',label:'普通',color:'var(--yellow)'},
+  {emoji:'😐',label:'普通',color:'var(--yellow)'},
+  {emoji:'😐',label:'普通',color:'var(--yellow)'},
+  {emoji:'😟',label:'緊張',color:'var(--orange)'},
+];
+let tensionIdx = 2;
+
+function updateMarketStats() {
+  liveStats.tw = Math.max(-3, Math.min(5, liveStats.tw + (Math.random()-0.47)*0.15));
+  liveStats.us = Math.max(-2, Math.min(4, liveStats.us + (Math.random()-0.47)*0.12));
+
+  const twEl = document.querySelector('#mkt-tw-val');
+  const usEl = document.querySelector('#mkt-us-val');
+  if (twEl) {
+    const sign = liveStats.tw >= 0 ? '+' : '';
+    twEl.textContent = sign + liveStats.tw.toFixed(2) + '%';
+    twEl.style.color = liveStats.tw >= 0 ? 'var(--green)' : 'var(--red)';
+    twEl.classList.add('update-flash');
+    setTimeout(()=>twEl.classList.remove('update-flash'), 500);
+  }
+  if (usEl) {
+    const sign = liveStats.us >= 0 ? '+' : '';
+    usEl.textContent = sign + liveStats.us.toFixed(2) + '%';
+    usEl.style.color = liveStats.us >= 0 ? 'var(--green)' : 'var(--red)';
+    usEl.classList.add('update-flash');
+    setTimeout(()=>usEl.classList.remove('update-flash'), 500);
+  }
+
+  // Update last-updated timestamp
+  const tsEl = document.getElementById('last-updated');
+  if (tsEl) {
+    const now = new Date();
+    tsEl.textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')} 更新`;
+  }
+}
+
+// ══════════════════════════════════════════════
+//  WEEKLY REPORT
+// ══════════════════════════════════════════════
+const WEEKLY_DATA = {
+  weather: {icon:'🌤', label:'微晴', desc:'本週市場整體氣氛偏樂觀，AI 算力主題持續帶動科技股上漲，但估值偏高讓部分法人保持謹慎。整體而言是「有機會但要挑股」的一週。'},
+  summary: '本週 S&P 500 上漲 0.8%，Nasdaq 上漲 1.4%，台股加權指數上漲 1.1%。AI 半導體和雲端業者持續強勢，傳統能源和零售類股表現落後大盤。',
+  topGainers: [
+    {rank:'🥇', name:'Eli Lilly', id:'LLY', pct:'+6.2%', reason:'GLP-1 新適應症獲 FDA 快速審查'},
+    {rank:'🥈', name:'台積電', id:'2330', pct:'+3.8%', reason:'2nm 量產進度傳出超前消息'},
+    {rank:'🥉', name:'Broadcom', id:'AVGO', pct:'+3.4%', reason:'ASIC 訂單傳出超預期'},
+  ],
+  topLosers: [
+    {rank:'1', name:'Moderna', id:'MRNA', pct:'-4.1%', reason:'RSV 疫苗市場競爭加劇'},
+    {rank:'2', name:'Tesla', id:'TSLA', pct:'-3.6%', reason:'Q2 交車量低於預期'},
+    {rank:'3', name:'Pfizer', id:'PFE', pct:'-2.8%', reason:'新藥試驗結果不如預期'},
+  ],
+  keyEvents: [
+    {day:'週一', text:'美國 4 月 ISM 製造業 PMI 公布，51.2 高於預期', impact:'偏正向', impactC:'var(--green)'},
+    {day:'週三', text:'Fed 會議紀錄發布，偏鷹派，年內降息次數預期再下修', impact:'需注意', impactC:'var(--orange)'},
+    {day:'週四', text:'台積電月營收公布，年增 27%，超出法人預估', impact:'偏正向', impactC:'var(--green)'},
+    {day:'週五', text:'美國非農就業數據 +27.5 萬，失業率 3.9%', impact:'中性', impactC:'var(--sub)'},
+  ],
+  nextWeek: [
+    {day:'週二', text:'美國 CPI 通膨數據（最關鍵指標）', impact:'高度關注', impactC:'var(--orange)'},
+    {day:'週三', text:'FOMC 利率決策會議', impact:'高度關注', impactC:'var(--orange)'},
+    {day:'週四', text:'台積電法說會（ADR）', impact:'關注', impactC:'var(--yellow)'},
+    {day:'週五', text:'美國零售銷售數據', impact:'留意', impactC:'var(--sub)'},
+  ],
+  aiSummary: '本週最值得記住的一件事：市場仍在「賺錢但不放心」的狀態。AI 需求是真實的，但估值已經很高——現在買科技股像是在一個好餐廳預訂座位，食物確實好，但你付的是旺季溢價。下週的 CPI 和 Fed 決策是最大變數，若通膨再高一點，科技股可能會有明顯的震盪。建議：不用急著追，等數據出來再決定。',
+};
+
+function renderWeekly() {
+  const now = new Date();
+  const day = now.getDay();
+  const isWeekend = day === 0 || day === 6;
+
+  // Update market page banner only
+  const wbTitle = document.getElementById('wb-title');
+  const wbSub   = document.getElementById('wb-sub');
+  const wbTag   = document.getElementById('wb-tag-text');
+  if (isWeekend) {
+    if (wbTag) wbTag.innerHTML = '📅 週報 <span style="background:var(--red);color:#fff;border-radius:4px;padding:1px 6px;font-size:9px;margin-left:4px">NEW</span>';
+    if (wbTitle) wbTitle.textContent = '本週市場週報已發布';
+    if (wbSub) wbSub.textContent = '點擊查看本週完整回顧、表現排行、下週日程與 AI 白話總結。';
+  } else {
+    const daysLeft = day === 5 ? 1 : (6 - day);
+    if (wbTag) wbTag.textContent = '📅 週報';
+    if (wbTitle) wbTitle.textContent = daysLeft === 1 ? '明天發布本週週報' : `還有 ${daysLeft} 天發布本週週報`;
+    if (wbSub) wbSub.textContent = '每週六 09:00 發布，包含本週市場回顧、個股排行與下週展望。';
+  }
+}
+
+function openWeeklySheet() {
+  const now = new Date();
+  const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+
+  const gainersHtml = WEEKLY_DATA.topGainers.map(s=>`
+    <div class="perf-row">
+      <div class="perf-rank">${s.rank}</div>
+      <div style="flex:1;cursor:pointer" onclick="closeBSheet();showDetail('${s.id}')">
+        <div class="perf-name">${s.name} <span style="font-size:10px;color:var(--gold)">${s.id}</span></div>
+        <div class="perf-sub">${s.reason}</div>
+      </div>
+      <div class="perf-val" style="color:var(--green)">${s.pct}</div>
+    </div>`).join('');
+
+  const losersHtml = WEEKLY_DATA.topLosers.map(s=>`
+    <div class="perf-row">
+      <div class="perf-rank" style="font-size:13px;font-weight:700;color:var(--sub)">${s.rank}</div>
+      <div style="flex:1;cursor:pointer" onclick="closeBSheet();showDetail('${s.id}')">
+        <div class="perf-name">${s.name} <span style="font-size:10px;color:var(--gold)">${s.id}</span></div>
+        <div class="perf-sub">${s.reason}</div>
+      </div>
+      <div class="perf-val" style="color:var(--red)">${s.pct}</div>
+    </div>`).join('');
+
+  const eventsHtml = WEEKLY_DATA.keyEvents.map(e=>`
+    <div class="cal-row">
+      <div class="cal-date">${e.day}</div>
+      <div><div class="cal-text">${e.text}</div>
+      <div class="cal-impact" style="color:${e.impactC}">${e.impact}</div></div>
+    </div>`).join('');
+
+  const nextHtml = WEEKLY_DATA.nextWeek.map(e=>`
+    <div class="cal-row">
+      <div class="cal-date">${e.day}</div>
+      <div><div class="cal-text">${e.text}</div>
+      <div class="cal-impact" style="color:${e.impactC}">${e.impact}</div></div>
+    </div>`).join('');
+
+  const weekdayNote = isWeekend ? '' : `
+    <div style="background:var(--card-soft);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:16px">
+      <span style="font-size:16px">📌</span>
+      <div style="font-size:12px;color:var(--sub);line-height:1.5">顯示上週資料，週報每週六 09:00 正式更新。</div>
+    </div>`;
+
+  openBSheet(`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">📅 週報</div>
+        <div style="font-size:20px;font-weight:700">本週市場總結</div>
+      </div>
+      ${isWeekend ? `<div style="display:flex;align-items:center;gap:5px;background:var(--red-dim);border:1px solid var(--red);border-radius:20px;padding:4px 10px"><span style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.2s infinite;display:inline-block"></span><span style="font-size:10px;font-weight:700;color:var(--red)">本週版</span></div>` : ''}
+    </div>
+
+    ${weekdayNote}
+
+    <div style="text-align:center;background:var(--card-soft);border-radius:12px;padding:20px 16px;margin-bottom:16px">
+      <div style="font-size:52px;margin-bottom:6px">${WEEKLY_DATA.weather.icon}</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">本週天氣：${WEEKLY_DATA.weather.label}</div>
+      <div style="font-size:13px;color:var(--sub);line-height:1.6">${WEEKLY_DATA.weather.desc}</div>
+    </div>
+
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:16px">
+      <div class="st">本週摘要</div>
+      <div style="font-size:13px;line-height:1.7;color:var(--text)">${WEEKLY_DATA.summary}</div>
+    </div>
+
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="st">🏆 本週漲幅前三</div>
+      ${gainersHtml}
+    </div>
+
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="st">📉 本週跌幅前三</div>
+      ${losersHtml}
+    </div>
+
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="st">本週重要事件</div>
+      ${eventsHtml}
+    </div>
+
+    <div style="background:var(--card-soft);border-radius:10px;padding:14px;margin-bottom:10px">
+      <div class="st">⚠️ 下週重要日程</div>
+      ${nextHtml}
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--gold-border);border-radius:10px;padding:14px;position:relative;overflow:hidden;margin-bottom:4px">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)"></div>
+      <div class="st">AI 週報白話總結</div>
+      <div style="font-size:13px;line-height:1.8;color:var(--text)">${WEEKLY_DATA.aiSummary}</div>
+    </div>
+
+    <div style="font-size:10px;color:var(--sub);line-height:1.5;margin-top:10px;margin-bottom:16px">⚠️ 以上內容僅供參考，不構成投資建議。週報每週六 09:00 更新。</div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
+}
+
+// ══════════════════════════════════════════════
+//  UPDATE switchTab TO INCLUDE weekly
+// ══════════════════════════════════════════════
+const _origSwitchTab = switchTab;
+// Override already defined above — patch weekly rendering
+const _switchTabPatched = function(tab) {
+  if (document.getElementById('page-detail').classList.contains('active')) {
+    document.getElementById('page-detail').classList.remove('active');
+  }
+  document.getElementById('page-' + currentTab).classList.remove('active');
+  document.getElementById('tab-' + currentTab).classList.remove('active');
+  currentTab = tab;
+  document.getElementById('page-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0,0);
+  if (tab === 'watchlist') renderWatchlist();
+  if (tab === 'search') renderBrowse(browsing);
+  if (tab === 'industries') renderIndustries();
+  if (tab === 'portfolio') renderPortfolio();
+};
+// Reassign globally
+window.switchTab = _switchTabPatched;
+
+// ══════════════════════════════════════════════
+//  MARKET PAGE LIVE ELEMENTS
+// ══════════════════════════════════════════════
+function buildMarketStats() {
+  const twSign = liveStats.tw >= 0 ? '+' : '';
+  const usSign = liveStats.us >= 0 ? '+' : '';
+  const twColor = liveStats.tw >= 0 ? 'var(--green)' : 'var(--red)';
+  const usColor = liveStats.us >= 0 ? 'var(--green)' : 'var(--red)';
+  const tw = document.getElementById('mkt-tw-val');
+  const us = document.getElementById('mkt-us-val');
+  if (tw) { tw.textContent = twSign + liveStats.tw.toFixed(2) + '%'; tw.style.color = twColor; }
+  if (us) { us.textContent = usSign + liveStats.us.toFixed(2) + '%'; us.style.color = usColor; }
+}
+
+// ══════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════
 initMarketChart();
 renderWatchlist();
+renderPortfolio();
+renderBrowse('科技');
 renderIndustries();
+renderWeekly();
+initTicker();
+
+// Live update intervals
+setInterval(updateTickerData, 4000);
+setInterval(() => {
+  updateMarketStats();
+  buildMarketStats();
+}, 5000);
 </script>
 </body>
 </html>
