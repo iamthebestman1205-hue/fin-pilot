@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FinPilot</title>
+<style>
+:root {
+  --bg:#050509; --card:#111118; --card-soft:#181824;
+  --gold:#FACC15; --gold-dim:rgba(250,204,21,.12); --gold-border:rgba(250,204,21,.25);
+  --text:#F9FAFB; --sub:#9CA3AF; --border:#27272F;
+  --green:#34D399; --green-dim:rgba(52,211,153,.12);
+  --yellow:#FCD34D; --yellow-dim:rgba(252,211,77,.12);
+  --orange:#FB923C; --orange-dim:rgba(251,146,60,.12);
+  --red:#F87171; --red-dim:rgba(248,113,113,.12);
+  --blue:#60A5FA; --blue-dim:rgba(96,165,250,.12);
+  --purple:#A78BFA; --purple-dim:rgba(167,139,250,.12);
+  --r:16px; --rsm:10px; --tabh:64px;
+  --font:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;max-width:430px;margin:0 auto;overflow-x:hidden}
+.page{display:none;padding-bottom:calc(var(--tabh)+16px);min-height:100vh}
+.page.active{display:block}
+
+/* Header */
+.ph{padding:52px 20px 16px;background:var(--bg);position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.ph-title{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.ph-title span{color:var(--gold)}
+.ph-sub{font-size:13px;color:var(--sub);margin-top:3px}
+
+/* Content */
+.sc{padding:16px 16px;display:flex;flex-direction:column;gap:14px}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.card-soft{background:var(--card-soft);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.card-gold{background:var(--card);border:1px solid var(--gold-border);border-radius:var(--r);padding:18px;position:relative;overflow:hidden}
+.card-gold::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+/* Section title */
+.st{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:12px}
+
+/* Badges */
+.badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.bg-green{color:var(--green);background:var(--green-dim)}
+.bg-yellow{color:var(--yellow);background:var(--yellow-dim)}
+.bg-orange{color:var(--orange);background:var(--orange-dim)}
+.bg-red{color:var(--red);background:var(--red-dim)}
+.bg-neutral{color:var(--sub);background:rgba(156,163,175,.1)}
+.bg-blue{color:var(--blue);background:var(--blue-dim)}
+
+/* Search */
+.search-wrap{padding:12px 16px;background:var(--bg);position:sticky;top:88px;z-index:9}
+.search-box{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:14px;flex:1;font-family:var(--font)}
+.search-box input::placeholder{color:var(--sub)}
+.search-icon{font-size:16px;color:var(--sub)}
+.clear-btn{font-size:13px;color:var(--sub);cursor:pointer;padding:2px 6px;border-radius:6px;background:var(--border)}
+
+/* Stock Card */
+.sc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:border-color .15s,transform .1s;active:transform:scale(.98)}
+.sc-card:active{transform:scale(.98);border-color:var(--gold-border)}
+.sc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.sc-left .ticker{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.8px;margin-bottom:3px}
+.sc-left .name{font-size:16px;font-weight:700}
+.sc-left .industry-tag{font-size:10px;color:var(--sub);margin-top:3px}
+.sc-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.sc-reason{font-size:12px;color:var(--sub);line-height:1.55;margin-bottom:10px}
+.sc-tip{font-size:11px;color:var(--gold);background:var(--gold-dim);border-radius:8px;padding:7px 11px;line-height:1.5}
+.sc-empty{text-align:center;padding:40px 20px;color:var(--sub);font-size:14px}
+
+/* Risk dot */
+.rdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-g{background:var(--green)}.dot-y{background:var(--yellow)}.dot-o{background:var(--orange)}.dot-r{background:var(--red)}
+.risk-row{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub)}
+
+/* Tab chips */
+.chip-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:1px solid var(--border);color:var(--sub);cursor:pointer;white-space:nowrap;transition:all .15s;background:var(--card)}
+.chip.active{background:var(--gold-dim);border-color:var(--gold-border);color:var(--gold)}
+
+/* Industry page */
+.ind-hero{padding:14px 16px 10px}
+.ind-chart-wrap{height:120px;position:relative}
+.ind-chart-wrap svg{width:100%;height:100%}
+.ind-stat-row{display:flex;gap:10px;margin-top:12px}
+.ind-stat{flex:1;background:var(--card-soft);border-radius:10px;padding:10px;text-align:center}
+.ind-stat .val{font-size:16px;font-weight:700}
+.ind-stat .lbl{font-size:10px;color:var(--sub);margin-top:3px}
+.news-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.news-item{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.news-item:last-child{border-bottom:none}
+.news-item:active{background:var(--card-soft)}
+.news-tag{font-size:10px;font-weight:600;letter-spacing:.5px;margin-bottom:5px}
+.news-title{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:4px}
+.news-meta{font-size:11px;color:var(--sub)}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;padding:0 4px}
+.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-item .bar{width:100%;border-radius:4px 4px 0 0;min-height:4px;transition:height .3s}
+.bar-item .bar-lbl{font-size:9px;color:var(--sub);text-align:center}
+
+/* Market weather */
+.wx-emoji{font-size:48px;display:block;margin-bottom:6px}
+.wx-title{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:10px}
+.wx-desc{font-size:14px;color:var(--sub);line-height:1.6;border-top:1px solid var(--border);padding-top:12px}
+.impact-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border)}
+.impact-row:last-child{border-bottom:none;padding-bottom:0}
+.impact-row:first-child{padding-top:0}
+.impact-left{display:flex;align-items:center;gap:9px;font-size:13px}
+.impact-icon{font-size:17px;width:26px;text-align:center}
+.alert-card{background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:flex-start}
+.alert-text{font-size:13px;line-height:1.6}
+
+/* Detail */
+.dh{padding:52px 16px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--gold);cursor:pointer;background:none;border:none;padding:0;font-family:var(--font);margin-bottom:14px}
+.d-ticker{font-size:12px;color:var(--gold);font-weight:600;letter-spacing:.8px;margin-bottom:3px}
+.d-name{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:12px}
+.d-badges{display:flex;gap:8px;flex-wrap:wrap}
+.thermo-wrap{display:flex;align-items:center;gap:12px}
+.thermo-track{flex:1;height:9px;background:var(--border);border-radius:5px;overflow:hidden}
+.thermo-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--green),var(--yellow),var(--orange),var(--red))}
+.thermo-lbl{font-size:12px;font-weight:600;flex-shrink:0}
+.tline-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tline-row:last-child{border-bottom:none;padding-bottom:0}
+.tline-row:first-child{padding-top:0}
+.tline-period{font-size:12px;color:var(--sub);width:74px;flex-shrink:0}
+.tline-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.tline-bar{height:100%;border-radius:3px}
+.bar-up{background:var(--green)}.bar-dn{background:var(--red)}.bar-md{background:var(--yellow)}
+.tline-lbl{font-size:11px;width:54px;text-align:right;flex-shrink:0}
+.conclusion{font-size:14px;line-height:1.7}
+.disclaimer{font-size:10px;color:var(--sub);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);line-height:1.5}
+
+/* Portfolio */
+.ph-score{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.ph-emoji{font-size:34px}
+.ph-val{font-size:19px;font-weight:700}
+.ph-tag{font-size:10px;color:var(--gold);font-weight:600;letter-spacing:.8px;margin-bottom:3px}
+.alloc-row{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.alloc-row:last-child{margin-bottom:0}
+.alloc-meta{display:flex;justify-content:space-between;font-size:12px}
+.alloc-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.alloc-bar{height:100%;border-radius:3px}
+.abar-tech{background:linear-gradient(90deg,var(--gold),#f59e0b)}
+.abar-etf{background:linear-gradient(90deg,var(--green),#059669)}
+.abar-cash{background:linear-gradient(90deg,#6366f1,#8b5cf6)}
+
+/* Tab bar */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--tabh);background:rgba(5,5,9,.9);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;z-index:100}
+.titem{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 0;opacity:.38;transition:opacity .2s}
+.titem.active{opacity:1}
+.titem-icon{font-size:22px}
+.titem-lbl{font-size:10px;font-weight:600;color:var(--text)}
+.titem.active .titem-lbl{color:var(--gold)}
+
+/* Sparkline in stock card */
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:28px;margin-top:8px}
+.sp-bar{width:6px;border-radius:2px 2px 0 0;min-height:3px}
+
+/* Watchlist header actions */
+.wl-sort{display:flex;gap:8px;align-items:center}
+.sort-lbl{font-size:11px;color:var(--sub)}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════
+     PAGE: MARKET
+═══════════════════════════════ -->
+<div id="page-market" class="page active">
+  <div class="ph">
+    <div class="ph-title">Fin<span>Pilot</span></div>
+    <div class="ph-sub">不用懂 K 線，也能看懂市場。</div>
+  </div>
+  <div class="sc">
+
+    <!-- Weather -->
+    <div class="card-gold">
+      <div class="st">今日市場天氣</div>
+      <span class="wx-emoji">🌤</span>
+      <div style="font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.5px;margin-bottom:5px">TODAY'S WEATHER</div>
+      <div class="wx-title">微晴</div>
+      <div class="wx-desc">市場氣氛仍偏樂觀，但 AI 類股漲多後，短線波動可能變大。</div>
+    </div>
+
+    <!-- Market Stats Row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="card" style="padding:14px;text-align:center">
+        <div style="font-size:11px;color:var(--sub);margin-bottom:5px">台股</div>
+        <div style="font-size:16px;font-weight:700;color:var(--green)">+0.8%</div>
+        <div style="font-size:10px;color:var(--sub);margin-top:2px">偏強</div>
+      </div>
+      <div class="card" style="padding:14px;text-align:center">
+        <div style="font-size:11px;color:var(--sub);margin-bottom:5px">美股</div>
+        <div style="font-size:16px;font-weight:700;color:var(--green)">+0.4%</div>
+        <div style="font-size:10px;color:var(--sub);margin-top:2px">穩定</div>
+      </div>
+      <div class="card" style="padding:14px;text-align:center">
+        <div style="font-size:11px;color:var(--sub);margin-bottom:5px">VIX</div>
+        <div style="font-size:16px;font-weight:700;color:var(--yellow)">18.3</div>
+        <div style="font-size:10px;color:var(--sub);margin-top:2px">中等</div>
+      </div>
+    </div>
+
+    <!-- Impact Breakdown -->
+    <div class="card">
+      <div class="st">影響來源拆解</div>
+      <div class="impact-row">
+        <div class="impact-left"><span class="impact-icon">🌍</span>利率預期</div>
+        <span class="badge bg-green">偏正向</span>
+      </div>
+      <div class="impact-row">
+        <div class="impact-left"><span class="impact-icon">🏭</span>AI 產業</div>
+        <span class="badge bg-green">偏強</span>
+      </div>
+      <div class="impact-row">
+        <div class="impact-left"><span class="impact-icon">💱</span>匯率變化</div>
+        <span class="badge bg-neutral">中性</span>
+      </div>
+      <div class="impact-row">
+        <div class="impact-left"><span class="impact-icon">🛢</span>能源價格</div>
+        <span class="badge bg-neutral">中性</span>
+      </div>
+      <div class="impact-row">
+        <div class="impact-left"><span class="impact-icon">⚠️</span>估值壓力</div>
+        <span class="badge bg-orange">偏高</span>
+      </div>
+    </div>
+
+    <!-- Weekly Performance Bar Chart -->
+    <div class="card">
+      <div class="st">本週各市場表現</div>
+      <div class="bar-chart" id="mkt-chart"></div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0;margin-top:2px">💡</div>
+      <div class="alert-text">今天不是恐慌的市場，但也不是適合盲目追高的環境。</div>
+    </div>
+
+    <!-- Hot Topics -->
+    <div class="card">
+      <div class="st">本週市場焦點</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:16px">🤖</span>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px">AI 算力需求持續擴大</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.5">NVIDIA、台積電、鴻海均受惠，資本支出持續創高。</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:16px">🏦</span>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px">Fed 降息時機討論</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.5">通膨數據仍偏高，市場預期年內降息 1～2 次。</div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:16px">🌏</span>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px">地緣政治風險升溫</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.5">中東局勢持續，油價短線有支撐，能源股受關注。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     PAGE: WATCHLIST
+═══════════════════════════════ -->
+<div id="page-watchlist" class="page">
+  <div class="ph">
+    <div class="ph-title">我的股票</div>
+    <div class="ph-sub" id="wl-count">追蹤 0 支股票</div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="stock-search" type="text" placeholder="搜尋股票代號或名稱…" oninput="onSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      <span class="clear-btn" id="clear-btn" onclick="clearSearch()" style="display:none">✕</span>
+    </div>
+  </div>
+
+  <!-- Search results -->
+  <div id="search-results" style="display:none;padding:0 16px">
+    <div class="st" style="margin-bottom:8px;margin-top:4px">搜尋結果</div>
+    <div id="results-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
+  <!-- Industry filter chips -->
+  <div style="padding:10px 16px 0;display:none" id="wl-filter-wrap">
+    <div class="chip-row" id="wl-chips"></div>
+  </div>
+
+  <!-- Watchlist -->
+  <div class="sc" id="watchlist-container">
+    <div class="sc-empty">
+      <div style="font-size:32px;margin-bottom:10px">📋</div>
+      <div style="font-weight:600;margin-bottom:6px">還沒有追蹤股票</div>
+      <div style="font-size:12px">搜尋股票並點擊 ＋ 加入追蹤</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     PAGE: INDUSTRIES
+═══════════════════════════════ -->
+<div id="page-industries" class="page">
+  <div class="ph">
+    <div class="ph-title">產業動態</div>
+    <div class="ph-sub">選擇你想了解的產業</div>
+  </div>
+
+  <div style="padding:12px 16px 0">
+    <div class="chip-row" id="ind-chips"></div>
+  </div>
+
+  <div class="sc" id="ind-content"></div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     PAGE: STOCK DETAIL
+═══════════════════════════════ -->
+<div id="page-detail" class="page">
+  <div class="dh">
+    <button class="back-btn" onclick="hideDetail()">‹ 返回</button>
+    <div class="d-ticker" id="d-ticker"></div>
+    <div class="d-name" id="d-name"></div>
+    <div class="d-badges" id="d-badges"></div>
+  </div>
+  <div class="sc" id="d-content"></div>
+</div>
+
+
+<!-- ═══════════════════════════════
+     PAGE: PORTFOLIO
+═══════════════════════════════ -->
+<div id="page-portfolio" class="page">
+  <div class="ph">
+    <div class="ph-title">投資組合</div>
+    <div class="ph-sub">健康度概覽</div>
+  </div>
+  <div class="sc">
+
+    <div class="card-gold">
+      <div class="st">投資組合健康度</div>
+      <div class="ph-score">
+        <div class="ph-emoji">📊</div>
+        <div>
+          <div class="ph-tag">PORTFOLIO HEALTH</div>
+          <div class="ph-val">中等偏積極</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--sub);line-height:1.6">
+        集中在科技與 AI 供應鏈，報酬潛力高，短期波動也相對大。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="st">資產配置</div>
+      <div class="alloc-row">
+        <div class="alloc-meta"><span>🖥 科技股</span><span style="color:var(--gold);font-weight:600">72%</span></div>
+        <div class="alloc-track"><div class="alloc-bar abar-tech" style="width:72%"></div></div>
+      </div>
+      <div class="alloc-row">
+        <div class="alloc-meta"><span>📦 ETF</span><span style="color:var(--green);font-weight:600">20%</span></div>
+        <div class="alloc-track"><div class="alloc-bar abar-etf" style="width:20%"></div></div>
+      </div>
+      <div class="alloc-row">
+        <div class="alloc-meta"><span>💵 現金</span><span style="color:#8b5cf6;font-weight:600">8%</span></div>
+        <div class="alloc-track"><div class="alloc-bar abar-cash" style="width:8%"></div></div>
+      </div>
+    </div>
+
+    <!-- Donut visual using SVG -->
+    <div class="card">
+      <div class="st">配置比例圖</div>
+      <div style="display:flex;align-items:center;gap:20px">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <!-- Total circumference of r=40: 251.3 -->
+          <!-- Tech 72%: 181 -->
+          <circle cx="55" cy="55" r="40" fill="none" stroke="#27272F" stroke-width="16"/>
+          <circle cx="55" cy="55" r="40" fill="none" stroke="#FACC15" stroke-width="16"
+            stroke-dasharray="181 251" stroke-dashoffset="63" stroke-linecap="round"/>
+          <circle cx="55" cy="55" r="40" fill="none" stroke="#34D399" stroke-width="16"
+            stroke-dasharray="50 251" stroke-dashoffset="-118" stroke-linecap="round"/>
+          <circle cx="55" cy="55" r="40" fill="none" stroke="#8b5cf6" stroke-width="16"
+            stroke-dasharray="20 251" stroke-dashoffset="-168" stroke-linecap="round"/>
+          <text x="55" y="59" text-anchor="middle" fill="#F9FAFB" font-size="13" font-weight="700">72%</text>
+          <text x="55" y="70" text-anchor="middle" fill="#9CA3AF" font-size="8">科技股</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:10px;height:10px;border-radius:3px;background:var(--gold)"></div>
+            <span style="font-size:12px">科技股 72%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:10px;height:10px;border-radius:3px;background:var(--green)"></div>
+            <span style="font-size:12px">ETF 20%</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:10px;height:10px;border-radius:3px;background:#8b5cf6"></div>
+            <span style="font-size:12px">現金 8%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-card">
+      <div style="font-size:20px;flex-shrink:0;margin-top:2px">🔍</div>
+      <div>
+        <div style="font-size:12px;font-weight:600;margin-bottom:4px">集中度提醒</div>
+        <div class="alert-text">你的投資組合偏向科技與 AI 供應鏈，上漲時很有感，修正時波動也大。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="st">風險溫度計</div>
+      <div class="thermo-wrap">
+        <div class="thermo-track"><div class="thermo-fill" style="width:58%"></div></div>
+        <div class="thermo-lbl" style="color:var(--orange)">🌡 偏熱</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px">
+        <span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span>
+      </div>
+    </div>
+
+    <div class="card-soft">
+      <div class="st">AI 白話提醒</div>
+      <div style="font-size:14px;line-height:1.7">
+        這個配置適合對科技趨勢有信心、能承受短期波動的投資人。如果你希望睡得更好，可以考慮提高 ETF 或現金比例，把風險分散開來。
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Tab Bar -->
+<nav class="tabbar">
+  <div class="titem active" id="tab-market" onclick="switchTab('market')">
+    <div class="titem-icon">🌤</div>
+    <div class="titem-lbl">市場</div>
+  </div>
+  <div class="titem" id="tab-watchlist" onclick="switchTab('watchlist')">
+    <div class="titem-icon">📋</div>
+    <div class="titem-lbl">股票</div>
+  </div>
+  <div class="titem" id="tab-industries" onclick="switchTab('industries')">
+    <div class="titem-icon">🏭</div>
+    <div class="titem-lbl">產業</div>
+  </div>
+  <div class="titem" id="tab-portfolio" onclick="switchTab('portfolio')">
+    <div class="titem-icon">📊</div>
+    <div class="titem-lbl">組合</div>
+  </div>
+</nav>
+
+<script>
+// ══════════════════════════════════════════════
+//  STOCK DATABASE
+// ══════════════════════════════════════════════
+const STOCKS = [
+  // ── 科技 ──
+  {id:'NVDA',name:'Nvidia',market:'USD',industry:'科技',status:'watch',risk:'hot',
+   reason:'AI 晶片龍頭，資料中心需求強勁，但近期漲幅顯著，部分法人開始獲利了結。',
+   tip:'🔍 注意出口管制政策與下季財測。',
+   spark:[55,60,58,70,85,80,90],thermo:75,
+   periods:[['最近 1 週','up',60,'小幅上升'],['最近 1 月','up',85,'大幅上升'],['最近 3 月','up',72,'震盪偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','估值偏高','orange']],
+   ai:'Nvidia 是這波 AI 浪潮最直接的受益者。算力需求強勁是真實的，但當期待已被充分定價，任何財測不如預期都可能造成震盪。建議設好停損點再持有。'},
+
+  {id:'AAPL',name:'Apple',market:'USD',industry:'科技',status:'stable',risk:'warm',
+   reason:'iPhone 換機周期偏緩，但服務收入持續成長，Apple Intelligence 功能逐步推出。',
+   tip:'✅ 長期持有者的穩定選擇。',
+   spark:[70,68,72,71,75,73,78],thermo:45,
+   periods:[['最近 1 週','mid',42,'小幅震盪'],['最近 1 月','up',55,'穩步上升'],['最近 3 月','up',60,'偏強整理']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Apple 是科技股中相對穩健的選擇。服務業務毛利率高且持續成長，AI 功能有機會帶動新一輪換機潮，整體風險可控。'},
+
+  {id:'MSFT',name:'Microsoft',market:'USD',industry:'科技',status:'stable',risk:'warm',
+   reason:'Azure 雲端業務與 Copilot AI 整合持續帶動成長，企業採購需求穩定。',
+   tip:'✅ AI 企業軟體龍頭，長期邏輯明確。',
+   spark:[65,67,66,70,72,71,75],thermo:48,
+   periods:[['最近 1 週','up',50,'小幅上升'],['最近 1 月','up',62,'穩定成長'],['最近 3 月','up',65,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Microsoft 藉由 OpenAI 的深度合作在 AI 軟體層取得先機，Copilot 商業化進展順利，雲端業務穩健。對想參與 AI 但不想押注硬體的投資人是不錯的選擇。'},
+
+  {id:'GOOGL',name:'Google (Alphabet)',market:'USD',industry:'科技',status:'watch',risk:'warm',
+   reason:'搜尋廣告市場面臨 AI 衝擊，但 GCP 雲端與 Gemini AI 有機會反攻。',
+   tip:'🔍 觀察 AI 搜尋對廣告收入的影響。',
+   spark:[60,62,58,55,60,63,65],thermo:52,
+   periods:[['最近 1 週','up',42,'小幅反彈'],['最近 1 月','mid',38,'震盪整理'],['最近 3 月','mid',45,'橫盤偏強']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   ai:'Google 面臨 AI 原生搜尋挑戰，但廣告護城河深且 GCP 具競爭力。短期不確定性較高，長期技術實力仍強。'},
+
+  {id:'META',name:'Meta Platforms',market:'USD',industry:'科技',status:'stable',risk:'warm',
+   reason:'廣告業務超預期，AI 推薦演算法大幅提升用戶黏著度，成本控制良好。',
+   tip:'✅ 獲利能力強，AI 廣告邏輯清晰。',
+   spark:[55,60,65,68,72,75,80],thermo:50,
+   periods:[['最近 1 週','up',60,'穩步上升'],['最近 1 月','up',72,'明顯走強'],['最近 3 月','up',78,'持續上漲']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Meta 是這波 AI 廣告紅利最直接受益者之一，Reels 廣告收入持續高速成長，整體基本面改善明顯。'},
+
+  {id:'AMZN',name:'Amazon',market:'USD',industry:'科技',status:'stable',risk:'warm',
+   reason:'AWS 雲端業務加速成長，AI 算力需求直接帶動 AWS 收入，電商業務回穩。',
+   tip:'✅ 雲端 + 電商雙引擎，長期邏輯強。',
+   spark:[58,60,62,65,63,68,72],thermo:50,
+   periods:[['最近 1 週','up',48,'小幅上升'],['最近 1 月','up',60,'穩步成長'],['最近 3 月','up',65,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Amazon 的 AWS 是 AI 基礎設施的核心受益者，加上電商業務回穩，整體成長動能充足。'},
+
+  {id:'TSLA',name:'Tesla',market:'USD',industry:'科技',status:'risk',risk:'high',
+   reason:'交車量數據不如預期，競爭加劇，市場對成長故事的信心動搖。',
+   tip:'⚠️ 短線波動大，建議觀察下季財報。',
+   spark:[80,70,65,55,60,50,48],thermo:85,
+   periods:[['最近 1 週','dn',70,'明顯下跌'],['最近 1 月','dn',60,'持續走弱'],['最近 3 月','dn',55,'震盪偏弱']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏弱','orange'],['🏢 公司','觀察中','yellow'],['⚠️ 風險','偏高','orange']],
+   ai:'Tesla 面臨競爭加劇與品牌形象的雙重壓力，成長故事需要重新驗證。Robotaxi 和 AI 機器人是長期敘事，但短期基本面承壓。'},
+
+  {id:'AMD',name:'AMD',market:'USD',industry:'科技',status:'watch',risk:'hot',
+   reason:'AI GPU 市場份額逐步提升，MI300 系列需求超預期，競爭格局改善中。',
+   tip:'🔍 觀察 MI 系列市場滲透率。',
+   spark:[40,45,50,55,60,58,65],thermo:65,
+   periods:[['最近 1 週','up',55,'小幅上升'],['最近 1 月','up',68,'明顯走強'],['最近 3 月','up',60,'震盪偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','偏高','orange']],
+   ai:'AMD 是 NVIDIA 最直接的挑戰者，MI GPU 系列逐漸被大型雲端採用，估值比 NVIDIA 相對合理，但仍需驗證市佔擴張的持續性。'},
+
+  {id:'AVGO',name:'Broadcom',market:'USD',industry:'科技',status:'stable',risk:'hot',
+   reason:'客製化 AI 晶片（ASIC）需求爆發，VMware 整合逐步貢獻收入。',
+   tip:'✅ AI ASIC + 企業軟體雙引擎。',
+   spark:[50,55,60,65,70,68,75],thermo:70,
+   periods:[['最近 1 週','up',62,'穩步上升'],['最近 1 月','up',75,'明顯走強'],['最近 3 月','up',70,'持續偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等偏高','yellow']],
+   ai:'Broadcom 是 AI 定製晶片的隱形冠軍，Google、Meta 等大廠的自研 AI 晶片都靠它製造，加上 VMware 提供軟體護城河。'},
+
+  // ── 台灣科技 ──
+  {id:'2330',name:'台積電',market:'TWD',industry:'科技',status:'watch',risk:'hot',
+   reason:'AI 晶片需求持續帶動業績，但估值討論增加，短線波動風險上升。',
+   tip:'⚡ 基本面仍強，觀察毛利率與海外設廠。',
+   spark:[60,65,62,70,75,72,78],thermo:65,
+   periods:[['最近 1 週','up',35,'小幅上升'],['最近 1 月','up',68,'明顯轉強'],['最近 3 月','mid',52,'震盪偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','偏高','orange']],
+   ai:'台積電目前故事仍強，但市場期待也高。對一般投資人來說，重點是觀察 AI 需求、毛利率和海外設廠成本是否持續支持基本面。'},
+
+  {id:'2454',name:'聯發科',market:'TWD',industry:'科技',status:'watch',risk:'warm',
+   reason:'手機 SoC 需求回溫，AI 邊緣計算布局逐步落地，但競爭仍激烈。',
+   tip:'🔍 觀察旗艦機 AI 晶片滲透率。',
+   spark:[55,58,60,62,60,65,68],thermo:55,
+   periods:[['最近 1 週','up',45,'小幅上升'],['最近 1 月','up',58,'穩步成長'],['最近 3 月','mid',50,'震盪']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏正向','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   ai:'聯發科在手機 AI 晶片市場具競爭力，中低階市場份額穩固。AI Edge 是下一個成長引擎，執行進度是關鍵觀察點。'},
+
+  {id:'2317',name:'鴻海',market:'TWD',industry:'科技',status:'stable',risk:'warm',
+   reason:'AI 伺服器組裝訂單持續成長，輝達 AI 伺服器的主要代工夥伴。',
+   tip:'✅ AI 伺服器供應鏈直接受益。',
+   spark:[45,47,50,52,55,53,58],thermo:50,
+   periods:[['最近 1 週','up',48,'小幅上升'],['最近 1 月','up',60,'穩步走強'],['最近 3 月','up',55,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'鴻海是 AI 伺服器最重要的 EMS 廠商之一，與 NVIDIA 合作深化，GB200 機架伺服器是短期最大亮點。'},
+
+  {id:'3008',name:'大立光',market:'TWD',industry:'科技',status:'stable',risk:'warm',
+   reason:'iPhone 換機周期趨緩，但高端鏡頭規格升級帶動 ASP 提升。',
+   tip:'📸 觀察 iPhone 鏡頭規格升級進度。',
+   spark:[50,52,51,55,54,57,60],thermo:45,
+   periods:[['最近 1 週','up',40,'小幅上升'],['最近 1 月','mid',45,'橫盤整理'],['最近 3 月','up',52,'偏強']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'大立光是蘋果光學鏡頭最重要供應商，技術護城河深，但成長空間受限於 iPhone 銷量與規格升級幅度。'},
+
+  {id:'2382',name:'廣達',market:'TWD',industry:'科技',status:'stable',risk:'warm',
+   reason:'雲端伺服器與 AI 伺服器訂單大幅成長，受惠 GB200 量產。',
+   tip:'✅ AI 伺服器 ODM 直接受益。',
+   spark:[40,45,50,55,58,62,68],thermo:55,
+   periods:[['最近 1 週','up',60,'明顯上升'],['最近 1 月','up',75,'大幅走強'],['最近 3 月','up',80,'強勢上漲']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等偏高','yellow']],
+   ai:'廣達是 AI 伺服器 ODM 最大受益者之一，GB200 機架伺服器組裝能力領先，成長能見度高。'},
+
+  // ── ETF ──
+  {id:'0050',name:'元大台灣50',market:'TWD',industry:'ETF',status:'stable',risk:'warm',
+   reason:'台股大盤整體偏正向，台積電等權值股帶動表現，波動可控。',
+   tip:'✅ 分散風險的好選擇，適合長期持有。',
+   spark:[60,62,61,65,64,67,70],thermo:42,
+   periods:[['最近 1 週','up',38,'小幅上升'],['最近 1 月','up',55,'穩步走強'],['最近 3 月','up',60,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','中等','neutral']],
+   ai:'0050 持有台股最具代表性的 50 家公司，台積電佔比最高。適合不想選股但想參與台股成長的投資人，長期報酬穩健。'},
+
+  {id:'0056',name:'元大高股息',market:'TWD',industry:'ETF',status:'stable',risk:'low',
+   reason:'高殖利率特性吸引保守型投資人，成分股以傳產與金融為主。',
+   tip:'💰 適合注重現金流的長期投資人。',
+   spark:[55,56,57,56,58,57,59],thermo:30,
+   periods:[['最近 1 週','mid',35,'橫盤小漲'],['最近 1 月','up',42,'穩步走強'],['最近 3 月','up',48,'偏強']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','偏低','neutral']],
+   ai:'0056 聚焦高股息企業，波動比 0050 小，適合追求穩定現金流的投資人。但需注意成分股以傳統產業為主，可能錯過科技高成長。'},
+
+  {id:'00878',name:'國泰永續高股息',market:'TWD',industry:'ETF',status:'stable',risk:'low',
+   reason:'ESG 概念加上高股息雙重吸引力，近年吸引大量資金流入。',
+   tip:'🌱 ESG + 高股息的入門好選擇。',
+   spark:[50,51,52,53,52,54,56],thermo:28,
+   periods:[['最近 1 週','up',30,'小幅上升'],['最近 1 月','up',40,'穩步走強'],['最近 3 月','mid',45,'偏強整理']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','偏低','neutral']],
+   ai:'00878 以 ESG 為選股條件，成分股多元分散，適合長期定期定額的入門投資人。'},
+
+  {id:'QQQ',name:'Nasdaq 100 ETF',market:'USD',industry:'ETF',status:'watch',risk:'warm',
+   reason:'納斯達克 100 大型科技股，AI 主題受惠，但集中度較高。',
+   tip:'📈 參與美國科技龍頭成長的便捷方式。',
+   spark:[65,68,70,72,75,73,78],thermo:55,
+   periods:[['最近 1 週','up',52,'穩步上升'],['最近 1 月','up',65,'偏強走升'],['最近 3 月','up',68,'持續偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','中等偏高','yellow']],
+   ai:'QQQ 讓你一次持有 NVIDIA、Apple、Microsoft 等美國科技龍頭，是參與 AI 趨勢的方便工具。但科技股佔比高，波動比 SPY 更大。'},
+
+  {id:'SPY',name:'S&P 500 ETF',market:'USD',industry:'ETF',status:'stable',risk:'warm',
+   reason:'美國大型股整體表現穩健，科技佔比高但分散效果好。',
+   tip:'✅ 長期投資美國市場的經典選擇。',
+   spark:[60,62,63,65,64,67,70],thermo:45,
+   periods:[['最近 1 週','up',45,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','up',62,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','分散持有','neutral'],['⚠️ 風險','中等','neutral']],
+   ai:'SPY 追蹤美國最大 500 家公司，是長期複利的基石工具。如果你只想持有一支美股，SPY 通常是最理性的選擇。'},
+
+  // ── 金融 ──
+  {id:'JPM',name:'JPMorgan Chase',market:'USD',industry:'金融',status:'stable',risk:'warm',
+   reason:'利率維持高位，淨利息收益率撐住獲利，投資銀行業務逐步回溫。',
+   tip:'🏦 金融類股中的防禦性首選。',
+   spark:[60,62,65,63,67,65,70],thermo:45,
+   periods:[['最近 1 週','up',42,'小幅上升'],['最近 1 月','up',55,'穩步走強'],['最近 3 月','up',60,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'JPMorgan 是美國最大銀行，高利率環境讓淨利息收入維持高水位，企業獲利能力強健。是想參與金融股但求穩健的好選擇。'},
+
+  {id:'V',name:'Visa',market:'USD',industry:'金融',status:'stable',risk:'warm',
+   reason:'全球消費支出維持韌性，跨境支付持續成長，AI 反詐欺技術提升競爭力。',
+   tip:'💳 收費公路商業模式，長期邏輯穩固。',
+   spark:[62,64,66,65,68,70,72],thermo:42,
+   periods:[['最近 1 週','up',44,'小幅上升'],['最近 1 月','up',57,'穩步走強'],['最近 3 月','up',62,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Visa 的商業模式不需要承擔信用風險，收益來自每筆交易手續費，是全球消費成長的間接受益者。長期邏輯非常清晰。'},
+
+  {id:'MA',name:'Mastercard',market:'USD',industry:'金融',status:'stable',risk:'warm',
+   reason:'同 Visa，支付基礎設施受惠全球消費擴張，ESG 評分良好。',
+   tip:'💳 與 Visa 互補，共同主導全球支付。',
+   spark:[60,63,65,64,68,70,73],thermo:42,
+   periods:[['最近 1 週','up',46,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','up',63,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Mastercard 與 Visa 業務高度相似，是全球支付雙寡頭之一。兩者一起持有可分散單一公司風險。'},
+
+  {id:'BRK.B',name:'Berkshire Hathaway',market:'USD',industry:'金融',status:'stable',risk:'low',
+   reason:'巴菲特投資組合多元分散，持有大量現金等待機會，防禦性強。',
+   tip:'🛡 市場下跌時的天然避風港。',
+   spark:[58,59,60,61,60,62,63],thermo:32,
+   periods:[['最近 1 週','mid',30,'橫盤小漲'],['最近 1 月','up',40,'穩步走強'],['最近 3 月','up',45,'偏強']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','偏低','neutral']],
+   ai:'Berkshire 是市場下跌時的避風港，大量現金儲備讓巴菲特能在低點抄底。長期持有通常能跑贏大盤，波動遠低於科技股。'},
+
+  // ── 能源 ──
+  {id:'XOM',name:'ExxonMobil',market:'USD',industry:'能源',status:'watch',risk:'warm',
+   reason:'油價短線有支撐，但長期能源轉型壓力持續，地緣政治影響大。',
+   tip:'🛢 配置能源股的波動性對沖工具。',
+   spark:[65,63,60,62,65,68,66],thermo:55,
+   periods:[['最近 1 週','mid',45,'橫盤震盪'],['最近 1 月','up',48,'小幅走強'],['最近 3 月','mid',42,'震盪整理']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'ExxonMobil 是傳統能源龍頭，油價波動是最大變數。地緣政治緊張時有防禦價值，長期面臨淨零轉型壓力。'},
+
+  {id:'NEE',name:'NextEra Energy',market:'USD',industry:'能源',status:'stable',risk:'warm',
+   reason:'AI 資料中心帶動電力需求大幅成長，再生能源政策支持。',
+   tip:'⚡ AI 用電需求爆發的最大受益者。',
+   spark:[40,42,45,50,55,58,65],thermo:52,
+   periods:[['最近 1 週','up',58,'明顯上升'],['最近 1 月','up',70,'大幅走強'],['最近 3 月','up',65,'持續偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'NextEra 是全球最大再生能源公司，AI 資料中心的爆炸性用電需求讓它意外成為 AI 概念股。長期政策支持強勁。'},
+
+  {id:'6505',name:'台塑石化',market:'TWD',industry:'能源',status:'watch',risk:'warm',
+   reason:'油價受地緣政治支撐，但煉油利差受壓，轉型進度緩慢。',
+   tip:'🔍 觀察油價走勢與煉油毛利。',
+   spark:[50,48,50,52,51,53,52],thermo:48,
+   periods:[['最近 1 週','mid',38,'橫盤整理'],['最近 1 月','mid',40,'小幅震盪'],['最近 3 月','mid',42,'震盪整理']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   ai:'台塑石化受油價影響大，近期煉油利差收窄，獲利能力承壓。如果持有以殖利率為主要考量，需確認配息政策持續。'},
+
+  // ── 醫療 ──
+  {id:'JNJ',name:'Johnson & Johnson',market:'USD',industry:'醫療',status:'stable',risk:'low',
+   reason:'醫療設備與藥品業務穩健，分拆消費品事業後聚焦度提升。',
+   tip:'🏥 防禦性醫療股，景氣循環影響小。',
+   spark:[60,61,62,61,63,62,64],thermo:35,
+   periods:[['最近 1 週','mid',32,'橫盤小漲'],['最近 1 月','up',42,'穩步走強'],['最近 3 月','up',48,'偏強']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','偏低','neutral']],
+   ai:'JNJ 是醫療股中的藍籌股，業務涵蓋醫療設備與製藥，需求穩定不受景氣影響。適合追求穩定的長期投資人。'},
+
+  {id:'LLY',name:'Eli Lilly',market:'USD',industry:'醫療',status:'stable',risk:'hot',
+   reason:'GLP-1 減重藥（Mounjaro/Zepbound）需求爆發，成為近年最大醫療題材。',
+   tip:'💊 GLP-1 減重藥革命最直接受益者。',
+   spark:[50,60,70,80,85,90,95],thermo:75,
+   periods:[['最近 1 週','up',70,'大幅上升'],['最近 1 月','up',85,'持續強勢'],['最近 3 月','up',90,'強勁上漲']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','偏強','green'],['⚠️ 風險','估值偏高','orange']],
+   ai:'Eli Lilly 的 GLP-1 藥物開啟了全球對抗肥胖症的新時代，潛在市場規模龐大。但目前估值已充分反映期待，任何研發挫折都可能造成大幅震盪。'},
+
+  {id:'MRNA',name:'Moderna',market:'USD',industry:'醫療',status:'risk',risk:'high',
+   reason:'COVID 疫苗需求大幅消退，新產品線尚未有足夠收入支撐估值。',
+   tip:'⚠️ 觀察 mRNA 技術在癌症疫苗的突破。',
+   spark:[80,65,55,45,50,42,40],thermo:78,
+   periods:[['最近 1 週','mid',55,'橫盤震盪'],['最近 1 月','dn',60,'偏弱'],['最近 3 月','dn',65,'持續走弱']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','偏弱','orange'],['🏢 公司','觀察中','yellow'],['⚠️ 風險','偏高','orange']],
+   ai:'Moderna 面臨後 COVID 時代的收入斷崖，需要 mRNA 技術在其他領域的突破。個人化癌症疫苗是長期期待，但短期財務壓力仍大。'},
+
+  // ── 消費 ──
+  {id:'MCD',name:"McDonald's",market:'USD',industry:'消費',status:'stable',risk:'low',
+   reason:'全球展店持續，數位點餐提升效率，高通膨環境下客單價維持穩定。',
+   tip:'🍔 穩定的消費品牌，抗景氣衰退。',
+   spark:[58,59,60,61,60,62,63],thermo:35,
+   periods:[['最近 1 週','mid',34,'橫盤小漲'],['最近 1 月','up',45,'穩步走強'],['最近 3 月','up',50,'偏強']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','穩定','green'],['🏢 公司','穩定','green'],['⚠️ 風險','偏低','neutral']],
+   ai:'麥當勞是全球最著名的消費品牌之一，景氣好壞消費者都吃得起，抗衰退特性強。數位化與自動化投資持續降低成本。'},
+
+  {id:'COST',name:'Costco',market:'USD',industry:'消費',status:'stable',risk:'warm',
+   reason:'會員制模式帶來穩定現金流，消費者在通膨環境傾向到 Costco 省錢。',
+   tip:'🛒 通膨受惠者，會員忠誠度極高。',
+   spark:[62,64,66,68,70,72,75],thermo:48,
+   periods:[['最近 1 週','up',50,'穩步上升'],['最近 1 月','up',62,'明顯走強'],['最近 3 月','up',68,'持續偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','穩定','green'],['🏢 公司','偏強','green'],['⚠️ 風險','中等','neutral']],
+   ai:'Costco 的會員費是護城河，高忠誠度會員帶來可預測的現金流。通膨時代消費者更願意付費加入以享受批量折扣。'},
+
+  {id:'NKE',name:'Nike',market:'USD',industry:'消費',status:'watch',risk:'warm',
+   reason:'中國市場復甦低於預期，庫存消化進度影響短期利潤率。',
+   tip:'👟 品牌力強，等待庫存修正後的反轉機會。',
+   spark:[70,65,62,58,55,58,60],thermo:55,
+   periods:[['最近 1 週','up',40,'小幅反彈'],['最近 1 月','mid',38,'橫盤震盪'],['最近 3 月','dn',50,'整體偏弱']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等','neutral']],
+   ai:'Nike 品牌力仍強，但面臨庫存過高與中國市場疲弱的雙重壓力，正在進行策略轉型。若庫存修正完成，可能是不錯的逢低布局機會。'},
+
+  {id:'SBUX',name:'Starbucks',market:'USD',industry:'消費',status:'watch',risk:'warm',
+   reason:'中國同店銷售持續低迷，新任 CEO 推出「回歸咖啡」轉型計畫。',
+   tip:'☕ 等待轉型成效的驗證期。',
+   spark:[65,60,58,55,52,55,58],thermo:58,
+   periods:[['最近 1 週','up',42,'小幅反彈'],['最近 1 月','mid',35,'橫盤整理'],['最近 3 月','dn',55,'持續偏弱']],
+   impacts:[['🌍 大環境','中性','neutral'],['🏭 產業','中性','neutral'],['🏢 公司','觀察中','yellow'],['⚠️ 風險','中等','neutral']],
+   ai:'Starbucks 面臨中國市場疲軟與美國同店銷售下滑，新 CEO 的轉型效果需時間驗證。短期仍有不確定性，但品牌護城河依然存在。'},
+
+  // ── 房地產 ──
+  {id:'AMT',name:'American Tower',market:'USD',industry:'房地產',status:'stable',risk:'warm',
+   reason:'電信塔 REIT，5G 基礎設施建設帶來穩定租金收入，AI 邊緣計算受惠。',
+   tip:'📡 5G + AI 邊緣運算基礎設施受益者。',
+   spark:[50,52,55,54,57,58,62],thermo:50,
+   periods:[['最近 1 週','up',48,'小幅上升'],['最近 1 月','up',58,'穩步走強'],['最近 3 月','up',55,'偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','穩定','green'],['⚠️ 風險','中等','neutral']],
+   ai:'AMT 持有全球電信塔資產，租約長達 10 年以上，現金流穩定。AI 時代對邊緣計算基礎設施需求上升，是不錯的防禦性成長股。'},
+
+  // ── 原物料 ──
+  {id:'GOLD',name:'Barrick Gold',market:'USD',industry:'原物料',status:'watch',risk:'warm',
+   reason:'黃金價格受地緣政治與降息預期支撐，金礦商受惠但波動大。',
+   tip:'🥇 黃金替代品，通膨與地緣避險工具。',
+   spark:[40,45,50,55,52,58,62],thermo:55,
+   periods:[['最近 1 週','up',50,'小幅上升'],['最近 1 月','up',65,'明顯走強'],['最近 3 月','up',68,'持續偏強']],
+   impacts:[['🌍 大環境','偏正向','green'],['🏭 產業','偏強','green'],['🏢 公司','持續觀察','yellow'],['⚠️ 風險','中等偏高','yellow']],
+   ai:'黃金礦商的槓桿效果讓它在金價上漲時表現更好，但也因為生產成本固定，金價下跌時虧損更大。適合對黃金看多又想放大報酬的投資人。'},
+];
+
+// ══════════════════════════════════════════════
+//  INDUSTRY DATA
+// ══════════════════════════════════════════════
+const INDUSTRIES = [
+  {
+    id:'科技', icon:'💻', color:'#FACC15',
+    desc:'AI、半導體、雲端運算等科技類股為本波市場主角，但估值普遍偏高。',
+    trend:'+18.4%', ytd:'今年來', momentum:'偏強',
+    bars:[{l:'一月',v:60,c:'up'},{l:'二月',v:55,c:'dn'},{l:'三月',v:75,c:'up'},{l:'四月',v:80,c:'up'},{l:'五月',v:90,c:'up'}],
+    stats:[{val:'+18.4%',lbl:'今年報酬',c:'green'},{val:'偏熱',lbl:'市場溫度',c:'orange'},{val:'偏強',lbl:'動能',c:'green'}],
+    news:[
+      {tag:'AI 算力',title:'NVIDIA H200 訂單持續爆滿，台積電先進製程滿載',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'雲端運算',title:'AWS、Azure、GCP 三大雲端 Q1 成長均超預期',meta:'產業消息 · 偏正向',tagc:'green'},
+      {tag:'風險',title:'AI 估值泡沫討論升溫，部分法人開始減碼科技股',meta:'注意事項 · 中性',tagc:'yellow'},
+      {tag:'半導體',title:'CoWoS 封裝產能緊張，台積電持續擴廠',meta:'供應鏈 · 偏正向',tagc:'green'},
+    ]
+  },
+  {
+    id:'金融', icon:'🏦', color:'#60A5FA',
+    desc:'高利率維持時間較長，支撐銀行淨利差，但商業房地產風險仍受關注。',
+    trend:'+8.2%', ytd:'今年來', momentum:'穩定',
+    bars:[{l:'一月',v:50,c:'up'},{l:'二月',v:55,c:'up'},{l:'三月',v:52,c:'dn'},{l:'四月',v:58,c:'up'},{l:'五月',v:62,c:'up'}],
+    stats:[{val:'+8.2%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'穩定',lbl:'動能',c:'neutral'}],
+    news:[
+      {tag:'銀行業',title:'Fed 維持利率不變，銀行淨利差持續受惠高利率',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'支付',title:'Visa、Mastercard 跨境交易量持續成長',meta:'產業消息 · 偏正向',tagc:'green'},
+      {tag:'風險',title:'商業房地產貸款違約率微升，銀行業備受關注',meta:'注意事項 · 中性',tagc:'yellow'},
+      {tag:'保險',title:'自然災害理賠增加，保險公司準備金上調',meta:'產業消息 · 中性',tagc:'neutral'},
+    ]
+  },
+  {
+    id:'能源', icon:'⚡', color:'#FB923C',
+    desc:'地緣政治支撐油價，AI 用電需求推升電力股，再生能源長期趨勢明確。',
+    trend:'+5.6%', ytd:'今年來', momentum:'中性',
+    bars:[{l:'一月',v:60,c:'up'},{l:'二月',v:65,c:'up'},{l:'三月',v:58,c:'dn'},{l:'四月',v:55,c:'dn'},{l:'五月',v:62,c:'up'}],
+    stats:[{val:'+5.6%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'中性',lbl:'動能',c:'neutral'}],
+    news:[
+      {tag:'電力',title:'AI 資料中心用電需求年增 40%，電力股強勢補漲',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'石油',title:'OPEC+ 維持減產，布蘭特原油維持 80 美元以上',meta:'產業消息 · 偏正向',tagc:'green'},
+      {tag:'再生能源',title:'太陽能板成本持續下降，裝機量創新高',meta:'長期趨勢 · 偏正向',tagc:'green'},
+      {tag:'風險',title:'能源轉型加速，傳統石化業長期面臨需求萎縮壓力',meta:'注意事項 · 中性',tagc:'yellow'},
+    ]
+  },
+  {
+    id:'醫療', icon:'🏥', color:'#34D399',
+    desc:'GLP-1 減重藥引領產業革命，AI 加速藥物研發，防禦性特質受景氣衰退型投資人青睞。',
+    trend:'+11.3%', ytd:'今年來', momentum:'偏強',
+    bars:[{l:'一月',v:55,c:'up'},{l:'二月',v:60,c:'up'},{l:'三月',v:68,c:'up'},{l:'四月',v:72,c:'up'},{l:'五月',v:78,c:'up'}],
+    stats:[{val:'+11.3%',lbl:'今年報酬',c:'green'},{val:'偏熱',lbl:'市場溫度',c:'orange'},{val:'偏強',lbl:'動能',c:'green'}],
+    news:[
+      {tag:'GLP-1',title:'Eli Lilly GLP-1 藥物全球需求供不應求，產能持續擴建',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'AI 醫療',title:'AI 輔助診斷與新藥研發效率提升，縮短臨床試驗時程',meta:'長期趨勢 · 偏正向',tagc:'green'},
+      {tag:'法規',title:'FDA 審藥時程縮短，有利新藥加速上市',meta:'產業消息 · 偏正向',tagc:'green'},
+      {tag:'專利',title:'多款暢銷藥物即將面臨專利懸崖，學名藥競爭壓力升',meta:'注意事項 · 中性',tagc:'yellow'},
+    ]
+  },
+  {
+    id:'消費', icon:'🛍', color:'#A78BFA',
+    desc:'高通膨壓縮消費能力，但科技業就業市場強韌支撐中高端消費。',
+    trend:'+4.1%', ytd:'今年來', momentum:'中性',
+    bars:[{l:'一月',v:55,c:'up'},{l:'二月',v:52,c:'dn'},{l:'三月',v:50,c:'dn'},{l:'四月',v:55,c:'up'},{l:'五月',v:58,c:'up'}],
+    stats:[{val:'+4.1%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'中性',lbl:'動能',c:'neutral'}],
+    news:[
+      {tag:'零售',title:'Costco 等折扣零售商受惠通膨，市占率持續提升',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'品牌',title:'Nike 庫存修正接近尾聲，轉型進度受市場關注',meta:'產業消息 · 中性',tagc:'neutral'},
+      {tag:'餐飲',title:'Starbucks 新 CEO 轉型計畫獲市場初步認可',meta:'公司消息 · 中性',tagc:'neutral'},
+      {tag:'風險',title:'消費信貸違約率上升，低收入族群消費力承壓',meta:'注意事項 · 偏負向',tagc:'orange'},
+    ]
+  },
+  {
+    id:'ETF', icon:'📦', color:'#34D399',
+    desc:'被動投資持續吸引資金，各類主題 ETF 快速成長。',
+    trend:'+9.8%', ytd:'今年來', momentum:'穩定',
+    bars:[{l:'一月',v:55,c:'up'},{l:'二月',v:58,c:'up'},{l:'三月',v:62,c:'up'},{l:'四月',v:65,c:'up'},{l:'五月',v:70,c:'up'}],
+    stats:[{val:'+9.8%',lbl:'今年報酬',c:'green'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'穩定',lbl:'動能',c:'green'}],
+    news:[
+      {tag:'台灣 ETF',title:'台灣 ETF 資產規模突破 4 兆，散戶投資主流工具',meta:'市場消息 · 中性',tagc:'neutral'},
+      {tag:'主動 ETF',title:'主動型 ETF 崛起，挑戰傳統指數型產品',meta:'產業趨勢 · 中性',tagc:'neutral'},
+      {tag:'AI ETF',title:'AI 主題 ETF 吸金力強，多檔今年報酬逾 20%',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'費用率',title:'各大 ETF 業者持續降費，投資人成本持續下降',meta:'長期趨勢 · 偏正向',tagc:'green'},
+    ]
+  },
+  {
+    id:'原物料', icon:'🪨', color:'#FCD34D',
+    desc:'黃金受地緣政治與降息預期雙重支撐，銅受惠電動車與電網建設需求。',
+    trend:'+12.7%', ytd:'今年來', momentum:'偏強',
+    bars:[{l:'一月',v:50,c:'up'},{l:'二月',v:55,c:'up'},{l:'三月',v:62,c:'up'},{l:'四月',v:70,c:'up'},{l:'五月',v:75,c:'up'}],
+    stats:[{val:'+12.7%',lbl:'今年報酬',c:'green'},{val:'偏熱',lbl:'市場溫度',c:'orange'},{val:'偏強',lbl:'動能',c:'green'}],
+    news:[
+      {tag:'黃金',title:'黃金突破 2400 美元創歷史新高，避險需求旺盛',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'銅',title:'電動車與電網建設帶動銅需求，供給端受限',meta:'產業消息 · 偏正向',tagc:'green'},
+      {tag:'稀土',title:'中國稀土出口管制升級，科技供應鏈面臨新風險',meta:'注意事項 · 偏負向',tagc:'orange'},
+      {tag:'鋼鐵',title:'中國鋼鐵產能過剩問題持續，鋼價承壓',meta:'市場消息 · 中性',tagc:'neutral'},
+    ]
+  },
+  {
+    id:'房地產', icon:'🏢', color:'#60A5FA',
+    desc:'高利率壓力使傳統 REIT 承壓，但資料中心 REIT 受 AI 需求帶動表現突出。',
+    trend:'-2.3%', ytd:'今年來', momentum:'偏弱',
+    bars:[{l:'一月',v:55,c:'dn'},{l:'二月',v:50,c:'dn'},{l:'三月',v:48,c:'dn'},{l:'四月',v:52,c:'up'},{l:'五月',v:55,c:'up'}],
+    stats:[{val:'-2.3%',lbl:'今年報酬',c:'red'},{val:'中溫',lbl:'市場溫度',c:'yellow'},{val:'偏弱',lbl:'動能',c:'orange'}],
+    news:[
+      {tag:'資料中心',title:'資料中心 REIT 受 AI 帶動，與傳統 REIT 走勢分化',meta:'市場影響 · 偏正向',tagc:'green'},
+      {tag:'辦公室',title:'混合辦公模式持續，辦公室 REIT 空置率維持高位',meta:'產業消息 · 偏負向',tagc:'orange'},
+      {tag:'利率',title:'利率維持高位，REIT 融資成本持續承壓',meta:'注意事項 · 偏負向',tagc:'orange'},
+      {tag:'住宅',title:'美國住宅供給不足，住宅 REIT 基本面相對穩健',meta:'市場消息 · 中性',tagc:'neutral'},
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let currentTab = 'market';
+let prevTab = 'watchlist';
+let watchlist = ['2330','0050','TSLA','NVDA']; // default
+let currentInd = '科技';
+
+// ══════════════════════════════════════════════
+//  TAB NAVIGATION
+// ══════════════════════════════════════════════
+function switchTab(tab) {
+  if (document.getElementById('page-detail').classList.contains('active')) {
+    document.getElementById('page-detail').classList.remove('active');
+  }
+  document.getElementById('page-' + currentTab).classList.remove('active');
+  document.getElementById('tab-' + currentTab).classList.remove('active');
+  currentTab = tab;
+  document.getElementById('page-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0,0);
+  if (tab === 'watchlist') renderWatchlist();
+  if (tab === 'industries') renderIndustries();
+}
+
+function showDetail(stockId) {
+  prevTab = currentTab;
+  const s = STOCKS.find(x=>x.id===stockId);
+  if (!s) return;
+  document.getElementById('page-' + currentTab).classList.remove('active');
+  document.getElementById('page-detail').classList.add('active');
+
+  document.getElementById('d-ticker').textContent = s.id + ' · ' + s.market;
+  document.getElementById('d-name').textContent = s.name;
+
+  const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
+  const riskMap   = {low:['🌡 低溫','bg-neutral',25],warm:['🌡 中溫','bg-yellow',45],hot:['🌡 偏熱','bg-orange',68],high:['🔴 高溫','bg-red',88]};
+  const [sl,sc] = statusMap[s.status];
+  const [rl,rc,rv] = riskMap[s.risk];
+
+  document.getElementById('d-badges').innerHTML =
+    `<span class="badge ${sc}">${sl}</span><span class="badge ${rc}">${rl}</span>`;
+
+  const trendColor = (t) => t==='up' ? 'var(--green)' : t==='dn' ? 'var(--red)' : 'var(--yellow)';
+  const barCls     = (t) => t==='up' ? 'bar-up' : t==='dn' ? 'bar-dn' : 'bar-md';
+
+  const sparkHtml = s.spark.map(v=>`<div class="sp-bar" style="height:${v*0.28}px;background:${v>=60?'var(--green)':'var(--yellow)'}"></div>`).join('');
+
+  const periodsHtml = s.periods.map(([p,t,w,l])=>`
+    <div class="tline-row">
+      <div class="tline-period">${p}</div>
+      <div class="tline-track"><div class="tline-bar ${barCls(t)}" style="width:${w}%"></div></div>
+      <div class="tline-lbl" style="color:${trendColor(t)}">${l}</div>
+    </div>`).join('');
+
+  const badgeMap = {green:'bg-green',yellow:'bg-yellow',orange:'bg-orange',red:'bg-red',neutral:'bg-neutral'};
+  const impactsHtml = s.impacts.map(([label,val,c])=>`
+    <div class="impact-row">
+      <div class="impact-left"><span class="impact-icon">${label.split(' ')[0]}</span>${label.split(' ').slice(1).join(' ')}</div>
+      <span class="badge ${badgeMap[c]||'bg-neutral'}">${val}</span>
+    </div>`).join('');
+
+  const watchBtn = watchlist.includes(s.id)
+    ? `<button onclick="removeFromWatchlist('${s.id}')" style="background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;width:100%">－ 移除追蹤</button>`
+    : `<button onclick="addToWatchlist('${s.id}')" style="background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold);border-radius:10px;padding:10px 20px;font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;width:100%">＋ 加入追蹤</button>`;
+
+  document.getElementById('d-content').innerHTML = `
+    <div class="card">
+      <div class="st">近期走勢</div>
+      <div class="sparkline">${sparkHtml}</div>
+    </div>
+    <div class="card">
+      <div class="st">風險溫度計</div>
+      <div class="thermo-wrap">
+        <div class="thermo-track"><div class="thermo-fill" style="width:${rv}%"></div></div>
+        <div class="thermo-lbl" style="color:${rv>=75?'var(--red)':rv>=55?'var(--orange)':rv>=40?'var(--yellow)':'var(--green)'}">${rl}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--sub);margin-top:7px"><span>低溫</span><span>中溫</span><span>偏熱</span><span>高溫</span></div>
+    </div>
+    <div class="card"><div class="st">走勢故事線</div>${periodsHtml}</div>
+    <div class="card"><div class="st">影響來源拆解</div>${impactsHtml}</div>
+    <div class="card-gold">
+      <div class="st">AI 白話結論</div>
+      <div style="font-size:14px;line-height:1.7">${s.ai}</div>
+      <div style="font-size:10px;color:var(--sub);margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">⚠️ 這不是投資建議，請自行判斷風險。</div>
+    </div>
+    <div>${watchBtn}</div>
+  `;
+  window.scrollTo(0,0);
+}
+
+function hideDetail() {
+  document.getElementById('page-detail').classList.remove('active');
+  document.getElementById('page-' + prevTab).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════════════════
+//  WATCHLIST
+// ══════════════════════════════════════════════
+function addToWatchlist(id) {
+  if (!watchlist.includes(id)) watchlist.push(id);
+  renderWatchlist();
+  const btn = document.querySelector('#d-content button');
+  if (btn) {
+    btn.textContent = '－ 移除追蹤';
+    btn.style.background='var(--red-dim)';
+    btn.style.borderColor='var(--red)';
+    btn.style.color='var(--red)';
+    btn.setAttribute('onclick', `removeFromWatchlist('${id}')`);
+  }
+}
+
+function removeFromWatchlist(id) {
+  watchlist = watchlist.filter(x=>x!==id);
+  renderWatchlist();
+  const btn = document.querySelector('#d-content button');
+  if (btn) {
+    btn.textContent = '＋ 加入追蹤';
+    btn.style.background='var(--gold-dim)';
+    btn.style.borderColor='var(--gold-border)';
+    btn.style.color='var(--gold)';
+    btn.setAttribute('onclick', `addToWatchlist('${id}')`);
+  }
+}
+
+function renderWatchlist() {
+  const c = document.getElementById('watchlist-container');
+  document.getElementById('wl-count').textContent = `追蹤 ${watchlist.length} 支股票`;
+
+  if (watchlist.length === 0) {
+    c.innerHTML = `<div class="sc-empty"><div style="font-size:32px;margin-bottom:10px">📋</div><div style="font-weight:600;margin-bottom:6px">還沒有追蹤股票</div><div style="font-size:12px">搜尋股票並點擊 ＋ 加入追蹤</div></div>`;
+    return;
+  }
+
+  const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
+  const riskMap   = {low:['低溫','dot-g'],warm:['中溫','dot-y'],hot:['偏熱','dot-o'],high:['高溫','dot-r']};
+
+  c.innerHTML = watchlist.map(id=>{
+    const s = STOCKS.find(x=>x.id===id);
+    if (!s) return '';
+    const [sl,sc] = statusMap[s.status];
+    const [rl,dc] = riskMap[s.risk];
+    const sparkHtml = s.spark.map(v=>`<div class="sp-bar" style="height:${v*0.28}px;background:${v>=60?'var(--green)':'var(--yellow)'}"></div>`).join('');
+    return `
+      <div class="sc-card" onclick="showDetail('${s.id}')">
+        <div class="sc-head">
+          <div class="sc-left">
+            <div class="ticker">${s.id} · ${s.market}</div>
+            <div class="name">${s.name}</div>
+            <div class="industry-tag">${s.industry}</div>
+          </div>
+          <div class="sc-right">
+            <span class="badge ${sc}">${sl}</span>
+            <div class="risk-row"><span class="rdot ${dc}"></span><span>風險 ${rl}</span></div>
+          </div>
+        </div>
+        <div class="sc-reason">${s.reason}</div>
+        <div class="sparkline">${sparkHtml}</div>
+        <div class="sc-tip" style="margin-top:10px">${s.tip}</div>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════
+function onSearch(val) {
+  const v = val.trim().toLowerCase();
+  document.getElementById('clear-btn').style.display = v ? 'block' : 'none';
+  const resultsWrap = document.getElementById('search-results');
+
+  if (!v) { resultsWrap.style.display='none'; return; }
+
+  const matches = STOCKS.filter(s =>
+    s.id.toLowerCase().includes(v) ||
+    s.name.toLowerCase().includes(v) ||
+    s.industry.toLowerCase().includes(v)
+  );
+
+  const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
+  const riskMap   = {low:['低溫','dot-g'],warm:['中溫','dot-y'],hot:['偏熱','dot-o'],high:['高溫','dot-r']};
+
+  if (matches.length === 0) {
+    document.getElementById('results-list').innerHTML = `<div style="text-align:center;padding:20px;color:var(--sub);font-size:13px">找不到「${val}」的相關股票</div>`;
+  } else {
+    document.getElementById('results-list').innerHTML = matches.map(s=>{
+      const [sl,sc] = statusMap[s.status];
+      const [rl,dc] = riskMap[s.risk];
+      const inWl = watchlist.includes(s.id);
+      return `
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1;cursor:pointer" onclick="showDetail('${s.id}')">
+            <div style="font-size:10px;color:var(--gold);font-weight:600;margin-bottom:2px">${s.id} · ${s.market}</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:3px">${s.name}</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <span class="badge ${sc}" style="font-size:10px">${sl}</span>
+              <span style="font-size:10px;color:var(--sub)">${s.industry}</span>
+            </div>
+          </div>
+          <button onclick="${inWl?`removeFromWatchlist('${s.id}');this.textContent='＋';this.style.background='var(--gold-dim)';this.style.borderColor='var(--gold-border)';this.style.color='var(--gold)'`:
+          `addToWatchlist('${s.id}');this.textContent='✓';this.style.background='var(--green-dim)';this.style.borderColor='var(--green)';this.style.color='var(--green)'`}"
+            style="background:${inWl?'var(--red-dim)':'var(--gold-dim)'};border:1px solid ${inWl?'var(--red)':'var(--gold-border)'};color:${inWl?'var(--red)':'var(--gold)'};border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;flex-shrink:0">
+            ${inWl?'－':'＋'}
+          </button>
+        </div>`;
+    }).join('');
+  }
+  resultsWrap.style.display='block';
+}
+
+function clearSearch() {
+  document.getElementById('stock-search').value='';
+  document.getElementById('clear-btn').style.display='none';
+  document.getElementById('search-results').style.display='none';
+}
+
+// ══════════════════════════════════════════════
+//  INDUSTRIES
+// ══════════════════════════════════════════════
+function renderIndustries() {
+  // Chips
+  const chipsEl = document.getElementById('ind-chips');
+  chipsEl.innerHTML = INDUSTRIES.map(i=>
+    `<div class="chip ${i.id===currentInd?'active':''}" onclick="selectIndustry('${i.id}')">${i.icon} ${i.id}</div>`
+  ).join('');
+
+  // Content
+  const ind = INDUSTRIES.find(i=>i.id===currentInd);
+  if (!ind) return;
+
+  const barMaxH = 68;
+  const maxV = Math.max(...ind.bars.map(b=>b.v));
+  const barsHtml = ind.bars.map(b=>{
+    const h = Math.round((b.v/maxV)*barMaxH);
+    const col = b.c==='up'?'var(--green)':b.c==='dn'?'var(--red)':'var(--yellow)';
+    return `<div class="bar-item"><div class="bar" style="height:${h}px;background:${col}"></div><div class="bar-lbl">${b.l}</div></div>`;
+  }).join('');
+
+  const statColor = {green:'var(--green)',yellow:'var(--yellow)',orange:'var(--orange)',red:'var(--red)',neutral:'var(--sub)'};
+  const statsHtml = ind.stats.map(s=>`
+    <div class="ind-stat">
+      <div class="val" style="color:${statColor[s.c]||'var(--text)'}">${s.val}</div>
+      <div class="lbl">${s.lbl}</div>
+    </div>`).join('');
+
+  const tagColors = {green:'var(--green)',yellow:'var(--yellow)',orange:'var(--orange)',neutral:'var(--sub)'};
+  const newsHtml = ind.news.map(n=>`
+    <div class="news-item">
+      <div class="news-tag" style="color:${tagColors[n.tagc]||'var(--sub)'}">${n.tag}</div>
+      <div class="news-title">${n.title}</div>
+      <div class="news-meta">${n.meta}</div>
+    </div>`).join('');
+
+  // Stocks in this industry
+  const indStocks = STOCKS.filter(s=>s.industry===ind.id);
+  const statusMap = {stable:['🟢 穩定偏強','bg-green'],watch:['🟡 觀察中','bg-yellow'],risk:['🔴 風險升高','bg-red']};
+  const riskMap   = {low:['低溫','dot-g'],warm:['中溫','dot-y'],hot:['偏熱','dot-o'],high:['高溫','dot-r']};
+
+  const stocksHtml = indStocks.length ? indStocks.map(s=>{
+    const [sl,sc] = statusMap[s.status];
+    const [rl,dc] = riskMap[s.risk];
+    return `
+      <div class="sc-card" onclick="showDetail('${s.id}')">
+        <div class="sc-head">
+          <div class="sc-left">
+            <div class="ticker">${s.id} · ${s.market}</div>
+            <div class="name">${s.name}</div>
+          </div>
+          <div class="sc-right">
+            <span class="badge ${sc}">${sl}</span>
+            <div class="risk-row"><span class="rdot ${dc}"></span><span>風險 ${rl}</span></div>
+          </div>
+        </div>
+        <div class="sc-reason">${s.reason}</div>
+      </div>`;
+  }).join('') : '';
+
+  document.getElementById('ind-content').innerHTML = `
+    <div class="card-gold">
+      <div style="font-size:13px;color:var(--gold);font-weight:600;margin-bottom:6px">${ind.icon} ${ind.id}</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.6">${ind.desc}</div>
+    </div>
+    <div class="card">
+      <div class="st">月度表現趨勢</div>
+      <div class="bar-chart">${barsHtml}</div>
+      <div class="ind-stat-row">${statsHtml}</div>
+    </div>
+    <div class="news-card">
+      <div style="padding:14px 16px 0"><div class="st">最新產業動態</div></div>
+      ${newsHtml}
+    </div>
+    ${indStocks.length ? `<div class="st" style="margin-top:4px">本產業相關股票</div>${stocksHtml}` : ''}
+  `;
+}
+
+function selectIndustry(id) {
+  currentInd = id;
+  renderIndustries();
+  document.getElementById('ind-content').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ══════════════════════════════════════════════
+//  MARKET CHART INIT
+// ══════════════════════════════════════════════
+function initMarketChart() {
+  const data = [
+    {l:'S&P500',v:75,c:'up'},{l:'納斯達克',v:88,c:'up'},{l:'台股',v:70,c:'up'},
+    {l:'日經',v:65,c:'up'},{l:'港股',v:35,c:'dn'},{l:'滬深',v:40,c:'dn'}
+  ];
+  const maxV = 100;
+  const maxH = 70;
+  document.getElementById('mkt-chart').innerHTML = data.map(d=>{
+    const h = Math.round((d.v/maxV)*maxH);
+    const col = d.c==='up'?'var(--green)':'var(--red)';
+    return `<div class="bar-item"><div class="bar" style="height:${h}px;background:${col}"></div><div class="bar-lbl">${d.l}</div></div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+initMarketChart();
+renderWatchlist();
+renderIndustries();
+</script>
+</body>
+</html>
