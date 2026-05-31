@@ -271,8 +271,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     </div>
 
     <!-- Weather -->
-    <div class="card-gold">
-      <div class="st">今日市場天氣</div>
+    <div class="card-gold" style="cursor:pointer" onclick="showMarketWeatherDetail()">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px">
+        <div class="st" style="margin-bottom:0">今日市場天氣</div>
+        <span style="font-size:11px;color:var(--gold)">點擊詳情 ›</span>
+      </div>
       <span class="wx-emoji">🌤</span>
       <div style="font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.5px;margin-bottom:5px">TODAY'S WEATHER</div>
       <div class="wx-title">微晴</div>
@@ -284,12 +287,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       <div class="card" style="padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--sub);margin-bottom:5px">台股</div>
         <div id="mkt-tw-val" style="font-size:16px;font-weight:700;color:var(--green)">+0.80%</div>
-        <div style="font-size:9px;color:var(--sub);margin-top:2px" id="last-updated">即時更新</div>
+        <div id="tw-status" style="font-size:9px;color:var(--sub);margin-top:2px">即時更新</div>
       </div>
       <div class="card" style="padding:14px;text-align:center">
         <div style="font-size:10px;color:var(--sub);margin-bottom:5px">美股</div>
         <div id="mkt-us-val" style="font-size:16px;font-weight:700;color:var(--green)">+0.40%</div>
-        <div style="font-size:9px;color:var(--sub);margin-top:2px">S&amp;P 500</div>
+        <div id="us-status" style="font-size:9px;color:var(--sub);margin-top:2px">S&amp;P 500</div>
       </div>
       <div class="card" style="padding:14px;text-align:center;cursor:pointer" onclick="showVixModal()">
         <div style="font-size:10px;color:var(--sub);margin-bottom:5px">市場緊張度</div>
@@ -2942,12 +2945,193 @@ renderIndustries();
 renderWeekly();
 initTicker();
 
-// Live update intervals
-setInterval(updateTickerData, 4000);
+// ── 市場開盤判斷 ──
+// 台股：週一～五 09:00–13:30（UTC+8）
+// 美股：週一～五 09:30–16:00 EST = 台灣 22:30–05:00 次日（UTC+8）
+function getMarketStatus() {
+  const now = new Date();
+  const tw = new Date(now.toLocaleString('en-US', {timeZone:'Asia/Taipei'}));
+  const us = new Date(now.toLocaleString('en-US', {timeZone:'America/New_York'}));
+  const twDay = tw.getDay(), twH = tw.getHours(), twM = tw.getMinutes();
+  const usDay = us.getDay(), usH = us.getHours(), usM = us.getMinutes();
+  const twMin = twH * 60 + twM;
+  const usMin = usH * 60 + usM;
+
+  const twOpen  = twDay >= 1 && twDay <= 5 && twMin >= 540  && twMin < 810;   // 9:00–13:30
+  const usOpen  = usDay >= 1 && usDay <= 5 && usMin >= 570  && usMin < 960;   // 9:30–16:00
+  const twPre   = twDay >= 1 && twDay <= 5 && twMin >= 480  && twMin < 540;   // 8:00–9:00 盤前
+  const usPre   = usDay >= 1 && usDay <= 5 && usMin >= 240  && usMin < 570;   // 4:00–9:30 盤前
+
+  return {twOpen, usOpen, twPre, usPre};
+}
+
+function getStatusLabel() {
+  const {twOpen, usOpen, twPre, usPre} = getMarketStatus();
+  if (twOpen && usOpen) return {tw:'交易中', us:'交易中', live:true};
+  if (twOpen)           return {tw:'交易中', us:'已收盤', live:true};
+  if (usOpen)           return {tw:'已收盤', us:'交易中', live:true};
+  if (twPre)            return {tw:'盤前',   us:'已收盤', live:false};
+  if (usPre)            return {tw:'已收盤', us:'盤前',   live:false};
+  return                       {tw:'已收盤', us:'已收盤', live:false};
+}
+
+function applyMarketStatus() {
+  const {twOpen, usOpen, live} = getMarketStatus();
+  const lbl = getStatusLabel();
+
+  // Ticker LIVE dot
+  const tickerLive = document.querySelector('.ticker-live');
+  if (tickerLive) {
+    tickerLive.innerHTML = live ? `<span class="ticker-dot"></span>LIVE` : `⏸`;
+    tickerLive.style.color = live ? 'var(--red)' : 'var(--sub)';
+  }
+
+  // Taiwan status label
+  const twSt = document.getElementById('tw-status');
+  if (twSt) {
+    twSt.textContent = lbl.tw;
+    twSt.style.color = twOpen ? 'var(--green)' : 'var(--sub)';
+    // Freeze value display when closed
+    const twVal = document.getElementById('mkt-tw-val');
+    if (twVal && !twOpen) twVal.style.opacity = '0.6';
+    if (twVal && twOpen)  twVal.style.opacity = '1';
+  }
+
+  // US status label
+  const usSt = document.getElementById('us-status');
+  if (usSt) {
+    usSt.textContent = lbl.us;
+    usSt.style.color = usOpen ? 'var(--green)' : 'var(--sub)';
+    const usVal = document.getElementById('mkt-us-val');
+    if (usVal && !usOpen) usVal.style.opacity = '0.6';
+    if (usVal && usOpen)  usVal.style.opacity = '1';
+  }
+}
+
+// ── 市場天氣詳情底部彈出 ──
+function showMarketWeatherDetail() {
+  const {twOpen, usOpen} = getMarketStatus();
+  const lbl = getStatusLabel();
+
+  // Industry weather summary from INDUSTRIES data
+  const indWeatherHtml = INDUSTRIES.slice(0,6).map(ind => {
+    const w = ind.weather?.short;
+    if (!w) return '';
+    const trendColor = ind.trend.startsWith('+') ? 'var(--green)' : 'var(--red)';
+    return `<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:24px;flex-shrink:0">${w.icon}</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+          <span style="font-size:13px;font-weight:700">${ind.icon} ${ind.id}</span>
+          <span class="badge" style="font-size:10px;color:${w.color};background:rgba(0,0,0,.3);border:1px solid ${w.color}30">${w.label}</span>
+        </div>
+        <div style="font-size:11px;color:var(--sub);line-height:1.5">${w.detail.slice(0,50)}…</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:${trendColor};flex-shrink:0">${ind.trend}</div>
+    </div>`;
+  }).join('');
+
+  // How weather is determined
+  const criteriaHtml = `
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px">☀️</span>
+        <div><div style="font-size:12px;font-weight:700;margin-bottom:3px">晴朗</div>
+        <div style="font-size:12px;color:var(--sub);line-height:1.5">大多數指標偏正向。企業獲利成長、資金環境寬鬆、市場情緒樂觀，適合積極布局。</div></div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px">🌤</span>
+        <div><div style="font-size:12px;font-weight:700;margin-bottom:3px">微晴</div>
+        <div style="font-size:12px;color:var(--sub);line-height:1.5">整體偏正向但有局部不確定性。機會大於風險，但需要選股，不能盲目追漲。</div></div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px">⛅</span>
+        <div><div style="font-size:12px;font-weight:700;margin-bottom:3px">多雲時晴</div>
+        <div style="font-size:12px;color:var(--sub);line-height:1.5">好壞消息並存，市場方向不明確。適合持盤觀望，減少短線操作頻率。</div></div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:20px">🌧</span>
+        <div><div style="font-size:12px;font-weight:700;margin-bottom:3px">降雨 / 雷雨</div>
+        <div style="font-size:12px;color:var(--sub);line-height:1.5">風險偏高，負面因素主導市場。考慮降低持倉比例，保留現金等待更好時機。</div></div>
+      </div>
+    </div>`;
+
+  // Market session status section
+  const sessionHtml = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px">
+      <div style="background:var(--card-soft);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--sub);margin-bottom:6px">🇹🇼 台灣股市</div>
+        <div style="font-size:14px;font-weight:700;color:${twOpen?'var(--green)':'var(--sub)'}">${twOpen?'交易中':'已收盤'}</div>
+        <div style="font-size:10px;color:var(--sub);margin-top:4px">週一～五 09:00–13:30</div>
+      </div>
+      <div style="background:var(--card-soft);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--sub);margin-bottom:6px">🇺🇸 美國股市</div>
+        <div style="font-size:14px;font-weight:700;color:${usOpen?'var(--green)':'var(--sub)'}">${usOpen?'交易中':'已收盤'}</div>
+        <div style="font-size:10px;color:var(--sub);margin-top:4px">週一～五 09:30–16:00 EST</div>
+      </div>
+    </div>`;
+
+  openBSheet(`
+    <div class="bsheet-tag" style="color:var(--gold)">今日市場天氣</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <span style="font-size:52px">🌤</span>
+      <div>
+        <div style="font-size:24px;font-weight:700;letter-spacing:-.5px">微晴</div>
+        <div style="font-size:12px;color:var(--sub);margin-top:4px">市場氣氛仍偏樂觀，AI 類股漲多後短線波動可能加大。</div>
+      </div>
+    </div>
+
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">為什麼今天是微晴？</div>
+      <div class="bsheet-section-body" style="font-size:13px">
+        聯準會降息預期讓資金持續流入股市，企業獲利整體優於預期，AI 相關產業訂單能見度高。但估值已偏貴，部分法人開始減碼，讓市場出現「漲但不穩」的微晴格局。
+      </div>
+    </div>
+
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">市場開盤狀態</div>
+      ${sessionHtml}
+    </div>
+
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">各產業短期天氣</div>
+      <div style="margin-top:4px">
+        ${indWeatherHtml}
+      </div>
+    </div>
+
+    <div class="bsheet-section">
+      <div class="bsheet-section-lbl">天氣評判標準</div>
+      <div style="font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.5">FinPilot 的市場天氣綜合以下四個面向判斷：</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <span style="background:var(--card-soft);border-radius:8px;padding:5px 10px;font-size:11px">📈 企業獲利趨勢</span>
+        <span style="background:var(--card-soft);border-radius:8px;padding:5px 10px;font-size:11px">💰 資金流向</span>
+        <span style="background:var(--card-soft);border-radius:8px;padding:5px 10px;font-size:11px">😰 市場情緒</span>
+        <span style="background:var(--card-soft);border-radius:8px;padding:5px 10px;font-size:11px">🌍 宏觀環境</span>
+      </div>
+      ${criteriaHtml}
+    </div>
+
+    <div style="font-size:10px;color:var(--sub);line-height:1.5;padding:10px;background:var(--card-soft);border-radius:8px;margin-top:4px">⚠️ 市場天氣為 FinPilot 的參考判斷，不代表任何投資建議。實際市場隨時可能因突發事件改變。</div>
+    <button class="bsheet-close" onclick="closeBSheet()">關閉</button>
+  `);
+}
+
+// Live update intervals — only fluctuate when market is open
 setInterval(() => {
-  updateMarketStats();
-  buildMarketStats();
+  const {twOpen, usOpen, live} = getMarketStatus();
+  if (live) updateTickerData();
+  applyMarketStatus();
+}, 4000);
+
+setInterval(() => {
+  const {twOpen, usOpen, live} = getMarketStatus();
+  if (live) { updateMarketStats(); buildMarketStats(); }
+  applyMarketStatus();
 }, 5000);
+
+// Apply once immediately on load
+applyMarketStatus();
 </script>
 </body>
 </html>
